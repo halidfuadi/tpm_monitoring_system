@@ -1,14 +1,8 @@
 <template>
   <Toaster position="top-center" closeButton />
-  <ModalFinding
-    :isShow="is_finding"
-    :finding="form.finding"
-    @submit="submitFinding"
-  />
+  <ModalFinding v-if="form.finding.user_id" :isShow="is_finding" :finding="form.finding" @submit="submitFinding" />
   <CCard class="mb-1">
-    <CCardHeader
-      >TPM Execution - {{ GETTER_SCHEDULE_DATA?.itemcheck_nm }}</CCardHeader
-    >
+    <CCardHeader>TPM Execution - {{ GETTER_SCHEDULE_DATA?.itemcheck_nm }}</CCardHeader>
     <CCardBody>
       <CRow class="justify-content-around">
         <CCol>
@@ -39,24 +33,15 @@
       <CRow>
         <CCol lg="6">
           <label>Plan Pic</label>
-          <CFormInput
-            :value="
-              GETTER_SCHEDULE_DATA?.checkers.map((pic) => {
-                return pic.user_nm
-              })
-            "
-            disabled
-          />
+          <CFormInput :value="GETTER_SCHEDULE_DATA?.checkers.map((pic) => {
+    return pic.user_nm
+  })
+    " disabled />
         </CCol>
         <CCol lg="6" v-if="GETTER_USERS">
           <label>Actual Pic</label>
-          <v-select
-            :options="GETTER_USERS"
-            label="user_nm"
-            multiple
-            v-model="form.actual_user_ids"
-            :disabled="is_already_check"
-          >
+          <v-select :options="GETTER_USERS" label="user_nm" multiple v-model="form.actual_user_ids"
+            :disabled="is_already_check">
             <template #option="option">
               <span>{{ option.noreg }}-{{ option.user_nm }}</span>
             </template>
@@ -71,10 +56,7 @@
           <!-- Itemcheck: type judg -->
           <CInputGroup class="mb-3">
             <CInputGroupText>TPM Check</CInputGroupText>
-            <CFormSelect
-              v-model="form.checked_val"
-              :disabled="is_already_check"
-            >
+            <CFormSelect v-model="form.checked_val" :disabled="is_already_check">
               <option value="null">--Select--</option>
               <template v-if="stdData">
                 <option :value="stdData.ng_val">{{ stdData.ng_val }}</option>
@@ -99,41 +81,25 @@
         <CCol lg="3">
           <CInputGroup class="mb-3">
             <CInputGroupText>Plan Date</CInputGroupText>
-            <CFormInput
-              type="date"
-              v-model="plan_check_dt"
-              :disabled="is_already_check"
-            />
+            <CFormInput type="date" v-model="plan_check_dt" :disabled="is_already_check" />
           </CInputGroup>
         </CCol>
         <CCol lg="3">
           <CInputGroup class="mb-3">
             <CInputGroupText>Actual Date</CInputGroupText>
-            <CFormInput
-              type="date"
-              v-model="form.actual_check_dt"
-              :disabled="is_already_check"
-            />
+            <CFormInput type="date" v-model="form.actual_check_dt" :disabled="is_already_check" />
           </CInputGroup>
         </CCol>
         <CCol lg="3">
           <CInputGroup class="mb-3">
             <CInputGroupText>Start Time</CInputGroupText>
-            <CFormInput
-              type="time"
-              v-model="start_time"
-              :disabled="is_already_check"
-            />
+            <CFormInput type="time" v-model="start_time" :disabled="is_already_check" />
           </CInputGroup>
         </CCol>
         <CCol lg="3">
           <CInputGroup class="mb-3">
             <CInputGroupText>End Time</CInputGroupText>
-            <CFormInput
-              type="time"
-              v-model="end_time"
-              :disabled="is_already_check"
-            />
+            <CFormInput type="time" v-model="end_time" :disabled="is_already_check" />
           </CInputGroup>
         </CCol>
       </CRow>
@@ -143,11 +109,7 @@
     <CCardBody>
       <CRow class="justify-content-end">
         <CCol lg="1">
-          <CButton
-            v-if="!is_already_check"
-            color="primary"
-            @click="submitTpmExec()"
-            >Submit
+          <CButton v-if="!is_already_check" color="primary" @click="submitTpmExec()">Submit
           </CButton>
           <CButton v-else color="primary" disabled="true">Submitted</CButton>
         </CCol>
@@ -184,7 +146,7 @@ export default {
         checked_val: null,
         ok_val: null,
         ng_val: null,
-        is_number: 0,
+        // is_number: 0,
         actual_duration: 0,
         finding: {
           user_id: null,
@@ -261,7 +223,7 @@ export default {
           this.is_finding = true
           return
         }
-        isNotNull.length === 0
+        isNotNull
           ? this.$store.dispatch('ACT_EXECUTION_TPM', this.submittedForm)
           : toast.error('Lengkapi input dulu!')
       } catch (error) {
@@ -353,7 +315,8 @@ export default {
 </script>
 
 <style>
-.form-control:disabled, .form-select:disabled  {
+.form-control:disabled,
+.form-select:disabled {
   border: 1px solid #00ff3b !important;
 }
 </style>
