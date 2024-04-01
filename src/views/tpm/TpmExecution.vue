@@ -1,6 +1,6 @@
 <template>
   <Toaster position="top-center" closeButton />
-  <ModalFinding v-if="form.finding.user_id" :isShow="is_finding" :finding="form.finding" @submit="submitFinding" />
+  <ModalFinding v-if="is_finding" :isShow="is_finding" :finding="form.finding" @submit="submitFinding" />
   <CCard class="mb-1">
     <CCardHeader>TPM Execution - {{ GETTER_SCHEDULE_DATA?.itemcheck_nm }}</CCardHeader>
     <CCardBody>
@@ -146,7 +146,7 @@ export default {
         checked_val: null,
         ok_val: null,
         ng_val: null,
-        // is_number: 0,
+        is_number: 0,
         actual_duration: 0,
         finding: {
           user_id: null,
@@ -198,6 +198,7 @@ export default {
       }
     },
     async submitTpmExec() {
+      console.log('SubmitExec')
       try {
         this.form.actual_duration = this.getActualDuration
         this.submittedForm = {
@@ -213,9 +214,11 @@ export default {
           !this.submittedForm.is_number &&
           this.submittedForm.ng_val === this.submittedForm.checked_val
         let isRangedType =
-          !this.submittedForm.is_number &&
+          this.submittedForm.is_number &&
           (this.submittedForm.ng_val < this.submittedForm.checked_val ||
             this.submittedForm.ok_val > this.submittedForm.checked_val)
+        console.log(isNotNull, isJudgType, isRangedType)
+        console.log(this.submittedForm)
         if (isNotNull && isJudgType) {
           this.is_finding = true
           return
@@ -223,6 +226,8 @@ export default {
           this.is_finding = true
           return
         }
+        console.log(isNotNull)
+
         isNotNull
           ? this.$store.dispatch('ACT_EXECUTION_TPM', this.submittedForm)
           : toast.error('Lengkapi input dulu!')
