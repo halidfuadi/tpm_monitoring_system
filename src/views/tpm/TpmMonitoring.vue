@@ -1,12 +1,7 @@
 <template>
   <Toaster position="top-center" closeButton />
-  <ModalPic
-    :isShow="isShow"
-    :incharge_id="incharge_id"
-    :machine_nm="machine_nm"
-    :schedule_id="schedule_id"
-    @showChanges="showChanges(state)"
-  />
+  <ModalPic :isShow="isShow" :incharge_id="incharge_id" :machine_nm="machine_nm" :schedule_id="schedule_id"
+    @showChanges="showChanges(state)" />
   <SearchBar @getSchedules="getSchedules" />
   <StatusTpm :filter="filter" />
   <CCard>
@@ -20,6 +15,7 @@
                 <th class="w100-line" rowspan="2">Line</th>
                 <th class="w200-mc" rowspan="2">Machine</th>
                 <th class="w300-item-check" rowspan="2">Item Check</th>
+                <th rowspan="2">Periodic</th>
                 <th class="text-center" rowspan="2">Incharge</th>
                 <th class="text-center" rowspan="2">PIC</th>
                 <th class="text-center" :colspan="31">{{ 'Schedule' }}</th>
@@ -38,73 +34,50 @@
                   <td>{{ schedule[0].line_nm }}</td>
                   <td>{{ schedule[0].machine_nm }}</td>
                   <td>{{ schedule[0].itemcheck_nm }}</td>
+                  <td>{{ schedule[0].val_periodic }} {{ schedule[0].period_nm }}</td>
                   <td class="text-center">{{ schedule[0].incharge_nm }}</td>
                   <td v-if="schedule[0].checkers.length > 0">
-                    <template
-                      v-for="user in schedule[0].checkers"
-                      :key="user.user_id"
-                    >
+                    <template v-for="user in schedule[0].checkers" :key="user.user_id">
                       <CButton color="dark" size="sm" disabled>
                         {{ user.user_nm }}
                       </CButton>
                     </template>
                   </td>
                   <td v-else>
-                    <CButton
-                      class="btn btn-sm w-100"
-                      color="info"
-                      @click="confirmShow(schedule[0])"
-                      >Assign</CButton
-                    >
+                    <CButton class="btn btn-sm w-100" color="info" @click="confirmShow(schedule[0])">Assign</CButton>
                   </td>
                   <template v-for="date in dates" :key="date">
-                    <td
-                      v-if="
+                    <td v-if="
+                      schedule.find((item) => {
+                        return item.day_idx == date
+                      })
+                    ">
+                      <!-- BTN FOR ASSIGN PIC -->
+                      <button class="btn btn-sm w-100" v-if="
                         schedule.find((item) => {
                           return item.day_idx == date
-                        })
-                      "
-                    >
-                      <!-- BTN FOR ASSIGN PIC -->
-                      <button
-                        class="btn btn-sm w-100"
-                        v-if="
-                          schedule.find((item) => {
-                            return item.day_idx == date
-                          }).checkers.length == 0
-                        "
-                        :style="`background-color: ${
-                          schedule.find((item) => {
-                            return item.day_idx == date
-                          }).color_tag
-                        }`"
-                        v-bind="props"
-                        @click="
+                        }).checkers.length == 0
+                      " :style="`background-color: ${schedule.find((item) => {
+                        return item.day_idx == date
+                      }).color_tag
+                        }`" v-bind="props" @click="
                           confirmShow(
                             schedule.find((item) => {
                               return item.day_idx == date
                             }),
                           )
-                        "
-                      ></button>
+                          "></button>
                       <!-- BTN FOR EXECUTION -->
-                      <button
-                        v-else
-                        class="btn btn-sm w-100"
-                        :style="`background-color: ${
-                          schedule.find((item) => {
-                            return item.day_idx == date
-                          }).color_tag
-                        }`"
-                        v-bind="props"
-                        @click="
+                      <button v-else class="btn btn-sm w-100" :style="`background-color: ${schedule.find((item) => {
+                        return item.day_idx == date
+                      }).color_tag
+                        }`" v-bind="props" @click="
                           executionPage(
                             schedule.find((item) => {
                               return item.day_idx == date
                             }),
                           )
-                        "
-                      ></button>
+                          "></button>
                     </td>
                     <td v-else></td>
                   </template>
@@ -124,7 +97,7 @@
       </CRow>
     </CCardBody>
     <CCardFooter>
-      <CRow class="justify-content-between" >
+      <CRow class="justify-content-between">
         <CCol lg="2">
           <div class="input-group mb-3">
             <div class="input-group-prepend">
@@ -185,17 +158,17 @@ export default {
       limitOpts: [{
         label: 5,
         value: 5
-      },{
+      }, {
         label: 10,
         value: 10
-      },{
+      }, {
         label: 100,
         value: 100
-      },{
+      }, {
         label: 'All',
         value: -1
       },
-    ],
+      ],
       months: [
         'January',
         'February',
@@ -215,7 +188,7 @@ export default {
   computed: {
     pages() {
       function range(start, end) {
-          return Array.from(Array(end - start + 1), (_, i) => i + start)
+        return Array.from(Array(end - start + 1), (_, i) => i + start)
       }
 
       const max = this.maxVisible
@@ -223,7 +196,7 @@ export default {
       const pageNum = Math.ceil(this.rowsNumber / this.rowsPerPage)
 
       if (pageNum < max) {
-          return range(1, pageNum)
+        return range(1, pageNum)
       }
 
       let start = this.modelValue - middle;
@@ -231,12 +204,12 @@ export default {
 
       // If we're close to the end
       if (this.modelValue >= pageNum - middle) {
-          start = pageNum - max + 1;
-          end = pageNum;
+        start = pageNum - max + 1;
+        end = pageNum;
       }
 
       return range(Math.max(1, start), Math.max(end, max))
-  },
+    },
   },
   methods: {
     onPageClick(page) {
@@ -304,27 +277,33 @@ export default {
 .w100-line {
   min-width: 100px;
 }
+
 .w40-date {
   min-width: 40px;
   z-index: -1 !important;
 }
+
 .w300-item-check {
   min-width: 300px;
 }
+
 .w200-mc {
   min-width: 200px;
 }
+
 th,
 td {
   border: 1px solid black;
   border-collapse: collapse;
   background: white;
 }
+
 thead {
   top: 0;
   position: sticky;
   z-index: 1 !important;
 }
+
 tr td:nth-child(1),
 tr td:nth-child(2),
 tr td:nth-child(3),
@@ -336,14 +315,17 @@ tr th:nth-child(4) {
   position: sticky;
   left: 0;
 }
+
 tr th:nth-child(2),
 tr td:nth-child(2) {
   left: 30px;
 }
+
 tr th:nth-child(3),
 tr td:nth-child(3) {
   left: 100px;
 }
+
 tr th:nth-child(4),
 tr td:nth-child(4) {
   left: 200px;

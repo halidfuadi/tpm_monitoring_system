@@ -1,29 +1,22 @@
 <template>
-  <CModal :visible="is_show" backdrop="static" @close="changesShow()">
+  <CModal :visible="is_show" backdrop="static" @close="() => {
+    is_show = false
+    $emit('close-modal', false)
+  }">
     <CModalHeader closeButton>TPM Finding Abnormality</CModalHeader>
     <CModalBody>
       <CRow>
         <CCol class="mb-2" lg="12">
           <label>Problem</label>
-          <CFormInput
-            placeholder="What's the problem?"
-            v-model="finding.problem"
-          />
+          <CFormInput placeholder="What's the problem?" v-model="finding.problem" />
         </CCol>
         <CCol class="mb-2" lg="12">
           <label>Action / Countermeasure</label>
-          <CFormInput
-            placeholder="What's the action / countermeasure?"
-            v-model="finding.action_plan"
-          />
+          <CFormInput placeholder="What's the action / countermeasure?" v-model="finding.action_plan" />
         </CCol>
         <CCol class="mb-2" lg="12">
           <label>Plan Date</label>
-          <CFormInput
-            type="date"
-            v-model="finding.plan_check_dt"
-            :disabled="is_already_check"
-          />
+          <CFormInput type="date" v-model="finding.plan_check_dt" :disabled="is_already_check" />
         </CCol>
         <CCol lg="12">
           <label>Pic</label>
@@ -39,12 +32,11 @@
       </CRow>
     </CModalBody>
     <CModalFooter>
-      <CButton
-        color="primary"
-        @click="changesShow()"
-        >Assign</CButton
-      >{{ ' ' }}
-      <CButton @click="changesShow()">Cancel</CButton>
+      <CButton color="primary" @click="changesShow()">Assign</CButton>{{ ' ' }}
+      <CButton @click="() => {
+        is_show = false
+        $emit('close-modal', false)
+      }">Cancel</CButton>
     </CModalFooter>
   </CModal>
 </template>
@@ -74,13 +66,15 @@ export default {
       if (this.incharge_id) this.getUsers(this.incharge_id)
     },
     isShow: function () {
+      console.log('FINDING IS SHOW CHANGEs');
       this.is_show = this.isShow
     },
     getSubmitStatus: {
       handler() {
-        console.log(this.getSubmitStatus)
         this.is_show = false
-        this.changesShow()
+        if (this.is_show) {
+          this.changesShow()
+        }
       },
       deep: true,
     },

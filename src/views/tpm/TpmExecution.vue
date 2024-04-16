@@ -1,6 +1,7 @@
 <template>
   <Toaster position="top-center" closeButton />
-  <ModalFinding v-if="is_finding" :isShow="is_finding" :finding="form.finding" @submit="submitFinding" />
+  <ModalFinding :isShow="is_finding" :finding="form.finding" @submit="submitFinding"
+    @closeModal="(state) => is_finding = state" />
   <CCard class="mb-1">
     <CCardHeader>TPM Execution - {{ GETTER_SCHEDULE_DATA?.itemcheck_nm }}</CCardHeader>
     <CCardBody>
@@ -34,9 +35,9 @@
         <CCol lg="6">
           <label>Plan Pic</label>
           <CFormInput :value="GETTER_SCHEDULE_DATA?.checkers.map((pic) => {
-    return pic.user_nm
-  })
-    " disabled />
+            return pic.user_nm
+          })
+            " disabled />
         </CCol>
         <CCol lg="6" v-if="GETTER_USERS">
           <label>Actual Pic</label>
@@ -64,7 +65,7 @@
               </template>
             </CFormSelect>
             <CInputGroupText>
-              <b v-if="stdData">Std: {{ stdData.ok_val }}</b>
+              <b v-if="stdData">Std: {{ GETTER_SCHEDULE_DATA.standard_measurement }}</b>
             </CInputGroupText>
           </CInputGroup>
         </CCol>
@@ -226,8 +227,7 @@ export default {
           this.is_finding = true
           return
         }
-        console.log(isNotNull)
-
+        console.log(isNotNull, isJudgType)
         isNotNull
           ? this.$store.dispatch('ACT_EXECUTION_TPM', this.submittedForm)
           : toast.error('Lengkapi input dulu!')
@@ -299,7 +299,7 @@ export default {
       try {
         let { data } = await api.get(
           `/v1/itemcheck-std`,
-          `?itemcheck_id=${this.GETTER_SCHEDULE_DATA.itemcheck_id}`,
+          `?itemcheck_std_id=${this.GETTER_SCHEDULE_DATA.itemcheck_std_id}`,
         )
         let stdData = data.data[0]
         this.is_number = stdData.is_number
