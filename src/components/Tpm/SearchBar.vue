@@ -31,40 +31,56 @@
           </div>
         </CCol>
       </CRow>
+
       <CRow>
         <CCol lg="3">
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text">Line</span>
-            </div>
-            <input type="text" class="form-control" placeholder="Line">
-          </div>
+          <v-select append-to-body style="z-index: 1;" :options="line" placeholder="Lines" :reduce="line => line.line_id"  v-model="form.line_id">
+            <template #option="option">
+              <span>{{option.line_nm}}</span>
+            </template>
+            <template #selected-option="option">
+              <span>{{option.line_nm}}</span>
+            </template>
+          </v-select>
         </CCol>
+
         <CCol lg="3">
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text">Machine</span>
-            </div>
-            <input type="text" class="form-control" placeholder="Machine">
-          </div>
+          <v-select append-to-body style="z-index: 1;" :options="machine" placeholder="Machines" :reduce="machine => machine.machine_id"  v-model="form.machine_id">
+            <template #option="option">
+              <span>{{option.machine_nm}}</span>
+            </template>
+            <template #selected-option="option">
+              <span>{{option.machine_nm}}</span>
+            </template>
+          </v-select>
         </CCol>
+
         <CCol lg="3">
-          <div class="input-group mb-3">
+          <v-select append-to-body style="z-index: 1;" :options="incharge" placeholder="Incharge" :reduce="incharge => incharge.incharge_id"  v-model="form.incharge_id">
+            <template #option="option">
+              <span>{{option.incharge_nm}}</span>
+            </template>
+            <template #selected-option="option">
+              <span>{{option.incharge_nm}}</span>
+            </template>
+          </v-select>
+          <!-- <div class="input-group mb-3">
             <div class="input-group-prepend">
               <span class="input-group-text">Incharge</span>
             </div>
             <input type="text" class="form-control" placeholder="Incharge">
-          </div>
+          </div> -->
         </CCol>
+
         <CCol lg="3">
           <v-select append-to-body style="z-index: 1;" :options="status" placeholder="Status" :reduce="status => status.status_id"  v-model="form.status_id">
-          <template #option="option">
-            <CBadge class="text-dark" :style="`background-color: ${option.color_tag}`" shape="pill">{{option.status_nm}}</CBadge>
-          </template>
-          <template #selected-option="option">
-            <CBadge class="text-dark" :style="`background-color: ${option.color_tag}`" shape="pill">{{option.status_nm}}</CBadge>
-          </template>
-        </v-select>
+            <template #option="option">
+              <CBadge class="text-dark" :style="`background-color: ${option.color_tag}`" shape="pill">{{option.status_nm}}</CBadge>
+            </template>
+            <template #selected-option="option">
+              <CBadge class="text-dark" :style="`background-color: ${option.color_tag}`" shape="pill">{{option.status_nm}}</CBadge>
+            </template>
+          </v-select>
         </CCol>
       </CRow>
       <CRow>
@@ -98,6 +114,9 @@ export default {
         status_id: null,
       },
       status: [],
+      incharge: [],
+      machine: [],
+      line:[],
     }
   },
   watch: {
@@ -107,15 +126,34 @@ export default {
         this.getStatus()
       }
     },
+    getSubmitIncharge: function(){
+      if (this.getIncharge){
+        this.search()
+        this.getIncharge()
+      }
+    },
+    getSubmitMachine: function(){
+      if (this.getMachine){
+        this.search()
+        this.getMachine()
+      }
+    },
+    getSubmitLine: function(){
+      if (this.getLine){
+        this.search()
+        this.getLine()
+      }
+    }
   },
   computed: {
     ...mapGetters(['getSubmitStatus']),
+    ...mapGetters(['getSubmitIncharge']),
+    ...mapGetters(['getSubmitMachine']),
+    ...mapGetters(['getSubmitLine']),
   },
   methods: {
     search() {
-      let mapForm = Object.keys(this.form)
-        .map((key) => `${key}=${this.form[key]}`)
-        .join('&')
+      let mapForm = Object.keys(this.form).map((key) => `${key}=${this.form[key]}`).join('&')
       this.$emit('getSchedules', mapForm)
     },
     async getStatus() {
@@ -126,9 +164,37 @@ export default {
         console.log(error)
       }
     },
+    async getIncharge(){
+      try{
+        let incharge = await api.post(`/v1/filter/incharge`)
+        this.incharge = incharge.data.data
+      } catch(error){
+        console.log(error);
+      }
+    },
+    async getMachine(){
+      try{
+        let machine = await api.post(`/v1/filter/machine`)
+        this.machine = machine.data.data
+      } catch(error){
+        console.log(error);
+      }
+    },
+    async getLine(){
+      try{
+        let line = await api.post(`/v1/filter/line`)
+        this.line = line.data.data
+      } catch(error){
+        console.log(error);
+      }
+    }
+
   },
   mounted() {
+    this.getIncharge()
     this.getStatus()
+    this.getMachine()
+    this.getLine()
     this.search()
   },
 }

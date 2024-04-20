@@ -140,7 +140,7 @@ export default {
       stdData: null,
       form: {
         schedule_id: null, //
-        itemcheck_id: null, //
+        ledger_itemcheck_id: null, //
         actual_check_dt: moment().format('YYYY-MM-DD'),
         plan_user_ids: [],
         actual_user_ids: [],
@@ -246,7 +246,7 @@ export default {
           ? moment(this.GETTER_SCHEDULE_DATA.actual_check_dt).format('hh:mm')
           : moment().format('hh:mm')
 
-        this.form.itemcheck_id = this.GETTER_SCHEDULE_DATA.itemcheck_id
+        this.form.ledger_itemcheck_id = this.GETTER_SCHEDULE_DATA.ledger_itemcheck_id
         this.end_time = moment(
           this.GETTER_SCHEDULE_DATA.actual_check_dt || new Date(),
         )
