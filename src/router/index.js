@@ -51,6 +51,12 @@ const routes = [{
                 component: () =>
                     import ('@/views/tpm/TpmHistory.vue'),
             },
+            {
+                path: '/tpm/ledger',
+                name: 'TpmLedger',
+                component: () =>
+                    import ('@/views/tpm/TpmLedger.vue')
+            }
 
             /*define other in here*/
         ],

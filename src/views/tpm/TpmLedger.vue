@@ -1,9 +1,6 @@
 <template>
   <Toaster position="top-center" closeButton />
-  <ModalPic :isShow="isShow" :incharge_id="incharge_id" :machine_nm="machine_nm" :schedule_id="schedule_id"
-    @showChanges="showChanges(state)" />
-  <SearchBar @getSchedules="getSchedules" />
-  <StatusTpm :filter="filter" />
+  <SearchBar @getLedgers="getLedgers" />
   <CCard>
     <CCardBody>
       <CRow>
@@ -14,28 +11,24 @@
                 <th rowspan="2">No</th>
                 <th class="w100-line" rowspan="2">Line</th>
                 <th class="w200-mc" rowspan="2">Machine</th>
-                <th class="w300-item-check" rowspan="2">Item Check</th>
-                <th rowspan="2">Periodic</th>
-                <th class="text-center" rowspan="2">Incharge</th>
-                <th class="text-center" rowspan="2">PIC</th>
-                <th class="text-center" :colspan="31">{{ 'Schedule' }}</th>
-                <th class="text-center w100-line" rowspan="2">Next Check</th>
+                <th class="w200-item-check" rowspan="2">Item Check No</th>
+                <th class="text-center" :colspan="3">Actions</th>
               </tr>
               <tr>
-                <td class="w40-date text-center" v-for="i in 31" :key="i">
+                <!-- <td class="w40-date text-center" v-for="i in 3" :key="i">
                   {{ i }}
-                </td>
+                </td> -->
               </tr>
             </thead>
+
             <tbody>
-              <template v-if="Object.keys(schedules).length > 0">
-                <tr v-for="(schedule, key, ipar) in schedules" :key="key">
+              <!-- <template v-if="Object.keys(schedules).length > 0"> -->
+              <template>
+                <tr v-for="(schedule, key, ipar) in ledgers" :key="key">
                   <td>{{ ipar + 1 }}</td>
                   <td>{{ schedule[0].line_nm }}</td>
                   <td>{{ schedule[0].machine_nm }}</td>
                   <td>{{ schedule[0].itemcheck_nm }}</td>
-                  <td>{{ schedule[0].val_periodic }} {{ schedule[0].period_nm }}</td>
-                  <td class="text-center">{{ schedule[0].incharge_nm }}</td>
                   <td v-if="schedule[0].checkers.length > 0">
                     <template v-for="user in schedule[0].checkers" :key="user.user_id">
                       <CButton color="dark" size="sm" disabled>
@@ -84,19 +77,18 @@
                   <td>{{ schedule[0].next_check.split('T')[0] }}</td>
                 </tr>
               </template>
-              <template v-else>
+              <!-- <template v-else>
                 <tr>
                   <td class="text-center" colspan="37">
                     <b>Tidak Ada Data</b>
                   </td>
                 </tr>
-              </template>
+              </template> -->
             </tbody>
           </table>
         </CCol>
       </CRow>
     </CCardBody>
-    
     <CCardFooter>
       <CRow class="justify-content-between">
         <CCol lg="2">
@@ -138,7 +130,7 @@ import SearchBar from '@/components/Tpm/SearchBar'
 import StatusTpm from '@/components/Tpm/StatusTpm'
 
 export default {
-  name: 'TpmMonitoring',
+  name: 'TpmLedger',
   data() {
     return {
       filtered: {
@@ -151,7 +143,7 @@ export default {
       isShow: false,
       filter: null,
       schedule_id: null,
-      schedules: [],
+      ledgers: [],
       incharge_id: null,
       machine_nm: null,
       year: null,
@@ -169,20 +161,6 @@ export default {
         label: 'All',
         value: -1
       },
-      ],
-      months: [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
       ],
     }
   },
@@ -229,7 +207,7 @@ export default {
         this.onPageClick(this.modelValue + 1)
       }
     },
-    async getSchedules(filter) {
+    async getLedgers(filter) {
       try {
         let month = filter.split('=')[1].split('-')[1]
         let year = filter.split('=')[1].split('-')[0]
@@ -289,7 +267,11 @@ export default {
 }
 
 .w200-mc {
-  min-width: 200px;
+  min-width: 100px;
+}
+
+.w200-per{
+  min-width: 90px;
 }
 
 th,
