@@ -126,6 +126,13 @@ export default {
         },
         {
           component: 'CNavItem',
+          to: '/tpm/ledger',
+          name: 'TPM Ledger',
+          icon: '',
+          parentId: 'ROOT',
+        },
+        {
+          component: 'CNavItem',
           to: '/tpm/history',
           name: 'TPM History',
           icon: '',
@@ -152,13 +159,6 @@ export default {
           icon: '',
           parentId: 'ROOT',
         },
-        // {
-        //   component: 'CNavItem',
-        //   to: '/qdc/gauge-control',
-        //   name: 'Gauge Control',
-        //   icon: '',
-        //   parentId: 'ROOT',
-        // },
         // {
         //   component: 'CNavItem',
         //   to: '/qdc/gauge-control/detail/:id',

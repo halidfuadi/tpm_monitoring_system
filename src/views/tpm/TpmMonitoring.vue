@@ -128,6 +128,7 @@
         </CCol>
       </CRow>
     </CCardBody>
+    
     <CCardFooter>
       <CRow class="justify-content-between">
         <CCol lg="2">
