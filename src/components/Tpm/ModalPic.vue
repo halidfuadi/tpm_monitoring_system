@@ -20,29 +20,62 @@
       </CRow>
       <CRow>
         <CCol lg="12">
-          <v-select
-            :options="users"
-            label="user_nm"
-            multiple
-            v-model="userSelected"
-          >
-            <template #option="option">
-              <span>{{ option.noreg }}-{{ option.user_nm }}</span>
-            </template>
-            <template #selected-option="option">
-              <span>{{ option.noreg }}-{{ option.user_nm }}</span>
-            </template>
-          </v-select>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend" style="width: 86%">
+              <v-select
+                :options="users"
+                label="user_nm"
+                multiple
+                v-model="userSelected"
+              >
+                <template #option="option">
+                  <span>{{ option.noreg }}-{{ option.user_nm }}</span>
+                </template>
+                <template #selected-option="option">
+                  <span>{{ option.noreg }}-{{ option.user_nm }}</span>
+                </template>
+              </v-select>
+            </div>
+            <div class="input-group-append" style="width: 14%">
+              <span class="input-group-text p-0">
+                <CButton
+                  color="primary"
+                  @click="assignPic()"
+                  :disabled="userSelected.length == 0"
+                >
+                  Assign
+                </CButton>
+              </span>
+            </div>
+          </div>
+        </CCol>
+      </CRow>
+
+      <CRow>
+        <CCol lg="12">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Plan Check</span>
+            </div>
+            <input
+              type="date"
+              class="form-control w-50"
+              v-model="changes_date"
+              placeholder="Plan Check Date"
+            />
+            <div class="input-group-append">
+              <span class="input-group-text p-0"
+                ><CButton color="warning" @click="updatePlanDate()"
+                  >Update</CButton
+                ></span
+              >
+            </div>
+          </div>
         </CCol>
       </CRow>
     </CModalBody>
     <CModalFooter>
-      <CButton
-        color="primary"
-        @click="assignPic()"
-        :disabled="userSelected.length == 0"
-        >Assign</CButton
-      >{{ ' ' }}
+      {{ ' ' }}
       <CButton @click="changesShow()">Cancel</CButton>
     </CModalFooter>
   </CModal>
@@ -50,6 +83,7 @@
 
 <script>
 import api from '@/apis/CommonAPI'
+import moment from 'moment'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -59,6 +93,7 @@ export default {
       users: [],
       is_show: false,
       userSelected: [],
+      changes_date: null,
     }
   },
   watch: {
@@ -76,17 +111,20 @@ export default {
       },
       deep: true,
     },
+    getPlanCheckDt: function () {
+      this.changes_date = this.getPlanCheckDt
+    },
   },
   computed: {
     ...mapGetters(['getSubmitStatus']),
+    getPlanCheckDt() {
+      return moment(this.plan_check_dt).format('YYYY-MM-DD')
+    },
   },
   methods: {
     async getUsers(incharge_id = null) {
       try {
-        let { data } = await api.get(
-          `/v1/users`,
-          `?incharge_id=${incharge_id}`,
-        )
+        let { data } = await api.get(`/v1/users`, `?incharge_id=${incharge_id}`)
         console.log(data)
         this.users = data.data
       } catch (error) {
@@ -117,6 +155,35 @@ export default {
         console.log(error)
       }
     },
+
+    async updatePlanDate() {
+      try {
+        const updatePlanDate = {
+          plan_check_dts: this.changes_date,
+          schedule_id: this.schedule_id,
+        }
+        console.log(updatePlanDate)
+        this.$store.dispatch('UPDATE_PLAN_DATE', updatePlanDate)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    formatDate(dateString) {
+      if (!dateString) return '' // Return empty string if dateString is empty or null
+      const dateObject = new Date(dateString) // Convert string to date object
+      // Check if dateObject is valid
+      if (
+        Object.prototype.toString.call(dateObject) === '[object Date]' &&
+        !isNaN(dateObject)
+      ) {
+        // If dateObject is valid, return formatted date string
+        return dateObject.toISOString().split('T')[0]
+      } else {
+        // If dateObject is invalid, return empty string
+        return ''
+      }
+    },
+    //
   },
   mounted() {
     this.getUsers()
@@ -126,6 +193,7 @@ export default {
     isShow: Boolean,
     schedule_id: String,
     machine_nm: String,
+    plan_check_dt: String,
   },
 }
 </script>

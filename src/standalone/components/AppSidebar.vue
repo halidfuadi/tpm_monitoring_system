@@ -1,17 +1,36 @@
 <template>
-  <CSidebar position="fixed" :unfoldable="sidebarUnfoldable" :visible="sidebarVisible" @visible-change="
-    (event) =>
-      $store.commit({
-        type: 'updateSidebarVisible',
-        value: event,
-      })
-  ">
+  <CSidebar
+    position="fixed"
+    :unfoldable="sidebarUnfoldable"
+    :visible="sidebarVisible"
+    @visible-change="
+      (event) =>
+        $store.commit({
+          type: 'updateSidebarVisible',
+          value: event,
+        })
+    "
+  >
     <CSidebarBrand>
-      <img src="../assets/brand/Toyota_logo.png" class="img-fluid sidebar-brand-full" width="200" height="200" />
-      <img src="../assets/brand/Toyota_logo.png" class="sidebar-brand-narrow" width="36" height="10" />
+      <img
+        src="../assets/brand/Toyota_logo.png"
+        class="img-fluid sidebar-brand-full"
+        width="200"
+        height="200"
+      />
+      <img
+        src="../assets/brand/Toyota_logo.png"
+        class="sidebar-brand-narrow"
+        width="36"
+        height="10"
+      />
     </CSidebarBrand>
     <AppSidebarNav v-bind:nav="nav" />
-    <CSidebarToggler id="SidebarToggler" class="d-none d-lg-flex" @click="$store.commit('toggleUnfoldable')" />
+    <CSidebarToggler
+      id="SidebarToggler"
+      class="d-none d-lg-flex"
+      @click="$store.commit('toggleUnfoldable')"
+    />
   </CSidebar>
 </template>
 
@@ -21,41 +40,59 @@ import { useStore } from 'vuex'
 import { AppSidebarNav } from './AppSidebarNav'
 import { logoNegative } from '@/standalone/assets/brand/logo-negative'
 import { sygnet } from '@/standalone/assets/brand/sygnet'
-import utils from "@/utils/CommonUtils"
-import api from "@/apis/CommonAPI"
+import utils from '@/utils/CommonUtils'
+import api from '@/apis/CommonAPI'
 import navtemplate from '@/_nav.js'
 
-var strAuthorizedNav = '';
-var appAuthorized = {};
+var strAuthorizedNav = ''
+var appAuthorized = {}
 const generateNav = async (newAuthorizedData, isChild) => {
-  strAuthorizedNav += '[';
-  let newAuthorizedDataLength = (newAuthorizedData.length)
+  strAuthorizedNav += '['
+  let newAuthorizedDataLength = newAuthorizedData.length
   for (var i = 0; i < newAuthorizedDataLength; i++) {
-    let currentNewAuthorizedData = newAuthorizedData[i];
-    if (currentNewAuthorizedData.children && currentNewAuthorizedData.children.length > 0) {
-      strAuthorizedNav += '{';
-      strAuthorizedNav += ' "component": "CNavGroup",';
-      strAuthorizedNav += ' "name": "' + (isChild ? '' : '') + currentNewAuthorizedData.displayText + '",';
-      strAuthorizedNav += ' "to": "' + currentNewAuthorizedData.path + '",';
-      strAuthorizedNav += ' "icon": "' + (currentNewAuthorizedData.icon) + '",';
-      strAuthorizedNav += ' "parentId": "' + currentNewAuthorizedData.parentId + '",';
+    let currentNewAuthorizedData = newAuthorizedData[i]
+    if (
+      currentNewAuthorizedData.children &&
+      currentNewAuthorizedData.children.length > 0
+    ) {
+      strAuthorizedNav += '{'
+      strAuthorizedNav += ' "component": "CNavGroup",'
+      strAuthorizedNav +=
+        ' "name": "' +
+        (isChild ? '' : '') +
+        currentNewAuthorizedData.displayText +
+        '",'
+      strAuthorizedNav += ' "to": "' + currentNewAuthorizedData.path + '",'
+      strAuthorizedNav += ' "icon": "' + currentNewAuthorizedData.icon + '",'
+      strAuthorizedNav +=
+        ' "parentId": "' + currentNewAuthorizedData.parentId + '",'
       strAuthorizedNav += ' "items": '
-      generateNav(currentNewAuthorizedData.children, true);
-      strAuthorizedNav += '},';
+      generateNav(currentNewAuthorizedData.children, true)
+      strAuthorizedNav += '},'
     } else {
-      strAuthorizedNav += '{';
-      strAuthorizedNav += ' "component": "CNavItem",';
-      strAuthorizedNav += ' "name": "' + (isChild ? '' : '') + currentNewAuthorizedData.displayText + '",';
-      strAuthorizedNav += ' "to": "' + currentNewAuthorizedData.path + '",';
-      strAuthorizedNav += ' "icon": "' + (currentNewAuthorizedData.icon) + '",';
-      strAuthorizedNav += ' "parentId": "' + currentNewAuthorizedData.parentId + '",';
-      strAuthorizedNav += ' "applicationId": "' + currentNewAuthorizedData.applicationId + '",';
-      strAuthorizedNav += ' "linkProps": { "queryParams": { "applicationId": "' + currentNewAuthorizedData.applicationId
-        + '", "functionId": "' + currentNewAuthorizedData.functionId + '" } }';
-      strAuthorizedNav += '},';
+      strAuthorizedNav += '{'
+      strAuthorizedNav += ' "component": "CNavItem",'
+      strAuthorizedNav +=
+        ' "name": "' +
+        (isChild ? '' : '') +
+        currentNewAuthorizedData.displayText +
+        '",'
+      strAuthorizedNav += ' "to": "' + currentNewAuthorizedData.path + '",'
+      strAuthorizedNav += ' "icon": "' + currentNewAuthorizedData.icon + '",'
+      strAuthorizedNav +=
+        ' "parentId": "' + currentNewAuthorizedData.parentId + '",'
+      strAuthorizedNav +=
+        ' "applicationId": "' + currentNewAuthorizedData.applicationId + '",'
+      strAuthorizedNav +=
+        ' "linkProps": { "queryParams": { "applicationId": "' +
+        currentNewAuthorizedData.applicationId +
+        '", "functionId": "' +
+        currentNewAuthorizedData.functionId +
+        '" } }'
+      strAuthorizedNav += '},'
     }
   }
-  strAuthorizedNav += ']';
+  strAuthorizedNav += ']'
 }
 
 export default {
@@ -105,6 +142,20 @@ export default {
           component: 'CNavItem',
           to: '/tpm/master/plant',
           name: 'Master Plant',
+          icon: '',
+          parentId: 'ROOT',
+        },
+        {
+          component: 'CNavItem',
+          to: '/tpm/ledger',
+          name: 'TPM Ledger',
+          icon: '',
+          parentId: 'ROOT',
+        },
+        {
+          component: 'CNavItem',
+          to: '/tpm/today-activities',
+          name: 'Today Activities',
           icon: '',
           parentId: 'ROOT',
         },

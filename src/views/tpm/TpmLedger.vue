@@ -143,6 +143,7 @@ export default {
       isShow: false,
       filter: null,
       schedule_id: null,
+      
       ledgers: [],
       incharge_id: null,
       machine_nm: null,
@@ -160,8 +161,7 @@ export default {
       }, {
         label: 'All',
         value: -1
-      },
-      ],
+      }],
     }
   },
   computed: {
@@ -220,18 +220,6 @@ export default {
         console.log(error)
       }
     },
-    generateDate(month, year) {
-      let monthIdx = this.months.indexOf(month)
-      let totalDate = new Date(year, monthIdx + 1, 0, 23, 59, 59).getDate()
-      this.dates = []
-      console.log(new Date(year, monthIdx + 1, 0, 23, 59, 59))
-      for (let index = 1; index <= totalDate; index++) {
-        this.dates.push(index)
-      }
-    },
-    showChanges(state) {
-      this.isShow = state
-    },
     async confirmShow(schedule) {
       await this.showChanges(true)
       console.log(schedule)
@@ -269,6 +257,7 @@ export default {
 .w200-mc {
   min-width: 100px;
 }
+
 
 .w200-per{
   min-width: 90px;
