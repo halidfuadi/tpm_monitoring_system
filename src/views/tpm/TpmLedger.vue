@@ -1,6 +1,11 @@
 <template>
   <Toaster position="top-center" closeButton />
-  <ModalItemcheck :isShow="isShow" :ledger_id="ledger_id" :machine_nm="machine_nm" @showChanges="showChanges(state)" />
+  <ModalItemcheck
+    :isShow="isShow"
+    :ledger_id="ledger_id"
+    :machine_nm="machine_nm"
+    @showChanges="showChanges(state)"
+  />
   <SearchBar @getSchedules="getLedgers" />
   <CCard>
     <CCardBody>
@@ -15,8 +20,7 @@
                 <th class="item-check text-center">Item Check No</th>
                 <th class="actions text-center">Actions</th>
               </tr>
-              <tr>
-              </tr>
+              <tr></tr>
             </thead>
 
             <tbody v-if="ledgers.length > 0">
@@ -24,15 +28,30 @@
                 <td class="text-center">{{ i + 1 }}</td>
                 <td class="line text-center">{{ ledger?.line_nm }}</td>
                 <td class="mc text-center">{{ ledger?.machine_nm }}</td>
-                <td class="item-check text-center">{{ ledger?.num_item_checks }}</td>
-                <td class="actions row">
-                  <CButton class="btn btn-sm col" color="success" v-bind="props" @click="showDetail(ledger)"
-                    style="max-width: 100px">
-                    ITEMCHECKS
-                  </CButton>
-                  <CButton class="btn btn-sm col" color="danger" style="max-width: 100px">
-                    DELETE
-                  </CButton>
+                <td class="item-check text-center">
+                  {{ ledger?.num_item_checks }}
+                </td>
+
+                <td class="actions align-center">
+                  <div class="d-flex justify-content-center">
+                    <!-- Add a div with Bootstrap flex utilities -->
+                    <CButton
+                      class="btn btn-sm col me-3"
+                      color="success"
+                      v-bind="props"
+                      @click="showDetail(ledger)"
+                      style="max-width: 100px"
+                    >
+                      ITEMCHECKS
+                    </CButton>
+                    <CButton
+                      class="btn btn-sm col"
+                      color="danger"
+                      style="max-width: 100px"
+                    >
+                      DELETE
+                    </CButton>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -48,7 +67,11 @@
               <span class="input-group-text">Limit</span>
             </div>
             <select class="form-control" v-model="filtered.rowsPerPage">
-              <option v-for="limit in limitOpts" :key="limit.label" :value="limit.value">
+              <option
+                v-for="limit in limitOpts"
+                :key="limit.label"
+                :value="limit.value"
+              >
                 {{ limit.label }}
               </option>
             </select>
@@ -73,15 +96,15 @@
 </template>
 
 <script>
-import api from '@/apis/CommonAPI'
+import api from "@/apis/CommonAPI";
 import { Toaster } from "vue-sonner";
 
-import ModalItemcheck from '@/components/Tpm/ModalItemcheck'
-import SearchBar from '@/components/Tpm/SearchBar'
-import StatusTpm from '@/components/Tpm/StatusTpm'
+import ModalItemcheck from "@/components/Tpm/ModalItemcheck";
+import SearchBar from "@/components/Tpm/SearchBar";
+import StatusTpm from "@/components/Tpm/StatusTpm";
 
 export default {
-  name: 'TpmLedger',
+  name: "TpmLedger",
   data() {
     return {
       filtered: {
@@ -101,33 +124,38 @@ export default {
       machine_nm: null,
       num_item_checks: null,
 
-      limitOpts: [{
-        label: 5,
-        value: 5
-      }, {
-        label: 10,
-        value: 10
-      }, {
-        label: 100,
-        value: 100
-      }, {
-        label: 'All',
-        value: -1
-      }],
-    }
+      limitOpts: [
+        {
+          label: 5,
+          value: 5,
+        },
+        {
+          label: 10,
+          value: 10,
+        },
+        {
+          label: 100,
+          value: 100,
+        },
+        {
+          label: "All",
+          value: -1,
+        },
+      ],
+    };
   },
   computed: {
     pages() {
       function range(start, end) {
-        return Array.from(Array(end - start + 1), (_, i) => i + start)
+        return Array.from(Array(end - start + 1), (_, i) => i + start);
       }
 
-      const max = this.maxVisible
-      const middle = Math.floor(this.maxVisible / 2)
-      const pageNum = Math.ceil(this.rowsNumber / this.rowsPerPage)
+      const max = this.maxVisible;
+      const middle = Math.floor(this.maxVisible / 2);
+      const pageNum = Math.ceil(this.rowsNumber / this.rowsPerPage);
 
       if (pageNum < max) {
-        return range(1, pageNum)
+        return range(1, pageNum);
       }
 
       let start = this.modelValue - middle;
@@ -139,16 +167,16 @@ export default {
         end = pageNum;
       }
 
-      return range(Math.max(1, start), Math.max(end, max))
+      return range(Math.max(1, start), Math.max(end, max));
     },
   },
   methods: {
     onPageClick(page) {
-      this.$emit('update:modelValue', page)
+      this.$emit("update:modelValue", page);
     },
     onPageBack() {
       if (this.modelValue - 1 >= 1) {
-        this.onPageClick(this.modelValue - 1)
+        this.onPageClick(this.modelValue - 1);
       }
     },
     onPageForward() {
@@ -156,28 +184,29 @@ export default {
         this.modelValue + 1 <=
         Math.ceil(this.rowsNumber / this.rowsPerPage)
       ) {
-        this.onPageClick(this.modelValue + 1)
+        this.onPageClick(this.modelValue + 1);
       }
     },
     async getLedgers(filter) {
       try {
-        let ledgers = await api.get(`/tpm/ledgers`)
-        console.log(ledgers)
-        this.ledgers = ledgers.data.data
+        let ledgers = await api.get(`/tpm/ledgers`);
+        console.log(ledgers);
+        this.ledgers = ledgers.data.data;
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
     showChanges(state) {
-      this.isShow = state
+      this.isShow = state;
     },
     async showDetail(ledger) {
+      console.log("Crt");
       console.log(ledger.ledger_id);
-      this.machine_nm = ledger.machine_nm
-      this.ledger_id = ledger.ledger_id
+      this.machine_nm = ledger.machine_nm;
+      this.ledger_id = ledger.ledger_id;
       setTimeout(() => {
-        this.showChanges(true)
-      }, 500)
+        this.showChanges(true);
+      }, 500);
     },
   },
   components: {
@@ -186,7 +215,7 @@ export default {
     ModalItemcheck,
     Toaster,
   },
-}
+};
 </script>
 
 <style scoped>
