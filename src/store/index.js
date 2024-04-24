@@ -5,30 +5,36 @@ import findingModule from './findings.module'
 import executionModule from './execution.module'
 import itemcheckModule from './itemcheck.module'
 import historyModule from './history.module'
+import lines from './lines.module'
+import status from './status.module'
+import todayActivities from './todayActivities.module'
 
 export default createStore({
-  state: {
-    sidebarVisible: '',
-    sidebarUnfoldable: false,
-  },
-  mutations: {
-    toggleSidebar(state) {
-      state.sidebarVisible = !state.sidebarVisible
+    state: {
+        sidebarVisible: '',
+        sidebarUnfoldable: false,
     },
-    toggleUnfoldable(state) {
-      state.sidebarUnfoldable = !state.sidebarUnfoldable
+    mutations: {
+        toggleSidebar(state) {
+            state.sidebarVisible = !state.sidebarVisible
+        },
+        toggleUnfoldable(state) {
+            state.sidebarUnfoldable = !state.sidebarUnfoldable
+        },
+        updateSidebarVisible(state, payload) {
+            state.sidebarVisible = payload.value
+        },
     },
-    updateSidebarVisible(state, payload) {
-      state.sidebarVisible = payload.value
+    actions: {},
+    modules: {
+        schedule: scheduleModule,
+        user: userModule,
+        execution: executionModule,
+        findings: findingModule,
+        itemchecks: itemcheckModule,
+        history: historyModule,
+        lines,
+        status,
+        todayActivities
     },
-  },
-  actions: {},
-  modules: {
-    schedule: scheduleModule,
-    user: userModule,
-    execution: executionModule,
-    findings: findingModule,
-    itemchecks: itemcheckModule,
-    history: historyModule,
-  },
 })

@@ -2,9 +2,13 @@ import './set-public-path'
 import { h, createApp } from 'vue'
 import singleSpaVue from 'single-spa-vue'
 
+
 import App from './App.vue'
 import router from './router'
 import store from '@/store'
+
+import axios from "axios";
+import VueAxios from "vue-axios";
 
 import CoreuiVue from '@coreui/vue'
 import CIcon from '@coreui/icons-vue'
@@ -39,6 +43,7 @@ const vueLifecycles = singleSpaVue({
         },
     },
     handleInstance(app) {
+        app.use(VueAxios, axios);
         app.use(router)
         app.use(store)
         app.use(CoreuiVue)

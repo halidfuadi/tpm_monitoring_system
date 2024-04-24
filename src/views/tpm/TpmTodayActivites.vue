@@ -3,8 +3,18 @@
     <div class="row mb-2">
       <div class="col">
         <label>Line</label>
-        <select class="form-select">
-          <!-- option here -->
+        <select class="form-select" v-model="filter.line_id">
+          <option v-for="(line, index) in getLinesOpts" :key="index" :value="line.id">
+            {{ line.text }}
+          </option>
+        </select>
+      </div>
+      <div class="col">
+        <label>Status</label>
+        <select class="form-select" v-model="filter.status">
+          <option v-for="(line, index) in getStatusOpts" :key="index" :value="line.id">
+            {{ line.text }}
+          </option>
         </select>
       </div>
     </div>
@@ -13,37 +23,56 @@
         <div class="d-flex flex-row justify-content-between align-items-center">
           <template v-if="isMobile">
             <div v-for="(item, i) in dailyOpts" :key="i" class="flex-col">
-              <button
-                :class="
-                  'btn btn-sm ' +
-                  (item.is_active ? 'btn-primary' : 'btn-outline-primary') +
-                  ' rounded-circle'
-                "
-                type="button"
-              >
+              <button :class="`btn btn-sm ${item.is_active ? 'btn-primary' : 'btn-outline-primary'} rounded-circle`"
+                type="button" @click="generateTodayActivities(i)">
                 {{ item.label }}
               </button>
             </div>
           </template>
 
           <template v-else>
-            <div
-              v-for="(item, i) in dailyDesktopOpts"
-              :key="i"
-              class="flex-col"
-            >
-              <button
-                :class="
-                  'btn btn-sm ' +
-                  (item.is_active ? 'btn-primary' : 'btn-outline-primary') +
-                  ' rounded-circle'
-                "
-                type="button"
-              >
+            <div v-for="(item, i) in dailyDesktopOpts" :key="i" class="flex-col">
+              <button :class="`btn btn-sm ${item.is_active ? 'btn-primary' : 'btn-outline-primary'} rounded-circle`"
+                type="button" @click="generateTodayActivities(i)">
                 {{ item.label }}
               </button>
             </div>
           </template>
+        </div>
+      </div>
+      <div class="card-body p-0 mt-3">
+        <div class="card p-3">
+          <ul>
+            <li>OM Activities</li>
+          </ul>
+          <div class="row">
+            <template v-if="getTodayActivities.length > 0 && !isLoading">
+              <div v-for="item in getTodayActivities" :key="item.observation_id" class="col-12 col-md-4 col-lg-4">
+                <div class="card p-2 mt-2" style="border-left: 5px solid cyan">
+                  <div class="d-flex flex-row justify-content-between align-items-center">
+                    <div class="d-flex flex-column">
+                      Line: {{ item.line_nm }} | M/C: {{ item.machine_nm }} |
+                      Dept: {{ item.incharge_nm }}
+                    </div>
+                    <div class="d-flex flex-column">
+                      <button class="btn btn-sm btn-primary"
+                        @click="$router.push(`/tpm/monitoring/${item.schedule_id}`)">
+                        Check </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+            <template v-else-if="isLoading">
+              <div class="col-12 col-md-4 col-lg-4">
+                <CSpinner component="span" size="sm" variant="grow" aria-hidden="true" />
+                Loading...
+              </div>
+            </template>
+            <template v-else>
+              <NoDataContent />
+            </template>
+          </div>
         </div>
       </div>
     </div>
@@ -52,13 +81,17 @@
 
 <script>
 import moment from 'moment'
-import api from '@/apis/CommonAPI'
-import { Toaster } from 'vue-sonner'
+
+import NoDataContent from '@/components/Card/NoDataContent.vue'
+
+import { toast } from 'vue-sonner'
+import { GET_LINES } from '@/store/lines.module'
 import { mapGetters } from 'vuex'
+import { GET_STATUS } from '@/store/status.module'
+import { GET_TODAY_ACTIVITIES } from '@/store/todayActivities.module'
 
 export default {
   name: 'TpmTodayActivites',
-
   data() {
     return {
       isLoading: false,
@@ -141,9 +174,10 @@ export default {
       filter: {
         line_id: localStorage.getItem('line_id') ?? -1,
         date: null,
+        status: -1,
       },
       isMobile: false,
-      dataSTW: [],
+      tpmData: [],
     }
   },
   watch: {
@@ -155,19 +189,89 @@ export default {
         this.isMobile = false
       }
     },
+    filter: {
+      handler() {
+        this.ActionGetTodayActivities()
+      },
+      deep: true
+    }
+  },
+  computed: {
+    ...mapGetters(['getLinesOpts', 'getStatusOpts', 'getTodayActivities']),
   },
   methods: {
+    async ActionGetLines() {
+      try {
+        await this.$store.dispatch(GET_LINES, this.filter)
+      } catch (error) {
+        toast.error(error.response.data.message)
+      }
+    },
+    async ActionGetStatus() {
+      try {
+        await this.$store.dispatch(GET_STATUS, this.filter)
+      } catch (error) {
+        toast.error(error.response.data.message)
+      }
+    },
+    async ActionGetTodayActivities() {
+      try {
+        await this.$store.dispatch(GET_TODAY_ACTIVITIES, this.filter)
+      } catch (error) {
+        console.log(error);
+        toast.error(error.response.data.message)
+      }
+    },
     onResize() {
       this.windowWidth = window.innerWidth
+    },
+    generateDateOfThisWeek() {
+      let thisDay = moment().startOf('week');
+      if (moment().isoWeekday() == 7) {
+        thisDay = moment().startOf('week').subtract(1, 'weeks');
+      }
+      let today = moment().format('YYYY-MM-DD');
+      for (let i = 0; i < 7; i++) {
+        var date = thisDay.add(1, 'days').format('YYYY-MM-DD');
+        this.dailyOpts[i].date = date
+        this.dailyDesktopOpts[i].date = date
+        if (today == date) {
+          this.dailyOpts[i].is_active = true
+          this.dailyDesktopOpts[i].is_active = true
+          this.filter.date = date
+        }
+      }
+    },
+    generateTodayActivities(idxSelected) {
+      const mapDay = this.dailyOpts.map((item, i) => {
+        if (idxSelected == i) {
+          this.dailyDesktopOpts[i].is_active = true
+          item.is_active = true
+          this.filter.date = item.date
+        } else {
+          this.dailyDesktopOpts[i].is_active = false
+          item.is_active = false
+        }
+        return item
+      })
+      this.dailyOpts = mapDay
     },
   },
   async mounted() {
     this.isLoading = true
     this.onResize()
+    this.generateDateOfThisWeek()
+    await this.ActionGetLines()
+    await this.ActionGetStatus()
+    await this.ActionGetTodayActivities()
+    this.isLoading = false
   },
   beforeUnmount() {
     window.removeEventListener('resize', this.onResize)
   },
+  components: {
+    NoDataContent
+  }
 }
 </script>
 
