@@ -275,7 +275,7 @@ export default {
         let year = filter.split('=')[1].split('-')[0]
         this.generateDate(month, year)
         this.filter = filter
-        let schedules = await api.get(`/v1/schedules`, '?' + filter)
+        let schedules = await api.get(`/tpm/schedules`, '?' + filter)
 
         console.log(schedules)
         this.schedules = schedules.data.data
@@ -295,7 +295,7 @@ export default {
     showChanges(state) {
       this.isShow = state
     },
-    
+
     async confirmShow(schedule) {
       await this.showChanges(true)
       console.log(schedule)

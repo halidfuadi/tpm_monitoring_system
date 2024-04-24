@@ -19,7 +19,7 @@ export default {
         async ACT_EXECUTION_TPM({ commit }, payload) {
             console.log(payload)
             try {
-                let resData = await api.post(`/v1/execution/add`, payload)
+                let resData = await api.post(`/tpm/execution/add`, payload)
                 commit('setSubmit', resData)
                 toast.success('Success to execution')
             } catch (error) {

@@ -34,34 +34,37 @@
 
       <CRow>
         <CCol lg="3">
-          <v-select append-to-body style="z-index: 1;" :options="line" placeholder="Lines" :reduce="line => line.line_id"  v-model="form.line_id">
+          <v-select append-to-body style="z-index: 1;" :options="line" placeholder="Lines"
+            :reduce="line => line.line_id" v-model="form.line_id">
             <template #option="option">
-              <span>{{option.line_nm}}</span>
+              <span>{{ option.line_nm }}</span>
             </template>
             <template #selected-option="option">
-              <span>{{option.line_nm}}</span>
+              <span>{{ option.line_nm }}</span>
             </template>
           </v-select>
         </CCol>
 
         <CCol lg="3">
-          <v-select append-to-body style="z-index: 1;" :options="machine" placeholder="Machines" :reduce="machine => machine.machine_id"  v-model="form.machine_id">
+          <v-select append-to-body style="z-index: 1;" :options="machine" placeholder="Machines"
+            :reduce="machine => machine.machine_id" v-model="form.machine_id">
             <template #option="option">
-              <span>{{option.machine_nm}}</span>
+              <span>{{ option.machine_nm }}</span>
             </template>
             <template #selected-option="option">
-              <span>{{option.machine_nm}}</span>
+              <span>{{ option.machine_nm }}</span>
             </template>
           </v-select>
         </CCol>
 
         <CCol lg="3">
-          <v-select append-to-body style="z-index: 1;" :options="incharge" placeholder="Incharge" :reduce="incharge => incharge.incharge_id"  v-model="form.incharge_id">
+          <v-select append-to-body style="z-index: 1;" :options="incharge" placeholder="Incharge"
+            :reduce="incharge => incharge.incharge_id" v-model="form.incharge_id">
             <template #option="option">
-              <span>{{option.incharge_nm}}</span>
+              <span>{{ option.incharge_nm }}</span>
             </template>
             <template #selected-option="option">
-              <span>{{option.incharge_nm}}</span>
+              <span>{{ option.incharge_nm }}</span>
             </template>
           </v-select>
           <!-- <div class="input-group mb-3">
@@ -73,12 +76,15 @@
         </CCol>
 
         <CCol lg="3">
-          <v-select append-to-body style="z-index: 1;" :options="status" placeholder="Status" :reduce="status => status.status_id"  v-model="form.status_id">
+          <v-select append-to-body style="z-index: 1;" :options="status" placeholder="Status"
+            :reduce="status => status.status_id" v-model="form.status_id">
             <template #option="option">
-              <CBadge class="text-dark" :style="`background-color: ${option.color_tag}`" shape="pill">{{option.status_nm}}</CBadge>
+              <CBadge class="text-dark" :style="`background-color: ${option.color_tag}`" shape="pill">
+                {{ option.status_nm }}</CBadge>
             </template>
             <template #selected-option="option">
-              <CBadge class="text-dark" :style="`background-color: ${option.color_tag}`" shape="pill">{{option.status_nm}}</CBadge>
+              <CBadge class="text-dark" :style="`background-color: ${option.color_tag}`" shape="pill">
+                {{ option.status_nm }}</CBadge>
             </template>
           </v-select>
         </CCol>
@@ -116,7 +122,7 @@ export default {
       status: [],
       incharge: [],
       machine: [],
-      line:[],
+      line: [],
     }
   },
   watch: {
@@ -126,20 +132,20 @@ export default {
         this.getStatus()
       }
     },
-    getSubmitIncharge: function(){
-      if (this.getIncharge){
+    getSubmitIncharge: function () {
+      if (this.getIncharge) {
         this.search()
         this.getIncharge()
       }
     },
-    getSubmitMachine: function(){
-      if (this.getMachine){
+    getSubmitMachine: function () {
+      if (this.getMachine) {
         this.search()
         this.getMachine()
       }
     },
-    getSubmitLine: function(){
-      if (this.getLine){
+    getSubmitLine: function () {
+      if (this.getLine) {
         this.search()
         this.getLine()
       }
@@ -158,33 +164,33 @@ export default {
     },
     async getStatus() {
       try {
-        let status = await api.post(`/v1/status/view`)
+        let status = await api.post(`/tpm/statusTpm/view`)
         this.status = status.data.data
       } catch (error) {
         console.log(error)
       }
     },
-    async getIncharge(){
-      try{
-        let incharge = await api.post(`/v1/filter/incharge`)
+    async getIncharge() {
+      try {
+        let incharge = await api.post(`/tpm/filter/incharge`)
         this.incharge = incharge.data.data
-      } catch(error){
+      } catch (error) {
         console.log(error);
       }
     },
-    async getMachine(){
-      try{
-        let machine = await api.post(`/v1/filter/machine`)
+    async getMachine() {
+      try {
+        let machine = await api.post(`/tpm/filter/machine`)
         this.machine = machine.data.data
-      } catch(error){
+      } catch (error) {
         console.log(error);
       }
     },
-    async getLine(){
-      try{
-        let line = await api.post(`/v1/filter/line`)
+    async getLine() {
+      try {
+        let line = await api.post(`/tpm/filter/line`)
         this.line = line.data.data
-      } catch(error){
+      } catch (error) {
         console.log(error);
       }
     }

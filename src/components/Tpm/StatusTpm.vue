@@ -13,10 +13,11 @@
                 <div class="input-group input-group-sm">
                   <div class="input-group-prepend">
                     <span class="input-group-text">
-                      <CBadge class="text-dark" :style="`background-color: ${stat.color_tag}`" shape="pill">{{stat.status_nm}}</CBadge>
+                      <CBadge class="text-dark" :style="`background-color: ${stat.color_tag}`" shape="pill">
+                        {{ stat.status_nm }}</CBadge>
                     </span>
                   </div>
-                  <input disabled type="text" class="form-control" :value="stat.count" >
+                  <input disabled type="text" class="form-control" :value="stat.count">
                 </div>
               </CCol>
             </CRow>
@@ -45,7 +46,7 @@ export default {
   methods: {
     async getStatus(filter) {
       try {
-        let status = await api.get(`/v1/status`, '?' + filter)
+        let status = await api.get(`/tpm/status`, '?' + filter)
         this.status = status.data.data
       } catch (error) {
         console.log(error)

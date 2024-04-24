@@ -8,13 +8,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text">Machine</span>
             </div>
-            <input
-              disabled
-              type="text"
-              class="form-control"
-              placeholder="Machine"
-              :value="machine_nm"
-            />
+            <input disabled type="text" class="form-control" placeholder="Machine" :value="machine_nm" />
           </div>
         </CCol>
       </CRow>
@@ -33,10 +27,11 @@
 
             <tbody v-if="items.length > 0">
               <tr v-for="(item, i) in items" :key="i">
-                <td class="text-center" >{{ i + 1 }}</td>
+                <td class="text-center">{{ i + 1 }}</td>
                 <td class="item-check text-center">{{ item?.itemcheck }}</td>
                 <td class="actions row">
-                  <CButton class="btn btn-sm col" color="warning" v-bind="props" @click="showDetail()" style="max-width: 100px">
+                  <CButton class="btn btn-sm col" color="warning" v-bind="props" @click="showDetail()"
+                    style="max-width: 100px">
                     EDIT
                   </CButton>
                   <CButton class="btn btn-sm col" color="danger" style="max-width: 100px">
@@ -81,7 +76,7 @@ export default {
       },
       deep: true,
     },
-    ledger_id: function() {
+    ledger_id: function () {
       this.getItems(this.ledger_id)
     }
   },
@@ -91,7 +86,7 @@ export default {
   methods: {
     async getItems(ledger_id) {
       try {
-        let items = await api.get(`v1/ledgers/detail`, `?ledger_id=${ledger_id}`)
+        let items = await api.get(`tpm/ledgers/detail`, `?ledger_id=${ledger_id}`)
         console.log(items)
         this.items = items.data
       } catch (error) {

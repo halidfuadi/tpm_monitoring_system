@@ -209,7 +209,7 @@ export default {
     },
     async ActionGetStatus() {
       try {
-        await this.$store.dispatch(GET_STATUS, this.filter)
+        await this.$store.dispatch(GET_STATUS)
       } catch (error) {
         toast.error(error.response.data.message)
       }
@@ -219,6 +219,7 @@ export default {
         await this.$store.dispatch(GET_TODAY_ACTIVITIES, this.filter)
       } catch (error) {
         console.log(error);
+
         toast.error(error.response.data.message)
       }
     },

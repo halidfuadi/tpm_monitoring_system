@@ -1,7 +1,6 @@
 <template>
   <Toaster position="top-center" closeButton />
-  <ModalItemcheck :isShow="isShow" :ledger_id="ledger_id" :machine_nm="machine_nm"
-    @showChanges = "showChanges(state)"/>
+  <ModalItemcheck :isShow="isShow" :ledger_id="ledger_id" :machine_nm="machine_nm" @showChanges="showChanges(state)" />
   <SearchBar @getSchedules="getLedgers" />
   <CCard>
     <CCardBody>
@@ -22,12 +21,13 @@
 
             <tbody v-if="ledgers.length > 0">
               <tr v-for="(ledger, i) in ledgers" :key="i">
-                <td class="text-center" >{{ i + 1 }}</td>
+                <td class="text-center">{{ i + 1 }}</td>
                 <td class="line text-center">{{ ledger?.line_nm }}</td>
                 <td class="mc text-center">{{ ledger?.machine_nm }}</td>
                 <td class="item-check text-center">{{ ledger?.num_item_checks }}</td>
                 <td class="actions row">
-                  <CButton class="btn btn-sm col" color="success" v-bind="props" @click="showDetail(ledger)" style="max-width: 100px">
+                  <CButton class="btn btn-sm col" color="success" v-bind="props" @click="showDetail(ledger)"
+                    style="max-width: 100px">
                     ITEMCHECKS
                   </CButton>
                   <CButton class="btn btn-sm col" color="danger" style="max-width: 100px">
@@ -94,7 +94,7 @@ export default {
       isShow: false,
       filter: null,
       schedule_id: null,
-      
+
       ledgers: [],
       ledger_id: null,
       line_nm: null,
@@ -161,14 +161,14 @@ export default {
     },
     async getLedgers(filter) {
       try {
-        let ledgers = await api.get(`/v1/ledgers`)
+        let ledgers = await api.get(`/tpm/ledgers`)
         console.log(ledgers)
         this.ledgers = ledgers.data.data
       } catch (error) {
         console.log(error)
       }
     },
-    showChanges(state){
+    showChanges(state) {
       this.isShow = state
     },
     async showDetail(ledger) {
@@ -205,6 +205,7 @@ export default {
 .mc {
   max-width: 50px;
 }
+
 th,
 td {
   border: 1px solid black;

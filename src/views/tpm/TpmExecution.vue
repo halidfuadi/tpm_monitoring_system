@@ -270,7 +270,7 @@ export default {
     async getHistoryExecution() {
       try {
         let { data } = await api.get(
-          `/v1/execution`,
+          `/tpm/execution`,
           `?schedule_id=${this.$route.params.id}`,
         )
         if (data.data) {
@@ -298,7 +298,7 @@ export default {
     async getStd() {
       try {
         let { data } = await api.get(
-          `/v1/itemcheck-std`,
+          `/tpm/itemcheck-std`,
           `?itemcheck_std_id=${this.GETTER_SCHEDULE_DATA.itemcheck_std_id}`,
         )
         let stdData = data.data[0]

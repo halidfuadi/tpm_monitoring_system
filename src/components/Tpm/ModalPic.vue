@@ -8,13 +8,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text">Machine</span>
             </div>
-            <input
-              disabled
-              type="text"
-              class="form-control"
-              placeholder="Machine"
-              :value="machine_nm"
-            />
+            <input disabled type="text" class="form-control" placeholder="Machine" :value="machine_nm" />
           </div>
         </CCol>
       </CRow>
@@ -22,12 +16,7 @@
         <CCol lg="12">
           <div class="input-group mb-3">
             <div class="input-group-prepend" style="width: 86%">
-              <v-select
-                :options="users"
-                label="user_nm"
-                multiple
-                v-model="userSelected"
-              >
+              <v-select :options="users" label="user_nm" multiple v-model="userSelected">
                 <template #option="option">
                   <span>{{ option.noreg }}-{{ option.user_nm }}</span>
                 </template>
@@ -38,11 +27,7 @@
             </div>
             <div class="input-group-append" style="width: 14%">
               <span class="input-group-text p-0">
-                <CButton
-                  color="primary"
-                  @click="assignPic()"
-                  :disabled="userSelected.length == 0"
-                >
+                <CButton color="primary" @click="assignPic()" :disabled="userSelected.length == 0">
                   Assign
                 </CButton>
               </span>
@@ -57,18 +42,11 @@
             <div class="input-group-prepend">
               <span class="input-group-text">Plan Check</span>
             </div>
-            <input
-              type="date"
-              class="form-control w-50"
-              v-model="changes_date"
-              placeholder="Plan Check Date"
-            />
+            <input type="date" class="form-control w-50" v-model="changes_date" placeholder="Plan Check Date" />
             <div class="input-group-append">
-              <span class="input-group-text p-0"
-                ><CButton color="warning" @click="updatePlanDate()"
-                  >Update</CButton
-                ></span
-              >
+              <span class="input-group-text p-0">
+                <CButton color="warning" @click="updatePlanDate()">Update</CButton>
+              </span>
             </div>
           </div>
         </CCol>
@@ -124,7 +102,7 @@ export default {
   methods: {
     async getUsers(incharge_id = null) {
       try {
-        let { data } = await api.get(`/v1/users`, `?incharge_id=${incharge_id}`)
+        let { data } = await api.get(`/tpm/users`, `?incharge_id=${incharge_id}`)
         console.log(data)
         this.users = data.data
       } catch (error) {

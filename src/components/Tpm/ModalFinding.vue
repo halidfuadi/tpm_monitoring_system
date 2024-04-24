@@ -86,7 +86,7 @@ export default {
     async getUsers(incharge_id = null) {
       try {
         let { data } = await api.get(
-          `/v1/users`,
+          `/tpm/users`,
           `?incharge_id=${incharge_id}`,
         )
         console.log(data)
