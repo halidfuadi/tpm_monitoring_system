@@ -11,7 +11,7 @@
       </div>
       <div class="col">
         <label>Status</label>
-        <select class="form-select" v-model="filter.status">
+        <select class="form-select" v-model="filter.status_id">
           <option v-for="(line, index) in getStatusOpts" :key="index" :value="line.id">
             {{ line.text }}
           </option>
@@ -43,12 +43,12 @@
       <div class="card-body p-0 mt-3">
         <div class="card p-3">
           <ul>
-            <li>OM Activities</li>
+            <li>TPM Activities</li>
           </ul>
           <div class="row">
             <template v-if="getTodayActivities.length > 0 && !isLoading">
               <div v-for="item in getTodayActivities" :key="item.observation_id" class="col-12 col-md-4 col-lg-4">
-                <div class="card p-2 mt-2" style="border-left: 5px solid cyan">
+                <div class="card p-2 mt-2" style="border-left: 5px solid cyan!important">
                   <div class="d-flex flex-row justify-content-between align-items-center">
                     <div class="d-flex flex-column">
                       Line: {{ item.line_nm }} | M/C: {{ item.machine_nm }} |
@@ -174,7 +174,7 @@ export default {
       filter: {
         line_id: localStorage.getItem('line_id') ?? -1,
         date: null,
-        status: -1,
+        status_id: -1,
       },
       isMobile: false,
       tpmData: [],
