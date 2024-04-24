@@ -1,57 +1,57 @@
 import CommonAPI from "../apis/CommonAPI";
 
-export const GET_LINES = "getLines";
-export const POST_LINE = "postLines";
-export const PUT_LINE = "putLines";
-export const DELETE_LINE = "deleteLines";
+export const GET_MACHINES = "getMachines";
+export const POST_MACHINE = "postMachines";
+export const PUT_MACHINE = "putMachines";
+export const DELETE_MACHINE = "deleteMachines";
 
 // mutation types
-export const SET_LINES = "setLines";
+export const SET_MACHINES = "setMachines";
 
 const state = {
-    lines: null
+    machines: []
 };
 
 const getters = {
-    getLines(state) {
-        return state.lines
+    getMachines(state) {
+        return state.machines
     },
-    getLinesOpts(state) {
-        if (state.lines) {
-            const mapLines = state.lines.map(line => {
+    getMachinesOpts(state) {
+        if (state.machines) {
+            const mapMachines = state.machines.map(machine => {
                 return {
-                    id: line.uuid,
-                    text: line.line_nm
+                    id: machine.uuid,
+                    text: machine.machine_nm
                 }
             })
-            mapLines.push({
+            mapMachines.push({
                 id: "-1",
                 text: 'All'
             })
-            return mapLines
+            return mapMachines
         }
     },
-    getLinesOptsWithoutAll(state) {
-        if (state.lines) {
-            const mapLines = state.lines.map(line => {
+    getMachinesOptsWithoutAll(state) {
+        if (state.machines) {
+            const mapMachines = state.machines.map(machine => {
                 return {
-                    id: line.id,
-                    text: line.line_nm
+                    id: machine.machine_id,
+                    text: machine.machine_nm
                 }
             })
-            return mapLines
+            return mapMachines
         }
     }
 };
 
 const actions = {
-    [GET_LINES]({ commit }, query) {
+    [GET_MACHINES]({ commit }, query) {
         return new Promise(async(resolve, reject) => {
-            await CommonAPI.post('/tpm/lines/search', query)
+            await CommonAPI.post('/tpm/machines/search', query)
                 .then((result) => {
                     if (result.data) {
                         console.log(result.data);
-                        commit(SET_LINES, result.data.data)
+                        commit(SET_MACHINES, result.data.data)
                         resolve(result.data.data)
                     }
                     reject('Data tidak ada')
@@ -62,26 +62,26 @@ const actions = {
 
         });
     },
-    [POST_LINE]({ commit }, data = null) {
+    [POST_MACHINE]({ commit }, data = null) {
         ApiService.setHeader()
         return new Promise((resolve, reject) => {
-            ApiService.post('master/lines', data)
+            ApiService.post('master/machines', data)
                 .then((result) => {
-                    const linesData = result.data
-                    resolve(linesData.data)
+                    const machinesData = result.data
+                    resolve(machinesData.data)
                     console.log(commit);
                 }).catch((err) => {
                     reject(err)
                 });
         });
     },
-    [PUT_LINE]({ commit }, data = null) {
+    [PUT_MACHINE]({ commit }, data = null) {
         ApiService.setHeader()
         let ID = data.id
         delete data.id
         return new Promise((resolve, reject) => {
             console.log(data);
-            ApiService.put(`master/lines/edit/${ID}`, data)
+            ApiService.put(`master/machines/edit/${ID}`, data)
                 .then((result) => {
                     const jobData = result.data
                     resolve(jobData.data)
@@ -92,10 +92,10 @@ const actions = {
 
         });
     },
-    [DELETE_LINE]({ commit }, id) {
+    [DELETE_MACHINE]({ commit }, id) {
         ApiService.setHeader()
         return new Promise((resolve, reject) => {
-            ApiService.delete(`master/lines/delete/${id}`)
+            ApiService.delete(`master/machines/delete/${id}`)
                 .then((result) => {
                     const jobData = result.data
                     resolve(jobData.data)
@@ -109,8 +109,8 @@ const actions = {
 };
 
 const mutations = {
-    [SET_LINES](state, lines) {
-        state.lines = lines;
+    [SET_MACHINES](state, machines) {
+        state.machines = machines;
     },
 };
 

@@ -5,7 +5,10 @@ import findingModule from './findings.module'
 import executionModule from './execution.module'
 import itemcheckModule from './itemcheck.module'
 import historyModule from './history.module'
+
 import lines from './lines.module'
+import machines from './machines.module'
+
 import status from './status.module'
 import todayActivities from './todayActivities.module'
 
@@ -35,6 +38,7 @@ export default createStore({
         history: historyModule,
         lines,
         status,
-        todayActivities
+        todayActivities,
+        machines
     },
 })

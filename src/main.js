@@ -26,6 +26,9 @@ if (process.env.VUE_APP_STANDALONE_SINGLE_SPA === 'true') {
 } else {
     require('@/components/SingleSpaStyle.vue')
 }
+
+import VueApexCharts from "vue3-apexcharts";
+
 const vueLifecycles = singleSpaVue({
     createApp,
     appOptions: {
@@ -51,6 +54,7 @@ const vueLifecycles = singleSpaVue({
         app.use(VueSweetalert2)
         app.component('CIcon', CIcon)
         app.component('v-select', vSelect)
+        app.use(VueApexCharts)
         app.use(HighchartsVue, {
             highcharts: Highcharts
         })
