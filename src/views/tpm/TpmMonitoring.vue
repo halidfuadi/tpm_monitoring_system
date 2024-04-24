@@ -128,7 +128,7 @@
         </CCol>
       </CRow>
     </CCardBody>
-    
+
     <CCardFooter>
       <CRow class="justify-content-between">
         <CCol lg="2">
@@ -276,6 +276,7 @@ export default {
         this.generateDate(month, year)
         this.filter = filter
         let schedules = await api.get(`/v1/schedules`, '?' + filter)
+
         console.log(schedules)
         this.schedules = schedules.data.data
       } catch (error) {
@@ -294,6 +295,7 @@ export default {
     showChanges(state) {
       this.isShow = state
     },
+    
     async confirmShow(schedule) {
       await this.showChanges(true)
       console.log(schedule)
@@ -302,6 +304,7 @@ export default {
       this.schedule_id = schedule.schedule_id
       this.plan_check_dt = schedule.plan_check_dt
     },
+
     executionPage(schedule) {
       this.$router.push(`monitoring/${schedule.schedule_id}`)
     },

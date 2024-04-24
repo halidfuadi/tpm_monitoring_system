@@ -1,6 +1,8 @@
 <template>
   <Toaster position="top-center" closeButton />
-  <SearchBar @getLedgers="getLedgers" />
+  <ModalItemcheck :isShow="isShow" :ledger_id="ledger_id" :machine_nm="machine_nm"
+    @showChanges = "showChanges(state)"/>
+  <SearchBar @getSchedules="getLedgers" />
   <CCard>
     <CCardBody>
       <CRow>
@@ -8,82 +10,31 @@
           <table class="table table-bordered table-striped">
             <thead>
               <tr>
-                <th rowspan="2">No</th>
-                <th class="w100-line" rowspan="2">Line</th>
-                <th class="w200-mc" rowspan="2">Machine</th>
-                <th class="w200-item-check" rowspan="2">Item Check No</th>
-                <th class="text-center" :colspan="3">Actions</th>
+                <th class="no text-center">No</th>
+                <th class="line text-center">Line</th>
+                <th class="mc text-center">Machine</th>
+                <th class="item-check text-center">Item Check No</th>
+                <th class="actions text-center">Actions</th>
               </tr>
               <tr>
-                <!-- <td class="w40-date text-center" v-for="i in 3" :key="i">
-                  {{ i }}
-                </td> -->
               </tr>
             </thead>
 
-            <tbody>
-              <!-- <template v-if="Object.keys(schedules).length > 0"> -->
-              <template>
-                <tr v-for="(schedule, key, ipar) in ledgers" :key="key">
-                  <td>{{ ipar + 1 }}</td>
-                  <td>{{ schedule[0].line_nm }}</td>
-                  <td>{{ schedule[0].machine_nm }}</td>
-                  <td>{{ schedule[0].itemcheck_nm }}</td>
-                  <td v-if="schedule[0].checkers.length > 0">
-                    <template v-for="user in schedule[0].checkers" :key="user.user_id">
-                      <CButton color="dark" size="sm" disabled>
-                        {{ user.user_nm }}
-                      </CButton>
-                    </template>
-                  </td>
-                  <td v-else>
-                    <CButton class="btn btn-sm w-100" color="info" @click="confirmShow(schedule[0])">Assign</CButton>
-                  </td>
-                  <template v-for="date in dates" :key="date">
-                    <td v-if="
-                      schedule.find((item) => {
-                        return item.day_idx == date
-                      })
-                    ">
-                      <!-- BTN FOR ASSIGN PIC -->
-                      <button class="btn btn-sm w-100" v-if="
-                        schedule.find((item) => {
-                          return item.day_idx == date
-                        }).checkers.length == 0
-                      " :style="`background-color: ${schedule.find((item) => {
-                        return item.day_idx == date
-                      }).color_tag
-                        }`" v-bind="props" @click="
-                          confirmShow(
-                            schedule.find((item) => {
-                              return item.day_idx == date
-                            }),
-                          )
-                          "></button>
-                      <!-- BTN FOR EXECUTION -->
-                      <button v-else class="btn btn-sm w-100" :style="`background-color: ${schedule.find((item) => {
-                        return item.day_idx == date
-                      }).color_tag
-                        }`" v-bind="props" @click="
-                          executionPage(
-                            schedule.find((item) => {
-                              return item.day_idx == date
-                            }),
-                          )
-                          "></button>
-                    </td>
-                    <td v-else></td>
-                  </template>
-                  <td>{{ schedule[0].next_check.split('T')[0] }}</td>
-                </tr>
-              </template>
-              <!-- <template v-else>
-                <tr>
-                  <td class="text-center" colspan="37">
-                    <b>Tidak Ada Data</b>
-                  </td>
-                </tr>
-              </template> -->
+            <tbody v-if="ledgers.length > 0">
+              <tr v-for="(ledger, i) in ledgers" :key="i">
+                <td class="text-center" >{{ i + 1 }}</td>
+                <td class="line text-center">{{ ledger?.line_nm }}</td>
+                <td class="mc text-center">{{ ledger?.machine_nm }}</td>
+                <td class="item-check text-center">{{ ledger?.num_item_checks }}</td>
+                <td class="actions row">
+                  <CButton class="btn btn-sm col" color="success" v-bind="props" @click="showDetail(ledger)" style="max-width: 100px">
+                    ITEMCHECKS
+                  </CButton>
+                  <CButton class="btn btn-sm col" color="danger" style="max-width: 100px">
+                    DELETE
+                  </CButton>
+                </td>
+              </tr>
             </tbody>
           </table>
         </CCol>
@@ -125,7 +76,7 @@
 import api from '@/apis/CommonAPI'
 import { Toaster } from "vue-sonner";
 
-import ModalPic from '@/components/Tpm/ModalPic'
+import ModalItemcheck from '@/components/Tpm/ModalItemcheck'
 import SearchBar from '@/components/Tpm/SearchBar'
 import StatusTpm from '@/components/Tpm/StatusTpm'
 
@@ -145,10 +96,11 @@ export default {
       schedule_id: null,
       
       ledgers: [],
-      incharge_id: null,
+      ledger_id: null,
+      line_nm: null,
       machine_nm: null,
-      year: null,
-      month: null,
+      num_item_checks: null,
+
       limitOpts: [{
         label: 5,
         value: 5
@@ -209,97 +161,54 @@ export default {
     },
     async getLedgers(filter) {
       try {
-        let month = filter.split('=')[1].split('-')[1]
-        let year = filter.split('=')[1].split('-')[0]
-        this.generateDate(month, year)
-        this.filter = filter
-        let schedules = await api.get(`/v1/schedules`, '?' + filter)
-        console.log(schedules)
-        this.schedules = schedules.data.data
+        let ledgers = await api.get(`/v1/ledgers`)
+        console.log(ledgers)
+        this.ledgers = ledgers.data.data
       } catch (error) {
         console.log(error)
       }
     },
-    async confirmShow(schedule) {
-      await this.showChanges(true)
-      console.log(schedule)
-      this.machine_nm = schedule.machine_nm
-      this.incharge_id = schedule.incharge_id
-      this.schedule_id = schedule.schedule_id
+    showChanges(state){
+      this.isShow = state
     },
-    executionPage(schedule) {
-      this.$router.push(`monitoring/${schedule.schedule_id}`)
+    async showDetail(ledger) {
+      console.log(ledger.ledger_id);
+      this.machine_nm = ledger.machine_nm
+      this.ledger_id = ledger.ledger_id
+      setTimeout(() => {
+        this.showChanges(true)
+      }, 500)
     },
   },
   components: {
     SearchBar,
     StatusTpm,
-    ModalPic,
+    ModalItemcheck,
     Toaster,
   },
 }
 </script>
 
 <style scoped>
-.w100-line {
-  min-width: 100px;
+.line {
+  max-width: 50px;
 }
 
-.w40-date {
-  min-width: 40px;
-  z-index: -1 !important;
+.no {
+  max-width: 20px;
 }
 
-.w300-item-check {
-  min-width: 300px;
+.item-check {
+  max-width: 20px;
 }
 
-.w200-mc {
-  min-width: 100px;
+.mc {
+  max-width: 50px;
 }
-
-
-.w200-per{
-  min-width: 90px;
-}
-
 th,
 td {
   border: 1px solid black;
   border-collapse: collapse;
   background: white;
-}
-
-thead {
-  top: 0;
-  position: sticky;
-  z-index: 1 !important;
-}
-
-tr td:nth-child(1),
-tr td:nth-child(2),
-tr td:nth-child(3),
-tr td:nth-child(4),
-tr th:nth-child(1),
-tr th:nth-child(2),
-tr th:nth-child(3),
-tr th:nth-child(4) {
-  position: sticky;
-  left: 0;
-}
-
-tr th:nth-child(2),
-tr td:nth-child(2) {
-  left: 30px;
-}
-
-tr th:nth-child(3),
-tr td:nth-child(3) {
-  left: 100px;
-}
-
-tr th:nth-child(4),
-tr td:nth-child(4) {
-  left: 200px;
 }
 </style>
