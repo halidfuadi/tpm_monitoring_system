@@ -27,7 +27,7 @@ export default {
         return request
     },
 
-    async get(url, params, callback) {
+    async get(url, params = "", callback) {
         // process.env.VUE_APP_STANDALONE_SINGLE_SPA == 'true' ?
         //     localStorage.setItem('id_token', process.env.VUE_APP_TKN)
         //     : console.log('STANDALONE_SINGLE_SPA FALSE')
