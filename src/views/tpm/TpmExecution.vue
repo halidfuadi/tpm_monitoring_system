@@ -227,10 +227,12 @@ export default {
           this.is_finding = true
           return
         }
-        console.log(isNotNull, isJudgType)
-        isNotNull
-          ? this.$store.dispatch('ACT_EXECUTION_TPM', this.submittedForm)
-          : toast.error('Lengkapi input dulu!')
+        if(isNotNull) {
+          this.$store.dispatch('ACT_EXECUTION_TPM', this.submittedForm)
+          this.$router.push('/tpm/monitoring')
+        } else {
+          toast.error('Lengkapi input dulu!')
+        }
       } catch (error) {
         toast.error('Error to execution')
       }
