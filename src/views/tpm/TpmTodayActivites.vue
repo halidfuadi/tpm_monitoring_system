@@ -48,16 +48,22 @@
           <div class="row">
             <template v-if="getTodayActivities.length > 0 && !isLoading">
               <div v-for="item in getTodayActivities" :key="item.observation_id" class="col-12 col-md-4 col-lg-4">
-                <div class="card p-2 mt-2" style="border-left: 5px solid cyan!important">
+                <div class="card p-2 mt-2"
+                  :style="`border-left: 5px solid ${item.color_tag}!important;min-height: 80px`">
                   <div class="d-flex flex-row justify-content-between align-items-center">
                     <div class="d-flex flex-column">
                       Line: {{ item.line_nm }} | M/C: {{ item.machine_nm }} |
-                      Dept: {{ item.incharge_nm }}
+                      Dept: {{ item.incharge_nm }} | Checker : {{ item.checkers.map(checker => checker.user_nm).length
+                        == 0
+                        ? '-' : item.checkers.map(checker => checker.user_nm)[0] }}
                     </div>
                     <div class="d-flex flex-column">
-                      <button class="btn btn-sm btn-primary"
+                      <button v-if="item.status_nm !== 'DONE'" class="btn btn-sm btn-outline-primary"
                         @click="$router.push(`/tpm/monitoring/${item.schedule_id}`)">
                         Check </button>
+                      <button v-else class="btn btn-sm btn-outline-success"
+                        @click="$router.push(`/tpm/monitoring/${item.schedule_id}`)">
+                        Details </button>
                     </div>
                   </div>
                 </div>

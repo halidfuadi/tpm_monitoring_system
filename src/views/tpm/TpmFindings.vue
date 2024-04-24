@@ -1,11 +1,6 @@
 <template>
   <Toaster position="top-center" closeButton />
-  <ModalFindingExec
-    v-if="detailItem"
-    :isShow="isShow"
-    :item="detailItem"
-    @submitData="submitData(st)"
-  />
+  <ModalFindingExec v-if="detailItem" :isShow="isShow" :item="detailItem" @submitData="submitData(st)" />
   <SearchBarFinding @getFindings="getFindings" />
   <CCard>
     <CCardBody>
@@ -27,11 +22,8 @@
                 <th>Action</th>
               </tr>
             </thead>
-            <tbody v-if="GETTER_FINDINGS.length > 0">
-              <tr
-                v-for="(finding, i) in GETTER_FINDINGS"
-                :key="finding.finding_id"
-              >
+            <tbody v-if="GETTER_FINDINGS.length > 0 && !isLoading">
+              <tr v-for="(finding, i) in GETTER_FINDINGS" :key="finding.finding_id">
                 <td>{{ i + 1 }}</td>
                 <td>
                   {{ finding.line_nm }}
@@ -58,11 +50,7 @@
                   {{ finding.actual_check_dt ? finding.actual_check_dt.split('T')[0] : 'Belum' }}
                 </td>
                 <td>
-                  <CBadge
-                    class="text-dark"
-                    :style="`background-color: ${finding.color_tag}`"
-                    shape="pill"
-                  >
+                  <CBadge class="text-dark" :style="`background-color: ${finding.color_tag}`" shape="pill">
                     {{ finding.status_nm }}
                   </CBadge>
                 </td>
@@ -71,6 +59,14 @@
                     Execute
                   </button>
                 </td>
+              </tr>
+            </tbody>
+            <tbody v-else-if="isLoading">
+              <tr>
+                <th class="text-center" colspan="11">
+                  <CSpinner component="span" size="sm" variant="grow" aria-hidden="true" />
+                  Loading...
+                </th>
               </tr>
             </tbody>
             <tbody v-else>
@@ -97,6 +93,7 @@ export default {
     return {
       isShow: false,
       detailItem: null,
+      isLoading: false
     }
   },
   computed: {
@@ -105,7 +102,9 @@ export default {
   methods: {
     async getFindings(filter) {
       try {
-        this.$store.dispatch('ACT_GET_FINDINGS', filter)
+        this.isLoading = true
+        await this.$store.dispatch('ACT_GET_FINDINGS', filter)
+        this.isLoading = false
       } catch (error) {
         toast.error('Failed to get findings')
       }

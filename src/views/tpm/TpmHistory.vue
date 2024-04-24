@@ -9,24 +9,20 @@
             <th>Date Check</th>
             <th>Itemcheck</th>
             <th>Actual</th>
-            <th>OK</th>
-            <th>NG</th>
+            <th>Standard</th>
             <th>Detail</th>
           </tr>
         </thead>
         <tbody v-if="GETTER_HISTORY_TPM.length > 0">
-          <tr v-for="item in GETTER_HISTORY_TPM" :key="item.schedule_id">
-            <td>{{ item.no }}</td>
+          <tr v-for="(item, i) in GETTER_HISTORY_TPM" :key="item.schedule_id">
+            <!-- <td>{{ item.no }}</td> -->
+            <td>{{ i + 1 }}</td>
             <td>{{ item.actual_check_dt.split('T')[0] }}</td>
             <td>{{ item.itemcheck_nm }}</td>
             <td>{{ item.checked_val }}</td>
-            <td>{{ item.ok_val }}</td>
-            <td>{{ item.ng_val }}</td>
+            <td>{{ item.standard_measurement == '' ? 'OK' : item.standard_measurement }}</td>
             <td>
-              <router-link
-                class="btn btn-sm bg-primary text-light"
-                :to="`/tpm/monitoring/${item.schedule_id}`"
-              >
+              <router-link class="btn btn-sm bg-primary text-light" :to="`/tpm/monitoring/${item.schedule_id}`">
                 Details
               </router-link>
             </td>

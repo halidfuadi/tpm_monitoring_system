@@ -8,13 +8,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text">Machine</span>
             </div>
-            <input
-              disabled
-              type="text"
-              class="form-control"
-              placeholder="Machine"
-              :value="machine_nm"
-            />
+            <input disabled type="text" class="form-control" placeholder="Machine" :value="machine_nm" />
           </div>
         </CCol>
       </CRow>
@@ -49,20 +43,10 @@
                   {{ item?.method_check }}
                 </td>
                 <td class="actions">
-                  <CButton
-                    class="btn btn-sm col"
-                    color="warning"
-                    v-bind="props"
-                    @click="showDetail()"
-                    style="max-width: 100px"
-                  >
+                  <CButton class="btn btn-sm col" color="warning" @click="showDetail()" style="max-width: 100px">
                     EDIT
                   </CButton>
-                  <CButton
-                    class="btn btn-sm col"
-                    color="danger"
-                    style="max-width: 100px"
-                  >
+                  <CButton class="btn btn-sm col" color="danger" style="max-width: 100px">
                     DELETE
                   </CButton>
                 </td>
@@ -108,7 +92,7 @@ export default {
     id_ledger: function () {
       console.log("CHANGES");
       console.log(this.id_ledger);
-      if (this.id_ledger) {
+      if (this.id_ledger || this.id_ledger == 0) {
         this.getItems();
       }
     },
@@ -141,7 +125,7 @@ export default {
       this.$emit("showChanges", this.is_show);
     },
   },
-  mounted() {},
+  mounted() { },
   props: {
     incharge_id: String,
     isShow: Boolean,

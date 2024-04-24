@@ -1,13 +1,7 @@
 <template>
   <Toaster position="top-center" closeButton />
-  <ModalPic
-    :isShow="isShow"
-    :incharge_id="incharge_id"
-    :machine_nm="machine_nm"
-    :plan_check_dt="plan_check_dt"
-    :schedule_id="schedule_id"
-    @showChanges="showChanges(state)"
-  />
+  <ModalPic :isShow="isShow" :incharge_id="incharge_id" :machine_nm="machine_nm" :plan_check_dt="plan_check_dt"
+    :schedule_id="schedule_id" @showChanges="showChanges(state)" />
   <SearchBar @getSchedules="getSchedules" />
   <StatusTpm :filter="filter" />
   <CCard>
@@ -45,71 +39,47 @@
                   </td>
                   <td class="text-center">{{ schedule[0].incharge_nm }}</td>
                   <td v-if="schedule[0].checkers.length > 0">
-                    <template
-                      v-for="user in schedule[0].checkers"
-                      :key="user.user_id"
-                    >
-                      <CButton color="dark" size="sm" disabled>
+                    <template v-for="user in schedule[0].checkers" :key="user.user_id">
+                      <CButton color="dark" size="sm" disabled style="z-index: 1;">
                         {{ user.user_nm }}
                       </CButton>
                     </template>
                   </td>
                   <td v-else>
-                    <CButton
-                      class="btn btn-sm w-100"
-                      color="info"
-                      @click="confirmShow(schedule[0])"
-                      >Assign</CButton
-                    >
+                    <CButton class="btn btn-sm w-100" color="info" @click="confirmShow(schedule[0])">Assign</CButton>
                   </td>
                   <template v-for="date in dates" :key="date">
-                    <td
-                      v-if="
+                    <td v-if="
+                      schedule.find((item) => {
+                        return item.day_idx == date
+                      })
+                    ">
+                      <!-- BTN FOR ASSIGN PIC -->
+                      <button class="btn btn-sm w-100" v-if="
                         schedule.find((item) => {
                           return item.day_idx == date
-                        })
-                      "
-                    >
-                      <!-- BTN FOR ASSIGN PIC -->
-                      <button
-                        class="btn btn-sm w-100"
-                        v-if="
-                          schedule.find((item) => {
-                            return item.day_idx == date
-                          }).checkers.length == 0
-                        "
-                        :style="`background-color: ${
-                          schedule.find((item) => {
-                            return item.day_idx == date
-                          }).color_tag
-                        }`"
-                        v-bind="props"
-                        @click="
+                        }).checkers.length == 0
+                      " :style="`background-color: ${schedule.find((item) => {
+                        return item.day_idx == date
+                      }).color_tag
+                        }`" @click="
                           confirmShow(
                             schedule.find((item) => {
                               return item.day_idx == date
                             }),
                           )
-                        "
-                      ></button>
+                          "></button>
                       <!-- BTN FOR EXECUTION -->
-                      <button
-                        v-else
-                        class="btn btn-sm w-100"
-                        :style="`background-color: ${
-                          schedule.find((item) => {
-                            return item.day_idx == date
-                          }).color_tag
-                        }`"
-                        v-bind="props"
-                        @click="
+                      <button v-else class="btn btn-sm w-100" :style="`background-color: ${schedule.find((item) => {
+                        return item.day_idx == date
+                      }).color_tag
+                        }`" @click="
                           executionPage(
                             schedule.find((item) => {
                               return item.day_idx == date
                             }),
                           )
-                        "
-                      ></button>
+                          "></button>
                     </td>
                     <td v-else></td>
                   </template>
@@ -137,11 +107,7 @@
               <span class="input-group-text">Limit</span>
             </div>
             <select class="form-control" v-model="filtered.rowsPerPage">
-              <option
-                v-for="limit in limitOpts"
-                :key="limit.label"
-                :value="limit.value"
-              >
+              <option v-for="limit in limitOpts" :key="limit.label" :value="limit.value">
                 {{ limit.label }}
               </option>
             </select>
@@ -346,7 +312,7 @@ td {
 thead {
   top: 0;
   position: sticky;
-  z-index: 1 !important;
+  z-index: -1 !important;
 }
 
 tr td:nth-child(1),

@@ -19,7 +19,8 @@
             <div class="input-group-prepend">
               <span class="input-group-text">Plant</span>
             </div>
-            <input type="text" class="form-control" placeholder="Plant">
+            <input type="text" class="form-control" placeholder="Plant" disabled
+              value="Engine Production Karawang#3 Division (EPKD)">
           </div>
         </CCol>
         <CCol lg="4">
@@ -27,7 +28,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text">Shop</span>
             </div>
-            <input type="text" class="form-control" placeholder="Shop">
+            <input type="text" class="form-control" placeholder="Shop" disabled value="All">
           </div>
         </CCol>
       </CRow>
@@ -105,7 +106,6 @@
 <script>
 import moment from 'moment'
 import api from '@/apis/CommonAPI'
-import { mapGetters } from 'vuex'
 
 export default {
   name: 'SearchBar',
@@ -150,12 +150,6 @@ export default {
         this.getLine()
       }
     }
-  },
-  computed: {
-    ...mapGetters(['getSubmitStatus']),
-    ...mapGetters(['getSubmitIncharge']),
-    ...mapGetters(['getSubmitMachine']),
-    ...mapGetters(['getSubmitLine']),
   },
   methods: {
     search() {

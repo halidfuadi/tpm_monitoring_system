@@ -10,7 +10,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text">Month</span>
             </div>
-            <input v-model="selectedMonth" type="month" class="form-control" placeholder="Month">
+            <input v-model="filter.month" type="month" class="form-control" placeholder="Month">
           </div>
         </div>
         <div class="col-4">
@@ -69,6 +69,9 @@ export default {
       } else {
         this.filter.machine_id = -1
       }
+    },
+    selectedMonth() {
+
     }
   },
   methods: {

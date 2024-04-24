@@ -27,6 +27,9 @@ export default {
   methods: {
     async ActionStandardTime() {
       try {
+        // this.filter.year = this.filter.selectedMonth.split('-')[0]
+        // this.filter.month = this.filter.selectedMonth.split('-')[1]
+        // delete this.filter.selectedMonth
         let { data } = await api.post(`/tpm/schedules/visualization`, this.filter)
         if (data) {
           this.series = data.data.series

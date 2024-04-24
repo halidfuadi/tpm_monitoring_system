@@ -9,7 +9,8 @@
             <div class="input-group-prepend">
               <span class="input-group-text">Plant</span>
             </div>
-            <input type="text" class="form-control" placeholder="Plant">
+            <input type="text" class="form-control" placeholder="Plant" disabled
+              value="Engine Production Karawang#3 Division (EPKD)">
           </div>
         </CCol>
         <CCol lg="4">
@@ -17,7 +18,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text">Shop</span>
             </div>
-            <input type="text" class="form-control" placeholder="Shop">
+            <input type="text" class="form-control" placeholder="Shop" disabled value="All">
           </div>
         </CCol>
         <CCol lg="3">
@@ -45,15 +46,8 @@
           </div>
         </CCol>
         <CCol lg="6" v-if="GETTER_ITEMCHECK.length > 0">
-          <v-select
-            append-to-body
-            style="z-index: 1"
-            :options="GETTER_ITEMCHECK"
-            label="itemcheck_nm"
-            placeholder="Itemcheck"
-            :reduce="(itemcheck) => itemcheck.uuid"
-            v-model="form.itemcheck_id"
-          >
+          <v-select append-to-body style="z-index: 1" :options="GETTER_ITEMCHECK" label="itemcheck_nm"
+            placeholder="Itemcheck" :reduce="(itemcheck) => itemcheck.uuid" v-model="form.itemcheck_id">
             <template #option="option">
               {{ option.itemcheck_nm }}
             </template>

@@ -23,7 +23,8 @@
             <div class="input-group-prepend">
               <span class="input-group-text">Plant</span>
             </div>
-            <input type="text" class="form-control" placeholder="Plant">
+            <input type="text" class="form-control" placeholder="Plant" disabled
+              value="Engine Production Karawang#3 Division (EPKD)">
           </div>
         </CCol>
         <CCol lg="4">
@@ -31,7 +32,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text">Shop</span>
             </div>
-            <input type="text" class="form-control" placeholder="Shop">
+            <input type="text" class="form-control" placeholder="Shop" disabled value="All">
           </div>
         </CCol>
       </CRow>
@@ -61,21 +62,17 @@
           </div>
         </CCol>
         <CCol lg="3">
-          <v-select
-            append-to-body
-            style="z-index: 1"
-            :options="status"
-            placeholder="Status"
-            :reduce="status => status.status_id"
-            v-model="form.status_id"
-          >
-          <template #option="option">
-            <CBadge class="text-dark" :style="`background-color: ${option.color_tag}`" shape="pill">{{option.status_nm}}</CBadge>
-          </template>
-          <template #selected-option="option">
-            <CBadge class="text-dark" :style="`background-color: ${option.color_tag}`" shape="pill">{{option.status_nm}}</CBadge>
-          </template>
-        </v-select>
+          <v-select append-to-body style="z-index: 1" :options="status" placeholder="Status"
+            :reduce="status => status.status_id" v-model="form.status_id">
+            <template #option="option">
+              <CBadge class="text-dark" :style="`background-color: ${option.color_tag}`" shape="pill">
+                {{ option.status_nm }}</CBadge>
+            </template>
+            <template #selected-option="option">
+              <CBadge class="text-dark" :style="`background-color: ${option.color_tag}`" shape="pill">
+                {{ option.status_nm }}</CBadge>
+            </template>
+          </v-select>
         </CCol>
       </CRow>
       <CRow>

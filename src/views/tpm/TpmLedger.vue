@@ -1,11 +1,6 @@
 <template>
   <Toaster position="top-center" closeButton />
-  <ModalItemcheck
-    :isShow="isShow"
-    :ledger_id="ledger_id"
-    :machine_nm="machine_nm"
-    @showChanges="showChanges(state)"
-  />
+  <ModalItemcheck :isShow="isShow" :ledger_id="ledger_id" :machine_nm="machine_nm" @showChanges="showChanges(state)" />
   <SearchBar @getSchedules="getLedgers" />
   <CCard>
     <CCardBody>
@@ -23,7 +18,7 @@
               <tr></tr>
             </thead>
 
-            <tbody v-if="ledgers.length > 0">
+            <tbody v-if="ledgers.length > 0 && !isLoading">
               <tr v-for="(ledger, i) in ledgers" :key="i">
                 <td class="text-center">{{ i + 1 }}</td>
                 <td class="line text-center">{{ ledger?.line_nm }}</td>
@@ -35,24 +30,23 @@
                 <td class="actions align-center">
                   <div class="d-flex justify-content-center">
                     <!-- Add a div with Bootstrap flex utilities -->
-                    <CButton
-                      class="btn btn-sm col me-3"
-                      color="success"
-                      v-bind="props"
-                      @click="showDetail(ledger)"
-                      style="max-width: 100px"
-                    >
+                    <CButton class="btn btn-sm col me-3" color="success" @click="showDetail(ledger)"
+                      style="max-width: 100px">
                       ITEMCHECKS
                     </CButton>
-                    <CButton
-                      class="btn btn-sm col"
-                      color="danger"
-                      style="max-width: 100px"
-                    >
+                    <CButton class="btn btn-sm col" color="danger" style="max-width: 100px">
                       DELETE
                     </CButton>
                   </div>
                 </td>
+              </tr>
+            </tbody>
+            <tbody v-else-if="isLoading">
+              <tr>
+                <th class="text-center" colspan="5">
+                  <CSpinner component="span" size="sm" variant="grow" aria-hidden="true" />
+                  Loading...
+                </th>
               </tr>
             </tbody>
           </table>
@@ -67,11 +61,7 @@
               <span class="input-group-text">Limit</span>
             </div>
             <select class="form-control" v-model="filtered.rowsPerPage">
-              <option
-                v-for="limit in limitOpts"
-                :key="limit.label"
-                :value="limit.value"
-              >
+              <option v-for="limit in limitOpts" :key="limit.label" :value="limit.value">
                 {{ limit.label }}
               </option>
             </select>
@@ -110,6 +100,7 @@ export default {
       filtered: {
         currentPage: 1,
       },
+      isLoading: false,
       rowsPerPage: 5,
       maxVisible: 5,
       modelValue: 10,
@@ -123,6 +114,7 @@ export default {
       line_nm: null,
       machine_nm: null,
       num_item_checks: null,
+      rowsNumber: 1,
 
       limitOpts: [
         {
@@ -189,9 +181,11 @@ export default {
     },
     async getLedgers(filter) {
       try {
+        this.isLoading = true
         let ledgers = await api.get(`/tpm/ledgers`);
         console.log(ledgers);
         this.ledgers = ledgers.data.data;
+        this.isLoading = false
       } catch (error) {
         console.log(error);
       }
@@ -200,12 +194,14 @@ export default {
       this.isShow = state;
     },
     async showDetail(ledger) {
+      this.isLoading = true
       console.log("Crt");
       console.log(ledger.ledger_id);
       this.machine_nm = ledger.machine_nm;
       this.ledger_id = ledger.ledger_id;
       setTimeout(() => {
         this.showChanges(true);
+        this.isLoading = false
       }, 500);
     },
   },
