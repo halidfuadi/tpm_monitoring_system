@@ -37,6 +37,21 @@ export default {
         toast.error('Error to add pic')
       }
     },
+    async UPDATE_PLAN_DATE({ commit }, payload) {
+      try {
+        console.log("Disini update");
+        console.log(payload)
+        const updatePlanDate = {
+          schedule_id: payload.schedule_id,
+          plan_check_dts: payload.plan_check_dts,
+        }
+        let inserted = await api.post(`/v1/schedules/edit/plandate`, updatePlanDate)
+        commit('setSubmit', inserted)
+        toast.success('Success to update plan date')
+      } catch (error) {
+        toast.error('Error to update plan date')
+      }
+    },
     async ACT_GET_SCHEDULE({ commit }, payload) {
       try {
         let filter = Object.keys(payload)

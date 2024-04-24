@@ -94,6 +94,7 @@ export default {
       isShow: false,
       filter: null,
       schedule_id: null,
+      
       ledgers: [],
       ledger_id: null,
       line_nm: null,
@@ -112,8 +113,7 @@ export default {
       }, {
         label: 'All',
         value: -1
-      },
-      ],
+      }],
     }
   },
   computed: {
