@@ -1,134 +1,136 @@
 <template>
-  <Toaster position="top-center" closeButton />
-  <ModalPic :isShow="isShow" :incharge_id="incharge_id" :machine_nm="machine_nm" :plan_check_dt="plan_check_dt"
-    :schedule_id="schedule_id" @showChanges="showChanges(state)" />
-  <SearchBar @getSchedules="getSchedules" />
-  <StatusTpm :filter="filter" />
-  <CCard>
-    <CCardBody>
-      <CRow>
-        <CCol class="overflow-auto" lg="12">
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th rowspan="2">No</th>
-                <th class="w100-line" rowspan="2">Line</th>
-                <th class="w200-mc" rowspan="2">Machine</th>
-                <th class="w300-item-check" rowspan="2">Item Check</th>
-                <th rowspan="2">Periodic</th>
-                <th class="text-center" rowspan="2">Incharge</th>
-                <th class="text-center" rowspan="2">PIC</th>
-                <th class="text-center" :colspan="31">{{ 'Schedule' }}</th>
-                <th class="text-center w100-line" rowspan="2">Next Check</th>
-              </tr>
-              <tr>
-                <td class="w40-date text-center" v-for="i in 31" :key="i">
-                  {{ i }}
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-if="Object.keys(schedules).length > 0">
-                <tr v-for="(schedule, key, ipar) in schedules" :key="key">
-                  <td>{{ ipar + 1 }}</td>
-                  <td>{{ schedule[0].line_nm }}</td>
-                  <td>{{ schedule[0].machine_nm }}</td>
-                  <td>{{ schedule[0].itemcheck_nm }}</td>
-                  <td>
-                    {{ schedule[0].val_periodic }} {{ schedule[0].period_nm }}
+  <div class="container-fluid">
+    <Toaster position="top-center" closeButton />
+    <ModalPic :isShow="isShow" :incharge_id="incharge_id" :machine_nm="machine_nm" :plan_check_dt="plan_check_dt"
+      :schedule_id="schedule_id" @showChanges="showChanges(state)" />
+    <SearchBar @getSchedules="getSchedules" />
+    <StatusTpm :filter="filter" />
+    <CCard>
+      <CCardBody>
+        <CRow>
+          <CCol class="tableFixHead">
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th rowspan="2">No</th>
+                  <th class="w100-line" rowspan="2">Line</th>
+                  <th class="w200-mc" rowspan="2">Machine</th>
+                  <th class="w300-item-check" rowspan="2">Item Check</th>
+                  <th rowspan="2">Periodic</th>
+                  <th class="text-center" rowspan="2">Incharge</th>
+                  <th class="text-center" rowspan="2">PIC</th>
+                  <th class="text-center" :colspan="31">{{ 'Schedule' }}</th>
+                  <th class="text-center w100-line" rowspan="2">Next Check</th>
+                </tr>
+                <tr>
+                  <td class="w40-date text-center" v-for="i in 31" :key="i">
+                    {{ i }}
                   </td>
-                  <td class="text-center">{{ schedule[0].incharge_nm }}</td>
-                  <td v-if="schedule[0].checkers.length > 0">
-                    <template v-for="user in schedule[0].checkers" :key="user.user_id">
-                      <CButton color="dark" size="sm" disabled style="z-index: 1;">
-                        {{ user.user_nm }}
-                      </CButton>
-                    </template>
-                  </td>
-                  <td v-else>
-                    <CButton class="btn btn-sm w-100" color="info" @click="confirmShow(schedule[0])">Assign</CButton>
-                  </td>
-                  <template v-for="date in dates" :key="date">
-                    <td v-if="
-                      schedule.find((item) => {
-                        return item.day_idx == date
-                      })
-                    ">
-                      <!-- BTN FOR ASSIGN PIC -->
-                      <button class="btn btn-sm w-100" v-if="
+                </tr>
+              </thead>
+              <tbody>
+                <template v-if="Object.keys(schedules).length > 0">
+                  <tr v-for="(schedule, key, ipar) in schedules" :key="key">
+                    <td>{{ ipar + 1 }}</td>
+                    <td>{{ schedule[0].line_nm }}</td>
+                    <td>{{ schedule[0].machine_nm }}</td>
+                    <td>{{ schedule[0].itemcheck_nm }}</td>
+                    <td>
+                      {{ schedule[0].val_periodic }} {{ schedule[0].period_nm }}
+                    </td>
+                    <td class="text-center">{{ schedule[0].incharge_nm }}</td>
+                    <td v-if="schedule[0].checkers.length > 0">
+                      <template v-for="user in schedule[0].checkers" :key="user.user_id">
+                        <CButton color="success" size="sm" style="z-index: 1;">
+                          {{ user.user_nm }}
+                        </CButton>
+                      </template>
+                    </td>
+                    <td v-else>
+                      <CButton class="btn btn-sm w-100" color="info" @click="confirmShow(schedule[0])">Assign</CButton>
+                    </td>
+                    <template v-for="date in dates" :key="date">
+                      <td v-if="
                         schedule.find((item) => {
                           return item.day_idx == date
-                        }).checkers.length == 0
-                      " :style="`background-color: ${schedule.find((item) => {
-                        return item.day_idx == date
-                      }).color_tag
-                        }`" @click="
-                          confirmShow(
-                            schedule.find((item) => {
-                              return item.day_idx == date
-                            }),
-                          )
-                          "></button>
-                      <!-- BTN FOR EXECUTION -->
-                      <button v-else class="btn btn-sm w-100" :style="`background-color: ${schedule.find((item) => {
-                        return item.day_idx == date
-                      }).color_tag
-                        }`" @click="
-                          executionPage(
-                            schedule.find((item) => {
-                              return item.day_idx == date
-                            }),
-                          )
-                          "></button>
+                        })
+                      ">
+                        <!-- BTN FOR ASSIGN PIC -->
+                        <button class="btn btn-sm w-100" v-if="
+                          schedule.find((item) => {
+                            return item.day_idx == date
+                          }).checkers.length == 0
+                        " :style="`background-color: ${schedule.find((item) => {
+                          return item.day_idx == date
+                        }).color_tag
+                          }`" @click="
+                            confirmShow(
+                              schedule.find((item) => {
+                                return item.day_idx == date
+                              }),
+                            )
+                            "></button>
+                        <!-- BTN FOR EXECUTION -->
+                        <button v-else class="btn btn-sm w-100" :style="`background-color: ${schedule.find((item) => {
+                          return item.day_idx == date
+                        }).color_tag
+                          }`" @click="
+                            executionPage(
+                              schedule.find((item) => {
+                                return item.day_idx == date
+                              }),
+                            )
+                            "></button>
+                      </td>
+                      <td v-else></td>
+                    </template>
+                    <td>{{ schedule[0].next_check.split('T')[0] }}</td>
+                  </tr>
+                </template>
+                <template v-else>
+                  <tr>
+                    <td class="text-center" colspan="37">
+                      <b>Tidak Ada Data</b>
                     </td>
-                    <td v-else></td>
-                  </template>
-                  <td>{{ schedule[0].next_check.split('T')[0] }}</td>
-                </tr>
-              </template>
-              <template v-else>
-                <tr>
-                  <td class="text-center" colspan="37">
-                    <b>Tidak Ada Data</b>
-                  </td>
-                </tr>
-              </template>
-            </tbody>
-          </table>
-        </CCol>
-      </CRow>
-    </CCardBody>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </CCol>
+        </CRow>
+      </CCardBody>
 
-    <CCardFooter>
-      <CRow class="justify-content-between">
-        <CCol lg="2">
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text">Limit</span>
+      <CCardFooter>
+        <CRow class="justify-content-between">
+          <CCol lg="2">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Limit</span>
+              </div>
+              <select class="form-control" v-model="filtered.rowsPerPage">
+                <option v-for="limit in limitOpts" :key="limit.label" :value="limit.value">
+                  {{ limit.label }}
+                </option>
+              </select>
             </div>
-            <select class="form-control" v-model="filtered.rowsPerPage">
-              <option v-for="limit in limitOpts" :key="limit.label" :value="limit.value">
-                {{ limit.label }}
-              </option>
-            </select>
-          </div>
-        </CCol>
-        <CCol lg="3">
-          <ul class="pagination m-0">
-            <li class="page-item disabled">
-              <button class="page-link">Previous</button>
-            </li>
-            <li v-for="page in pages" class="page-item">
-              <button class="page-link">1</button>
-            </li>
-            <li class="page-item">
-              <button class="page-link">Next</button>
-            </li>
-          </ul>
-        </CCol>
-      </CRow>
-    </CCardFooter>
-  </CCard>
+          </CCol>
+          <CCol lg="3">
+            <ul class="pagination m-0">
+              <li class="page-item disabled">
+                <button class="page-link">Previous</button>
+              </li>
+              <li v-for="page in pages" class="page-item">
+                <button class="page-link">1</button>
+              </li>
+              <li class="page-item">
+                <button class="page-link">Next</button>
+              </li>
+            </ul>
+          </CCol>
+        </CRow>
+      </CCardFooter>
+    </CCard>
+  </div>
 </template>
 
 <script>
@@ -312,7 +314,13 @@ td {
 thead {
   top: 0;
   position: sticky;
-  z-index: -1 !important;
+  z-index: 1;
+}
+
+.tableFixHead {
+  overflow-y: auto;
+  height: 600px;
+  z-index: 1;
 }
 
 tr td:nth-child(1),

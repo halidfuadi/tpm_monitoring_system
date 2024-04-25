@@ -127,8 +127,8 @@ export default {
           schedule_id: this.schedule_id,
           user_ids: mapIdUsers,
         }
-        console.log(newObj)
         this.$store.dispatch('ADD_PIC_SCHEDULE', newObj)
+        // this.$emit('showChanges', this.is_show)
       } catch (error) {
         console.log(error)
       }
@@ -140,8 +140,8 @@ export default {
           plan_check_dts: this.changes_date,
           schedule_id: this.schedule_id,
         }
-        console.log(updatePlanDate)
         this.$store.dispatch('UPDATE_PLAN_DATE', updatePlanDate)
+        // this.$emit('showChanges', this.is_show)
       } catch (error) {
         console.log(error)
       }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="body flex-grow-1 px-3">
-      <CContainer lg>
+      <CContainer lg style="margin: 0px!important;">
         <router-view />
       </CContainer>
     </div>
@@ -19,24 +19,24 @@ export default {
   components: {
     CContainer,
   },
-  setup(){
-  /*
-    const getBreadcrumbs = () => {
-      return router.currentRoute.value.matched.map((route) => {
-        return {
-          active: route.path === router.currentRoute.value.fullPath,
-          name: route.name,
-          path: `${router.options.history.base}${route.path}`,
-        }
+  setup() {
+    /*
+      const getBreadcrumbs = () => {
+        return router.currentRoute.value.matched.map((route) => {
+          return {
+            active: route.path === router.currentRoute.value.fullPath,
+            name: route.name,
+            path: `${router.options.history.base}${route.path}`,
+          }
+        })
+      }
+      router.afterEach(() => {
+        let breadcrumbs = getBreadcrumbs()
+        localStorage.breadcrumbs=JSON.stringify(breadcrumbs);
+        document.getElementById("breadcrumbsChangeValue").click();
+        console.log(localStorage.breadcrumbs)
       })
-    }
-    router.afterEach(() => {
-      let breadcrumbs = getBreadcrumbs()
-      localStorage.breadcrumbs=JSON.stringify(breadcrumbs);
-      document.getElementById("breadcrumbsChangeValue").click();
-      console.log(localStorage.breadcrumbs)
-    })
-	*/
+    */
   }
 }
 </script>

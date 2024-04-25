@@ -9,25 +9,26 @@
           <table class="table table-bordered table-striped">
             <thead>
               <tr>
-                <th class="no text-center">No</th>
-                <th class="line text-center">Line</th>
-                <th class="mc text-center">Machine</th>
-                <th class="item-check text-center">Item Check No</th>
-                <th class="actions text-center">Actions</th>
+                <th class="text-center">No</th>
+                <th class="text-center">Line</th>
+                <th class="text-center">Machine</th>
+                <th class="text-center">Total Itemcheck</th>
+                <th class="text-center">Actions</th>
               </tr>
-              <tr></tr>
             </thead>
 
             <tbody v-if="ledgers.length > 0 && !isLoading">
               <tr v-for="(ledger, i) in ledgers" :key="i">
                 <td class="text-center">{{ i + 1 }}</td>
-                <td class="line text-center">{{ ledger?.line_nm }}</td>
-                <td class="mc text-center">{{ ledger?.machine_nm }}</td>
-                <td class="item-check text-center">
-                  {{ ledger?.num_item_checks }}
+                <td class="text-center">{{ ledger?.line_nm }}</td>
+                <td class="text-center">{{ ledger?.machine_nm }}</td>
+                <td class="text-center">
+
+                  <CBadge class="text-light bg-dark" shape="pill">
+                    {{ ledger?.num_item_checks }}</CBadge>
                 </td>
 
-                <td class="actions align-center">
+                <td class="align-center">
                   <div class="d-flex justify-content-center">
                     <!-- Add a div with Bootstrap flex utilities -->
                     <CButton class="btn btn-sm col me-3" color="success" @click="showDetail(ledger)"
