@@ -37,7 +37,7 @@
                 </td>
                 <td class="item-check text-center">{{ item?.duration }}</td>
                 <td class="item-check text-center">
-                  {{ item?.standard_measurement }}
+                  {{ item?.standard_measurement == '' ? "OK" : item?.standard_measurement }}
                 </td>
                 <td class="item-check text-center">
                   {{ item?.method_check }}

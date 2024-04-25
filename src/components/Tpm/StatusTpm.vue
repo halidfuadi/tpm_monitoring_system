@@ -46,7 +46,7 @@ export default {
   methods: {
     async getStatus(filter) {
       try {
-        let status = await api.get(`/tpm/status`, '?' + filter)
+        let status = await api.get(`/tpm/statusTpm`, '?' + filter)
         this.status = status.data.data
       } catch (error) {
         console.log(error)
