@@ -2,6 +2,7 @@
   <CModal :visible="is_show" backdrop="static" size="lg" @close="changesShow()">
     <CModalHeader closeButton>Items</CModalHeader>
     <CModalBody>
+
       <CRow>
         <CCol lg="6">
           <div class="input-group mb-3">
@@ -11,10 +12,21 @@
             <input disabled type="text" class="form-control" placeholder="Machine" :value="machine_nm" />
           </div>
         </CCol>
+        <CCol class="text-end" lg="6">
+          <CButton class="btn btn-sm col" color="info" @click="changeAdd()" style="max-width: 150px; margin-bottom: 5px;">
+            ADD ITEMCHECK
+          </CButton>
+        </CCol>
       </CRow>
+
+      <CRow v-if="is_add">
+        <AddItemcheck :ledger_id="this.id_ledger" />
+      </CRow>
+
       <CRow>
         <CCol class="overflow-auto" lg="12">
           <table class="table table-bordered table-striped">
+
             <thead>
               <tr>
                 <th class="no text-center">No</th>
@@ -31,25 +43,50 @@
             <tbody v-if="items">
               <tr v-for="(item, i) in items" :key="i">
                 <td class="text-center">{{ i + 1 }}</td>
-                <td class="item-check text-center">{{ item?.itemcheck_nm }}</td>
-                <td class="item-check text-center">
-                  {{ item?.val_period }} {{ item.period_nm }}
-                </td>
-                <td class="item-check text-center">{{ item?.duration }}</td>
-                <td class="item-check text-center">
-                  {{ item?.standard_measurement == '' ? "OK" : item?.standard_measurement }}
-                </td>
-                <td class="item-check text-center">
-                  {{ item?.method_check }}
-                </td>
-                <td class="actions">
-                  <CButton class="btn btn-sm col" color="warning" @click="showDetail()" style="max-width: 100px">
-                    EDIT
-                  </CButton>
-                  <CButton class="btn btn-sm col" color="danger" style="max-width: 100px">
-                    DELETE
-                  </CButton>
-                </td>
+                <template v-if="!is_editing">
+                  <td class="item-check text-center">{{ item?.itemcheck_nm }}</td>
+                  <td class="item-check text-center">
+                    {{ item?.val_periodic }} {{ item.period_nm }}
+                  </td>
+                  <td class="item-check text-center">{{ item?.duration }}</td>
+                  <td class="item-check text-center">
+                    {{ item?.standard_measurement == '' ? "OK" : item?.standard_measurement }}
+                  </td>
+                  <td class="item-check text-center">
+                    {{ item?.method_check }}
+                  </td>
+                  <td class="actions">
+                    <CButton class="btn btn-sm col" color="warning" @click="changeEdit()" style="max-width: 100px; margin-bottom: 5px;">
+                      EDIT
+                    </CButton>
+                    <CButton class="btn btn-sm col" color="danger" style="max-width: 100px">
+                      DELETE
+                    </CButton>
+                  </td>
+                </template>
+                <template v-else>
+                  <td class="item-check text-center">
+                    <input :value="item?.itemcheck_nm"</input>
+                  </td>
+                  <td class="item-check text-center">
+                    {{ item?.val_periodic }} {{ item.period_nm }}
+                  </td>
+                  <td class="item-check text-center">{{ item?.duration }}</td>
+                  <td class="item-check text-center">
+                    {{ item?.standard_measurement == '' ? "OK" : item?.standard_measurement }}
+                  </td>
+                  <td class="item-check text-center">
+                    {{ item?.method_check }}
+                  </td>
+                  <td class="actions">
+                    <CButton class="btn btn-sm col" color="success" @click="" style="max-width: 100px; margin-bottom: 5px;">
+                      DONE
+                    </CButton>
+                    <CButton class="btn btn-sm col" color="danger" @click="changeEdit()" style="max-width: 100px; margin-bottom: 5px;">
+                      CANCEL
+                    </CButton>
+                  </td>
+                </template>
               </tr>
             </tbody>
           </table>
@@ -65,6 +102,7 @@
 <script>
 import api from "@/apis/CommonAPI";
 import { mapGetters } from "vuex";
+import AddItemcheck from "@/components/Tpm/AddItemcheck"
 
 export default {
   name: "ModalItemCheck",
@@ -74,6 +112,8 @@ export default {
       is_show: false,
       items: null,
       id_ledger: null,
+      is_editing: false,
+      is_add: false
     };
   },
   watch: {
@@ -96,6 +136,13 @@ export default {
         this.getItems();
       }
     },
+    // editing: function () {
+    //   if(this.is_editing){
+    //     this.is_editing = false
+    //   }else{
+    //     this.is_editing = true
+    //   }
+    // }
   },
   computed: {
     ...mapGetters(["getSubmitStatus"]),
@@ -117,13 +164,34 @@ export default {
     },
     changesShow() {
       this.userSelected = [];
+      if(this.is_editing){
+        this.is_editing = false
+      }
       if (this.is_show) {
         this.is_show = false;
+        this.is_add = false;
       } else {
         this.is_show = true;
       }
       this.$emit("showChanges", this.is_show);
     },
+    changeEdit(){
+      if(this.is_editing){
+        this.is_editing = false
+      }else{
+        this.is_editing = true
+      }
+    },
+
+    changeAdd(){
+      if(this.is_add){
+        this.is_add = false
+      }else{
+        this.is_add = true
+        // this.ledger_id = id_ledger
+      }
+    }
+
   },
   mounted() { },
   props: {
@@ -132,5 +200,8 @@ export default {
     machine_nm: String,
     ledger_id: Number,
   },
+  components: {
+    AddItemcheck
+  }
 };
 </script>

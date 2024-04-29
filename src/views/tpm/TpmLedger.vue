@@ -180,7 +180,7 @@ export default {
         this.onPageClick(this.modelValue + 1);
       }
     },
-    async getLedgers(filter) {
+    async getLedgers() {
       try {
         this.isLoading = true
         let ledgers = await api.get(`/tpm/ledgers`);
@@ -196,8 +196,6 @@ export default {
     },
     async showDetail(ledger) {
       this.isLoading = true
-      console.log("Crt");
-      console.log(ledger.ledger_id);
       this.machine_nm = ledger.machine_nm;
       this.ledger_id = ledger.ledger_id;
       setTimeout(() => {

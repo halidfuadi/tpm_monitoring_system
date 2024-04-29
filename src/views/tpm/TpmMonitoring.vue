@@ -30,7 +30,7 @@
               </thead>
               <tbody>
                 <template v-if="Object.keys(schedules).length > 0">
-                  <tr v-for="(schedule, key, ipar) in schedules" :key="key">
+                  <tr v-for="(schedule, key, ipar) in schedules " :key="key">
                     <td>{{ ipar + 1 }}</td>
                     <td>{{ schedule[0].line_nm }}</td>
                     <td>{{ schedule[0].machine_nm }}</td>

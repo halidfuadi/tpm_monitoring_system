@@ -43,6 +43,7 @@ import { GET_LINES } from '../../store/lines.module'
 import { GET_MACHINES } from '../../store/machines.module'
 
 import GraphStandardTime from '../../components/Tpm/GraphStandardTime.vue'
+import StatusTpm from '../../components/Tpm/StatusTpm.vue'
 
 export default {
   name: "TPMStandardTime",
@@ -57,7 +58,8 @@ export default {
     }
   },
   components: {
-    GraphStandardTime
+    GraphStandardTime,
+    StatusTpm
   },
   computed: {
     ...mapGetters(['getLinesOpts', 'getMachinesOpts']),

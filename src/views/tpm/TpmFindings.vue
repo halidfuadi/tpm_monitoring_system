@@ -55,6 +55,9 @@
                   </CBadge>
                 </td>
                 <td>
+                  <button class="btn btn-sm btn-info mx-2" @click="">
+                    Image
+                  </button>
                   <button class="btn btn-sm btn-success" @click="popUpDetail(finding)">
                     Execute
                   </button>

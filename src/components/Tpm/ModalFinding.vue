@@ -12,11 +12,14 @@
         </CCol>
         <CCol class="mb-2" lg="12">
           <label>Action / Countermeasure</label>
-          <CFormInput placeholder="What's the action / countermeasure?" v-model="finding.action_plan" />
+          <CFormTextarea placeholder="What's the action / countermeasure?" v-model="finding.action_plan" />
         </CCol>
         <CCol class="mb-2" lg="12">
           <label>Plan Date</label>
           <CFormInput type="date" v-model="finding.plan_check_dt" :disabled="is_already_check" />
+        </CCol>
+        <CCol class="mb-2" lg="12">
+          <CFormInput type="file" v-model="finding.file_path" label="Input Finding Image" />
         </CCol>
         <CCol lg="12">
           <label>Pic</label>
