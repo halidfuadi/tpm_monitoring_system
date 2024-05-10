@@ -24,5 +24,25 @@ export default {
                 toast.error('Error to execution')
             }
         },
+
+        async ACT_NEW_ITEMCHECK({ commit }, payload){
+          console.log(payload);
+          try {
+            let resData = await api.post(`/tpm/itemchecks/addItemCheck`, payload)
+            commit('setItemcheck', resData)
+          } catch (error) {
+            toast.error('Error to add itemcheck')
+          }
+        },
+
+        async ACT_EDIT_ITEMCHECK({ commit }, payload){
+          try {
+            console.log(payload);
+            let editData = await api.put(`/tpm/itemchecks/editItemCheck`, payload)
+            commit('setItemcheck', editData)
+          } catch (error) {
+            toast.error('Error to edit itemcheck')
+          }
+        }
     },
 }

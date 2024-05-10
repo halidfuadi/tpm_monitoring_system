@@ -14,10 +14,9 @@ export default {
         },
     },
     actions: {
-        async ACT_ITEMCHECKS({ commit }, filter = '') {
+        async ACT_LEDGERS({ commit }, payload = null) {
             try {
-                const itemchecks = await api.get('/tpm/ledgers/', filter)
-                console.log(itemchecks);
+                const itemchecks = await api.get('/tpm/ledgers/', '?')
                 commit('setItemcheck', itemchecks.data.data)
             } catch (error) {
                 toast.error('Error to execution')

@@ -39,7 +39,6 @@ export default {
         },
         async UPDATE_PLAN_DATE({ commit }, payload) {
             try {
-                console.log("Disini update");
                 console.log(payload)
                 const updatePlanDate = {
                     schedule_id: payload.schedule_id,

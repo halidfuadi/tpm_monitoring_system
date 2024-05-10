@@ -69,7 +69,6 @@ export default {
       if (this.incharge_id) this.getUsers(this.incharge_id)
     },
     isShow: function () {
-      console.log('FINDING IS SHOW CHANGEs');
       this.is_show = this.isShow
     },
     getSubmitStatus: {

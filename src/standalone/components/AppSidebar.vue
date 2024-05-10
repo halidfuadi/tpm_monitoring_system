@@ -92,6 +92,13 @@ export default {
         // },
         {
           component: 'CNavItem',
+          to: '/tpm/dashboard',
+          name: 'TPM Dashboard',
+          icon: 'cilHome',
+          parentId: 'ROOT',
+        },
+        {
+          component: 'CNavItem',
           to: '/tpm/monitoring',
           name: 'TPM Monitoring',
           icon: 'cilScreenDesktop',
@@ -123,13 +130,6 @@ export default {
           to: '/tpm/history',
           name: 'TPM History',
           icon: 'cilHistory',
-          parentId: 'ROOT',
-        },
-        {
-          component: 'CNavItem',
-          to: '/tpm/standard-time',
-          name: 'TPM Standard Time',
-          icon: 'cilAvTimer',
           parentId: 'ROOT',
         },
       ],

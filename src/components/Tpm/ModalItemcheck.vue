@@ -1,6 +1,6 @@
 <template>
-  <CModal :visible="is_show" backdrop="static" size="lg" @close="changesShow()">
-    <CModalHeader closeButton>Items</CModalHeader>
+  <CModal :visible="is_show" backdrop="static" size="xl" close="changesShow()">
+    <CModalHeader @click="changesShow()">Items</CModalHeader>
     <CModalBody>
 
       <CRow>
@@ -14,7 +14,7 @@
         </CCol>
         <CCol class="text-end" lg="6">
           <CButton class="btn btn-sm col" color="info" @click="changeAdd()" style="max-width: 150px; margin-bottom: 5px;">
-            ADD ITEMCHECK
+            ADD NEW ITEMCHECK
           </CButton>
         </CCol>
       </CRow>
@@ -25,17 +25,18 @@
 
       <CRow>
         <CCol class="overflow-auto" lg="12">
-          <table class="table table-bordered table-striped">
+          <table class="table table-bordered table-striped" responsive="md">
 
             <thead>
               <tr>
-                <th class="no text-center">No</th>
-                <th class="item-check text-center">Item Check</th>
-                <th class="item-check text-center">Periodic</th>
-                <th class="item-check text-center">Duration</th>
-                <th class="item-check text-center">Standard</th>
-                <th class="item-check text-center">Methods</th>
-                <th class="actions text-center">Actions</th>
+                <th class="no text-center" >No</th>
+                <th class="item-check text-center" >Item Check</th>
+                <th class="item-check text-center" colspan="2">Periodic</th>
+                <th class="item-check text-center" >duration</th>
+                <th class="item-check text-center" >Standard</th>
+                <th class="item-check text-center" >Methods</th>
+                <th class="item-check text-center" >Plan Check Date</th>
+                <th class="actions text-center" colspan="2">Actions</th>
               </tr>
               <tr></tr>
             </thead>
@@ -43,10 +44,13 @@
             <tbody v-if="items">
               <tr v-for="(item, i) in items" :key="i">
                 <td class="text-center">{{ i + 1 }}</td>
-                <template v-if="!is_editing">
+                <template v-if="!item.is_editing">
                   <td class="item-check text-center">{{ item?.itemcheck_nm }}</td>
                   <td class="item-check text-center">
-                    {{ item?.val_periodic }} {{ item.period_nm }}
+                    {{ item?.val_periodic }}
+                  </td>
+                  <td class="item-check text-center">
+                    {{ item.period_nm }}
                   </td>
                   <td class="item-check text-center">{{ item?.duration }}</td>
                   <td class="item-check text-center">
@@ -55,34 +59,59 @@
                   <td class="item-check text-center">
                     {{ item?.method_check }}
                   </td>
+                  <td class="item-check text-center">
+                    {{ item?.plan_check_dt.split('T')[0] }}
+                  </td>
                   <td class="actions">
-                    <CButton class="btn btn-sm col" color="warning" @click="changeEdit()" style="max-width: 100px; margin-bottom: 5px;">
+                    <CButton class="btn btn-sm col" color="warning" @click="changeEdit(item)" style="max-width: 100px; margin-bottom: 5px;">
                       EDIT
                     </CButton>
+                  </td>
+                  <td class="actions">
                     <CButton class="btn btn-sm col" color="danger" style="max-width: 100px">
                       DELETE
                     </CButton>
                   </td>
                 </template>
+
                 <template v-else>
                   <td class="item-check text-center">
-                    <input :value="item?.itemcheck_nm"</input>
+                    <CFormInput v-model="item.itemcheck_nm" :value="item?.itemcheck_nm"/>
                   </td>
                   <td class="item-check text-center">
-                    {{ item?.val_periodic }} {{ item.period_nm }}
-                  </td>
-                  <td class="item-check text-center">{{ item?.duration }}</td>
-                  <td class="item-check text-center">
-                    {{ item?.standard_measurement == '' ? "OK" : item?.standard_measurement }}
+                    <CFormInput style="max-width: 20px;" v-model="item.val_periodic" :value="item?.val_periodic"/>
                   </td>
                   <td class="item-check text-center">
-                    {{ item?.method_check }}
+                    <CFormSelect v-model="item.period_nm">
+                      <option>{{ item?.period_nm }}</option>
+                      <option value=0>Day</option>
+                      <option value=1>Month</option>
+                      <option value=2>Year</option>
+                    </CFormSelect>
+                  </td>
+                  <td class="item-check text-center">
+                    <!-- {{ item?.duration }} -->
+                    <CFormInput v-model="item.duration" :value="item?.duration"/>
+                  </td>
+                  <td class="item-check text-center">
+                    <!-- {{ item?.standard_measurement == '' ? "OK" : item?.standard_measurement }} -->
+                    <CFormInput v-model="item.standard_measurement" :value="item?.standard_measurement"/>
+                  </td>
+                  <td class="item-check text-center">
+                    <!-- {{ item?.method_check }} -->
+                    <CFormInput v-model="item.method_check" :value="item?.method_check"/>
+                  </td>
+                  <td class="item-check text-center">
+                    <!-- {{ item?.plan_check_dt.split('T')[0] }} -->
+                    <CFormInput type="date" v-model="item.plan_check_dt" placeholder="Plan Check Date" :value="item?.plan_check_dt"/>
                   </td>
                   <td class="actions">
-                    <CButton class="btn btn-sm col" color="success" @click="" style="max-width: 100px; margin-bottom: 5px;">
-                      DONE
+                    <CButton class="btn btn-sm col" color="success" @click="editData(item)" style="max-width: 100px; margin-bottom: 5px;">
+                      UPDATE
                     </CButton>
-                    <CButton class="btn btn-sm col" color="danger" @click="changeEdit()" style="max-width: 100px; margin-bottom: 5px;">
+                  </td>
+                  <td class="actions">
+                    <CButton class="btn btn-sm col" color="danger" @click="changeEdit(item)" style="max-width: 100px; margin-bottom: 5px;">
                       CANCEL
                     </CButton>
                   </td>
@@ -112,7 +141,6 @@ export default {
       is_show: false,
       items: null,
       id_ledger: null,
-      is_editing: false,
       is_add: false
     };
   },
@@ -136,36 +164,30 @@ export default {
         this.getItems();
       }
     },
-    // editing: function () {
-    //   if(this.is_editing){
-    //     this.is_editing = false
-    //   }else{
-    //     this.is_editing = true
-    //   }
-    // }
   },
   computed: {
     ...mapGetters(["getSubmitStatus"]),
   },
   methods: {
     async getItems() {
-      console.log("getItems CAlling");
-      console.log(this.id_ledger);
       try {
         let items = await api.get(
           `/tpm/ledgers/detail`,
           `?ledger_id=${this.id_ledger}`
         );
-        console.log(items);
+        items.data.data.forEach(obj => {obj.is_editing = false})
         this.items = items.data.data;
       } catch (error) {
         console.log(error);
       }
     },
+
     changesShow() {
       this.userSelected = [];
-      if(this.is_editing){
-        this.is_editing = false
+      if(this.items.is_editing){
+        this.items.is_editing = false
+      }else{
+        this.items.is_editing = true
       }
       if (this.is_show) {
         this.is_show = false;
@@ -175,12 +197,9 @@ export default {
       }
       this.$emit("showChanges", this.is_show);
     },
-    changeEdit(){
-      if(this.is_editing){
-        this.is_editing = false
-      }else{
-        this.is_editing = true
-      }
+
+    changeEdit(item){
+      item.is_editing = !item.is_editing;
     },
 
     changeAdd(){
@@ -188,8 +207,12 @@ export default {
         this.is_add = false
       }else{
         this.is_add = true
-        // this.ledger_id = id_ledger
       }
+    },
+
+    async editData(item){
+      console.log(item);
+      this.$store.dispatch('ACT_EDIT_ITEMCHECK', item)
     }
 
   },
@@ -199,6 +222,7 @@ export default {
     isShow: Boolean,
     machine_nm: String,
     ledger_id: Number,
+    itemcheck_id: Number
   },
   components: {
     AddItemcheck

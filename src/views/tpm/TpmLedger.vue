@@ -1,7 +1,14 @@
 <template>
   <Toaster position="top-center" closeButton />
-  <ModalItemcheck :isShow="isShow" :ledger_id="ledger_id" :machine_nm="machine_nm" @showChanges="showChanges(state)" />
-  <SearchBar @getSchedules="getLedgers" />
+  <CRow>
+    <CCol lg="4">
+      <SearchBarLedger @getLedgers="getLedgers" />
+    </CCol>
+    <CCol lg="8">
+      <NewUpdate :dataUpdate="dataUpdate" />
+    </CCol>
+  </CRow>
+  <ModalItemcheck :isShow="isShow" :ledger_id="ledger_id" :machine_nm="machine_nm" :itemcheck_id="itemcheck_id" @showChanges="showChanges(state)" />
   <CCard>
     <CCardBody>
       <CRow>
@@ -91,8 +98,9 @@ import api from "@/apis/CommonAPI";
 import { Toaster } from "vue-sonner";
 
 import ModalItemcheck from "@/components/Tpm/ModalItemcheck";
-import SearchBar from "@/components/Tpm/SearchBar";
+import SearchBarLedger from "@/components/Tpm/SearchBarLedger";
 import StatusTpm from "@/components/Tpm/StatusTpm";
+import NewUpdate from "@/components/Tpm/NewUpdate"
 
 export default {
   name: "TpmLedger",
@@ -106,9 +114,12 @@ export default {
       maxVisible: 5,
       modelValue: 10,
 
+      dataUpdate: null,
+
       isShow: false,
       filter: null,
       schedule_id: null,
+      approval: null,
 
       ledgers: [],
       ledger_id: null,
@@ -163,6 +174,7 @@ export default {
       return range(Math.max(1, start), Math.max(end, max));
     },
   },
+
   methods: {
     onPageClick(page) {
       this.$emit("update:modelValue", page);
@@ -180,13 +192,14 @@ export default {
         this.onPageClick(this.modelValue + 1);
       }
     },
-    async getLedgers() {
+    async getLedgers(filter) {
       try {
-        this.isLoading = true
-        let ledgers = await api.get(`/tpm/ledgers`);
+        // this.isLoading = true
+        this.filter = filter
+        let ledgers = await api.get(`/tpm/ledgers`, '?' + filter);
         console.log(ledgers);
         this.ledgers = ledgers.data.data;
-        this.isLoading = false
+        // this.isLoading = false
       } catch (error) {
         console.log(error);
       }
@@ -203,9 +216,25 @@ export default {
         this.isLoading = false
       }, 500);
     },
+
+    async getUpdate(){
+      try {
+        let dataUpdate = await api.get(`/tpm/ledgers/new_data`, '?')
+        this.dataUpdate = dataUpdate.data.data
+        console.log(this.dataUpdate);
+      } catch (error) {
+        console.log(error);
+      }
+    }
   },
+  async mounted(){
+    await this.getLedgers()
+    await this.getUpdate()
+  },
+
   components: {
-    SearchBar,
+    SearchBarLedger,
+    NewUpdate,
     StatusTpm,
     ModalItemcheck,
     Toaster,

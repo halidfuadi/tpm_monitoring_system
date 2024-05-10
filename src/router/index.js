@@ -64,10 +64,10 @@ const routes = [{
                     import ('@/views/tpm/TpmTodayActivites.vue')
             },
             {
-                path: '/tpm/standard-time',
-                name: 'TPMStandardTime',
+                path: '/tpm/dashboard',
+                name: 'TPMDashboard',
                 component: () =>
-                    import ('@/views/tpm/TpmStandardTime.vue')
+                    import ('@/views/tpm/TpmDashboard.vue')
             },
 
             /*define other in here*/
