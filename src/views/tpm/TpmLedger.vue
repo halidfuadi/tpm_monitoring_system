@@ -2,7 +2,8 @@
   <Toaster position="top-center" closeButton />
   <CRow>
     <CCol lg="4">
-      <SearchBarLedger @getLedgers="getLedgers" />
+        <SearchBarLedger @getLedgers="getLedgers" />
+        <AddLedger />
     </CCol>
     <CCol lg="8">
       <NewUpdate :dataUpdate="dataUpdate" />
@@ -100,7 +101,9 @@ import { Toaster } from "vue-sonner";
 import ModalItemcheck from "@/components/Tpm/ModalItemcheck";
 import SearchBarLedger from "@/components/Tpm/SearchBarLedger";
 import StatusTpm from "@/components/Tpm/StatusTpm";
-import NewUpdate from "@/components/Tpm/NewUpdate"
+import NewUpdate from "@/components/Tpm/NewUpdate";
+import AddItemcheck from "../../components/Tpm/AddItemcheck.vue";
+import AddLedger from "../../components/Tpm/AddLedger.vue"
 
 export default {
   name: "TpmLedger",
@@ -238,6 +241,7 @@ export default {
     StatusTpm,
     ModalItemcheck,
     Toaster,
+    AddLedger
   },
 };
 </script>

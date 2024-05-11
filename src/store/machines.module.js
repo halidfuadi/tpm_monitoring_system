@@ -1,4 +1,5 @@
 import CommonAPI from "../apis/CommonAPI";
+import api from '@/apis/CommonAPI'
 
 export const GET_MACHINES = "getMachines";
 export const POST_MACHINE = "postMachines";
@@ -62,18 +63,12 @@ const actions = {
 
         });
     },
-    [POST_MACHINE]({ commit }, data = null) {
-        ApiService.setHeader()
-        return new Promise((resolve, reject) => {
-            ApiService.post('master/machines', data)
-                .then((result) => {
-                    const machinesData = result.data
-                    resolve(machinesData.data)
-                    console.log(commit);
-                }).catch((err) => {
-                    reject(err)
-                });
-        });
+    async ACT_NEW_LEDGER({ commit }, payload) {
+      try {
+        let resData = await api.post('/tpm/ledgers/addLedger', payload)
+      } catch (error) {
+        console.log(error);
+      }
     },
     [PUT_MACHINE]({ commit }, data = null) {
         ApiService.setHeader()

@@ -1,6 +1,5 @@
 <template>
-  <!-- Start:Search -->
-  <CCard class="mb-1">
+  <CCard class="mb-3">
     <CCardHeader>
       Search
     </CCardHeader>
