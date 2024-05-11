@@ -4,9 +4,9 @@
       Changes in Ledger
     </CCardHeader>
     <CCardBody>
-      <CRow class="justify-content-center">
-        <CCol v-for="(item, i) in dataUpdate" :key="i">
-          <CCard style="width: 18rem">
+      <CRow>
+        <CCol class="mb-3" lg="3" v-for="(item, i) in dataUpdate" :key="i">
+          <CCard>
             <CCardBody>
               <CCardTitle>{{ item.line_nm }} | {{ item.machine_nm }}</CCardTitle>
               <CCardSubtitle class="mb-2 text-body-secondary">
