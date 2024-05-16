@@ -54,7 +54,19 @@ export default {
             toast.success('Success to approve item')
           } catch (error) {
             console.log(error);
-            Toast.error('Error to approve item')
+            toast.error('Error to approve item')
+          }
+        },
+
+        async ACT_APPROVE_ITEMCHECK({ commit }, payload){
+          try {
+            console.log(payload);
+            let approvedData = await api.post(`/tpm/itemchecks/approvedNew`, payload)
+            commit('setItemcheck', approvedData)
+            toast.success('Success to approve new item')
+          } catch (error) {
+            console.log(error);
+            toast.error('Error to approve new item')
           }
         }
     },
