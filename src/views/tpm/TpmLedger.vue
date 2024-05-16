@@ -22,7 +22,7 @@
                 <th class="text-center">No</th>
                 <th class="text-center">Line</th>
                 <th class="text-center">Machine</th>
-                <!-- <th class="text-center">Total Itemcheck</th> -->
+                <th class="text-center">Total Itemcheck</th>
                 <th class="text-center">Actions</th>
               </tr>
             </thead>
@@ -32,9 +32,9 @@
                 <td class="text-center">{{ i + 1 }}</td>
                 <td class="text-center">{{ ledger?.line_nm }}</td>
                 <td class="text-center">{{ ledger?.machine_nm }}</td>
-                <!-- <td class="text-center">
+                <td class="text-center">
                   <CBadge class="text-light bg-dark" shape="pill">{{ ledger?.num_item_checks }}</CBadge>
-                </td> -->
+                </td>
 
                 <td class="align-center">
                   <div class="d-flex justify-content-center">
