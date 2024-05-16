@@ -1,14 +1,16 @@
 <template>
   <Toaster position="top-center" closeButton />
-  <CRow>
-    <CCol lg="4">
-        <SearchBarLedger @getLedgers="getLedgers" />
-        <AddLedger />
-    </CCol>
-    <CCol lg="8">
-      <NewUpdate :dataUpdate="dataUpdate" />
-    </CCol>
-  </CRow>
+  <CCard class="mb-3 p-2">
+    <CRow>
+      <CCol lg="4">
+          <SearchBarLedger @getLedgers="getLedgers" />
+          <AddLedger />
+      </CCol>
+      <CCol lg="8">
+        <NewUpdate :dataUpdate="dataUpdate" :dataUpdatedItem="dataUpdatedItem"/>
+      </CCol>
+    </CRow>
+  </CCard>
   <ModalItemcheck :isShow="isShow" :ledger_id="ledger_id" :machine_nm="machine_nm" :itemcheck_id="itemcheck_id" @showChanges="showChanges(state)" />
   <CCard>
     <CCardBody>
@@ -20,7 +22,7 @@
                 <th class="text-center">No</th>
                 <th class="text-center">Line</th>
                 <th class="text-center">Machine</th>
-                <th class="text-center">Total Itemcheck</th>
+                <!-- <th class="text-center">Total Itemcheck</th> -->
                 <th class="text-center">Actions</th>
               </tr>
             </thead>
@@ -30,11 +32,9 @@
                 <td class="text-center">{{ i + 1 }}</td>
                 <td class="text-center">{{ ledger?.line_nm }}</td>
                 <td class="text-center">{{ ledger?.machine_nm }}</td>
-                <td class="text-center">
-
-                  <CBadge class="text-light bg-dark" shape="pill">
-                    {{ ledger?.num_item_checks }}</CBadge>
-                </td>
+                <!-- <td class="text-center">
+                  <CBadge class="text-light bg-dark" shape="pill">{{ ledger?.num_item_checks }}</CBadge>
+                </td> -->
 
                 <td class="align-center">
                   <div class="d-flex justify-content-center">
@@ -117,7 +117,8 @@ export default {
       maxVisible: 5,
       modelValue: 10,
 
-      dataUpdate: null,
+      dataUpdate: [],
+      dataUpdatedItem: [],
 
       isShow: false,
       filter: null,
@@ -152,49 +153,49 @@ export default {
     };
   },
   computed: {
-    pages() {
-      function range(start, end) {
-        return Array.from(Array(end - start + 1), (_, i) => i + start);
-      }
+    // pages() {
+    //   function range(start, end) {
+    //     return Array.from(Array(end - start + 1), (_, i) => i + start);
+    //   }
 
-      const max = this.maxVisible;
-      const middle = Math.floor(this.maxVisible / 2);
-      const pageNum = Math.ceil(this.rowsNumber / this.rowsPerPage);
+    //   const max = this.maxVisible;
+    //   const middle = Math.floor(this.maxVisible / 2);
+    //   const pageNum = Math.ceil(this.rowsNumber / this.rowsPerPage);
 
-      if (pageNum < max) {
-        return range(1, pageNum);
-      }
+    //   if (pageNum < max) {
+    //     return range(1, pageNum);
+    //   }
 
-      let start = this.modelValue - middle;
-      let end = this.modelValue + middle;
+    //   let start = this.modelValue - middle;
+    //   let end = this.modelValue + middle;
 
-      // If we're close to the end
-      if (this.modelValue >= pageNum - middle) {
-        start = pageNum - max + 1;
-        end = pageNum;
-      }
+    //   // If we're close to the end
+    //   if (this.modelValue >= pageNum - middle) {
+    //     start = pageNum - max + 1;
+    //     end = pageNum;
+    //   }
 
-      return range(Math.max(1, start), Math.max(end, max));
-    },
+    //   return range(Math.max(1, start), Math.max(end, max));
+    // },
   },
 
   methods: {
-    onPageClick(page) {
-      this.$emit("update:modelValue", page);
-    },
-    onPageBack() {
-      if (this.modelValue - 1 >= 1) {
-        this.onPageClick(this.modelValue - 1);
-      }
-    },
-    onPageForward() {
-      if (
-        this.modelValue + 1 <=
-        Math.ceil(this.rowsNumber / this.rowsPerPage)
-      ) {
-        this.onPageClick(this.modelValue + 1);
-      }
-    },
+    // onPageClick(page) {
+    //   this.$emit("update:modelValue", page);
+    // },
+    // onPageBack() {
+    //   if (this.modelValue - 1 >= 1) {
+    //     this.onPageClick(this.modelValue - 1);
+    //   }
+    // },
+    // onPageForward() {
+    //   if (
+    //     this.modelValue + 1 <=
+    //     Math.ceil(this.rowsNumber / this.rowsPerPage)
+    //   ) {
+    //     this.onPageClick(this.modelValue + 1);
+    //   }
+    // },
     async getLedgers(filter) {
       try {
         // this.isLoading = true
@@ -228,11 +229,22 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+
+    async getUpdatedItem(){
+      try {
+        let dataUpdatedItem = await api.get(`/tpm/itemchecks/updatedItem`, '?')
+        this.dataUpdatedItem = dataUpdatedItem.data.data
+        console.log(this.dataUpdatedItem);
+      } catch (error) {
+        console.log(error);
+      }
     }
   },
   async mounted(){
     await this.getLedgers()
     await this.getUpdate()
+    await this.getUpdatedItem()
   },
 
   components: {

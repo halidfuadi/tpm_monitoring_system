@@ -1,5 +1,5 @@
 <template>
-  <CCard class="mb-3">
+  <CCard>
     <CCardHeader>
       Add Ledger
     </CCardHeader>

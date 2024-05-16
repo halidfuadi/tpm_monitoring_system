@@ -319,7 +319,7 @@ thead {
 
 .tableFixHead {
   overflow-y: auto;
-  height: 600px;
+  height: 800px;
   z-index: 1;
 }
 

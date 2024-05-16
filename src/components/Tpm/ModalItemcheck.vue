@@ -32,6 +32,7 @@
                 <th class="no text-center" >No</th>
                 <th class="item-check text-center" >Item Check</th>
                 <th class="item-check text-center" colspan="2">Periodic</th>
+                <th class="item-check text-center" >MP</th>
                 <th class="item-check text-center" >duration</th>
                 <th class="item-check text-center" >Standard</th>
                 <th class="item-check text-center" >Methods</th>
@@ -52,6 +53,7 @@
                   <td class="item-check text-center">
                     {{ item.period_nm }}
                   </td>
+                  <td class="item-check text-center">{{ item?.mp }}</td>
                   <td class="item-check text-center">{{ item?.duration }}</td>
                   <td class="item-check text-center">
                     {{ item?.standard_measurement == '' ? "OK" : item?.standard_measurement }}
@@ -82,12 +84,15 @@
                     <CFormInput style="max-width: 20px;" v-model="item.val_periodic" :value="item?.val_periodic"/>
                   </td>
                   <td class="item-check text-center">
-                    <CFormSelect v-model="item.period_nm">
-                      <option>{{ item?.period_nm }}</option>
+                    <CFormSelect v-model="item.period_id">
+                      <option>{{ item?.period_id }}</option>
                       <option value=0>Day</option>
                       <option value=1>Month</option>
                       <option value=2>Year</option>
                     </CFormSelect>
+                  </td>
+                  <td class="item-check text-center">
+                    <CFormInput v-model="item.mp" :value="item?.mp"/>
                   </td>
                   <td class="item-check text-center">
                     <!-- {{ item?.duration }} -->
@@ -101,9 +106,11 @@
                     <!-- {{ item?.method_check }} -->
                     <CFormInput v-model="item.method_check" :value="item?.method_check"/>
                   </td>
-                  <td class="item-check text-center">
-                    <!-- {{ item?.plan_check_dt.split('T')[0] }} -->
+                  <!-- <td class="item-check text-center">
                     <CFormInput type="date" v-model="item.plan_check_dt" placeholder="Plan Check Date" :value="item?.plan_check_dt"/>
+                  </td> -->
+                  <td class="item-check text-center">
+                    {{ item?.plan_check_dt.split('T')[0] }}
                   </td>
                   <td class="actions">
                     <CButton class="btn btn-sm col" color="success" @click="editData(item)" style="max-width: 100px; margin-bottom: 5px;">
@@ -211,6 +218,8 @@ export default {
     },
 
     async editData(item){
+      console.log(item);
+      item.ledger_id = this.id_ledger
       console.log(item);
       this.$store.dispatch('ACT_EDIT_ITEMCHECK', item)
     }
