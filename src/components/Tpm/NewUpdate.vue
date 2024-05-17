@@ -6,7 +6,7 @@
           NEW ITEM
         </CCardHeader>
         <CCardBody class="tableFixHead">
-          <template v-if="dataUpdate > 0">
+          <template v-if="dataUpdate.length > 0">
           <CRow>
               <CCol class="mb-3" lg="6" v-for="(item, i) in dataUpdate" :key="i">
                 <CCard>
