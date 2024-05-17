@@ -41,15 +41,19 @@
 
     </CCardFooter>
   </CCard>
+  <TableItemHistory></TableItemHistory>
 </template>
 
 <script>
 import SearchBarHistory from '@/components/Tpm/SearchBarHistory.vue'
 import { mapGetters } from 'vuex'
+import TableItemHistory from '@/components/Tpm/TableItemHistory.vue'
+
 export default {
   name: 'TpmHistory',
   components: {
     SearchBarHistory,
+    TableItemHistory,
   },
   methods: {
     getHistory(filter) {
