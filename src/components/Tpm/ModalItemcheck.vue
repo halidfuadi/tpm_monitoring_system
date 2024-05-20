@@ -1,5 +1,18 @@
 <template>
   <CModal :visible="is_show" backdrop="static" size="xl" close="changesShow()">
+    <CModal :visible="is_deleting" :item="item" @close="() => { is_deleting = false }">
+      <CModalHeader>
+        <CModalTitle>Are you sure to delete this item?</CModalTitle>
+      </CModalHeader>
+      <CModalBody>{{ item.itemcheck_nm }} {{ item.itemcheck_id }} {{ item.ledger_itemcheck_id }}</CModalBody>
+      <CModalFooter>
+        <CButton color="secondary" @click="() => { is_deleting = false }">
+          Close
+        </CButton>
+        <CButton color="danger" @click="submitDeleting(item)">Delete</CButton>
+      </CModalFooter>
+    </CModal>
+
     <CModalHeader @click="changesShow()">Items</CModalHeader>
     <CModalBody>
 
@@ -70,7 +83,7 @@
                     </CButton>
                   </td>
                   <td class="actions">
-                    <CButton class="btn btn-sm col" color="danger" style="max-width: 100px">
+                    <CButton class="btn btn-sm col" color="danger" @click="deleting(item)" style="max-width: 100px">
                       DELETE
                     </CButton>
                   </td>
@@ -139,6 +152,7 @@
 import api from "@/apis/CommonAPI";
 import { mapGetters } from "vuex";
 import AddItemcheck from "@/components/Tpm/AddItemcheck"
+import { toast } from "vue-sonner";
 
 export default {
   name: "ModalItemCheck",
@@ -148,7 +162,8 @@ export default {
       is_show: false,
       items: null,
       id_ledger: null,
-      is_add: false
+      is_add: false,
+      is_deleting: false,
     };
   },
   watch: {
@@ -164,6 +179,9 @@ export default {
       },
       deep: true,
     },
+
+
+
     id_ledger: function () {
       console.log("CHANGES");
       console.log(this.id_ledger);
@@ -189,6 +207,21 @@ export default {
       }
     },
 
+    submitDeleting(item){
+      console.log(item);
+      this.$store.dispatch('ACT_DELETE_ITEMCHECK', item)
+      this.getItems()
+      this.is_deleting = false
+    },
+
+    deleting(item){
+      if(this.is_deleting){
+        this.is_deleting = false
+      }else{
+        this.is_deleting = true
+        this.item = item
+      }
+    },
     changesShow() {
       this.userSelected = [];
       if(this.items.is_editing){
@@ -218,10 +251,16 @@ export default {
     },
 
     async editData(item){
-      console.log(item);
-      item.ledger_id = this.id_ledger
-      console.log(item);
-      this.$store.dispatch('ACT_EDIT_ITEMCHECK', item)
+      try {
+        console.log(item);
+        item.ledger_id = this.id_ledger
+        console.log(item);
+        this.$store.dispatch('ACT_EDIT_ITEMCHECK', item)
+        toast.success('Success edit itemcheck, please wait for approval')
+      } catch (error) {
+        console.log(error);
+        toast.error('Error edit itemcheck')
+      }
     }
 
   },

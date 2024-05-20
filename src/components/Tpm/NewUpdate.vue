@@ -1,4 +1,5 @@
 <template>
+  
   <CRow>
     <CCol>
       <CCard>
@@ -144,9 +145,8 @@
 </template>
 
 <script>
-import api from '@/apis/CommonAPI'
 import { CAccordion, CAccordionBody, CAccordionItem, CCard, CCardFooter, CCardHeader, CCol } from '@coreui/vue';
-import { logo } from '../../assets/brand/logo';
+
 export default {
   name: 'newUpdate',
   data() {
@@ -162,6 +162,7 @@ export default {
       this.$store.dispatch('ACT_APPROVE_UPDATED_ITEMCHECK', data)
     }
   },
+
   props: {
     dataUpdate: [],
     dataUpdatedItem: []

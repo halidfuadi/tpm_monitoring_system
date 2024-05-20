@@ -28,7 +28,7 @@
       <CCol lg="6">
         <div class="card">
           <div class="card-header">
-            Search
+            Item 
           </div>
           <div class="card-body">
             <div class="row">
@@ -51,12 +51,12 @@
 
     </CRow>
 
-    <CRow>
-      <div class="card">
-        <div class="card-header">
+    <!-- <CRow> -->
+      <CCard>
+        <CCardHeader>
           Search
-        </div>
-        <div class="card-body">
+        </CCardHeader>
+        <CCardBody class="card-body">
           <div class="row">
             <div class="col-4">
               <div class="input-group mb-3">
@@ -81,13 +81,13 @@
               </select>
             </div>
           </div>
-        </div>
+          <div class="card-body card">
+            <GraphStandardTime :filter="filter" />
+          </div>
+        </CCardBody>
 
-        <div class="card-body card">
-          <GraphStandardTime :filter="filter" />
-        </div>
-      </div>
-    </CRow>
+      </CCard>
+    <!-- </CRow> -->
 
 
 </template>

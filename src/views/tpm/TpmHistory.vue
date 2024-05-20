@@ -1,7 +1,7 @@
 <template>
   <SearchBarHistory @getHistory="getHistory" />
-  <CCard>
-    <CCardBody>
+  <CCard class="mb-1">
+    <CCardBody class="tableFixHead">
       <table class="table table-bordered table-striped">
         <thead>
           <tr>
@@ -66,3 +66,11 @@ export default {
   },
 }
 </script>
+
+<style>
+.tableFixHead {
+  overflow-y: auto;
+  height: 350px;
+  z-index: 1;
+}
+</style>

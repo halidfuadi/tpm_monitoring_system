@@ -153,49 +153,9 @@ export default {
     };
   },
   computed: {
-    // pages() {
-    //   function range(start, end) {
-    //     return Array.from(Array(end - start + 1), (_, i) => i + start);
-    //   }
-
-    //   const max = this.maxVisible;
-    //   const middle = Math.floor(this.maxVisible / 2);
-    //   const pageNum = Math.ceil(this.rowsNumber / this.rowsPerPage);
-
-    //   if (pageNum < max) {
-    //     return range(1, pageNum);
-    //   }
-
-    //   let start = this.modelValue - middle;
-    //   let end = this.modelValue + middle;
-
-    //   // If we're close to the end
-    //   if (this.modelValue >= pageNum - middle) {
-    //     start = pageNum - max + 1;
-    //     end = pageNum;
-    //   }
-
-    //   return range(Math.max(1, start), Math.max(end, max));
-    // },
   },
 
   methods: {
-    // onPageClick(page) {
-    //   this.$emit("update:modelValue", page);
-    // },
-    // onPageBack() {
-    //   if (this.modelValue - 1 >= 1) {
-    //     this.onPageClick(this.modelValue - 1);
-    //   }
-    // },
-    // onPageForward() {
-    //   if (
-    //     this.modelValue + 1 <=
-    //     Math.ceil(this.rowsNumber / this.rowsPerPage)
-    //   ) {
-    //     this.onPageClick(this.modelValue + 1);
-    //   }
-    // },
     async getLedgers(filter) {
       try {
         // this.isLoading = true
@@ -219,6 +179,9 @@ export default {
         this.showChanges(true);
         this.isLoading = false
       }, 500);
+      this.getLedgers(this.filter)
+      this.getUpdate()
+      this.getUpdatedItem()
     },
 
     async getUpdate(){
@@ -281,4 +244,6 @@ td {
   border-collapse: collapse;
   background: white;
 }
+
+
 </style>

@@ -13,10 +13,10 @@
               <thead>
                 <tr>
                   <th rowspan="2">No</th>
-                  <th class="w100-line" rowspan="2">Line</th>
+                  <th class="w100-line text-center" rowspan="2">Line</th>
                   <th class="w200-mc" rowspan="2">Machine</th>
-                  <th class="w300-item-check" rowspan="2">Item Check</th>
-                  <th rowspan="2">Periodic</th>
+                  <th class="w300-item-check text-center" rowspan="2">Item Check</th>
+                  <th class="text-center" rowspan="2" colspan="2">Periodic</th>
                   <th class="text-center" rowspan="2">Incharge</th>
                   <th class="text-center" rowspan="2">PIC</th>
                   <th class="text-center" :colspan="31">{{ 'Schedule' }}</th>
@@ -36,7 +36,10 @@
                     <td>{{ schedule[0].machine_nm }}</td>
                     <td>{{ schedule[0].itemcheck_nm }}</td>
                     <td>
-                      {{ schedule[0].val_periodic }} {{ schedule[0].period_nm }}
+                      {{ schedule[0].val_periodic }}
+                    </td>
+                    <td class="text-center">
+                      {{ schedule[0].period_nm }}
                     </td>
                     <td class="text-center">{{ schedule[0].incharge_nm }}</td>
                     <td v-if="schedule[0].checkers.length > 0">
@@ -275,6 +278,7 @@ export default {
 
     executionPage(schedule) {
       this.$router.push(`monitoring/${schedule.schedule_id}`)
+
     },
   },
   components: {
@@ -283,6 +287,10 @@ export default {
     ModalPic,
     Toaster,
   },
+  watch:{
+    getSchedules(){
+      this.getSchedules(this.filter)}
+  }
 }
 </script>
 

@@ -63,6 +63,7 @@
 import api from '@/apis/CommonAPI'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
+import {getSchedule} from '../../views/tpm/TpmMonitoring.vue'
 
 export default {
   name: 'ModalPic',
@@ -128,7 +129,6 @@ export default {
           user_ids: mapIdUsers,
         }
         this.$store.dispatch('ADD_PIC_SCHEDULE', newObj)
-        // this.$emit('showChanges', this.is_show)
       } catch (error) {
         console.log(error)
       }

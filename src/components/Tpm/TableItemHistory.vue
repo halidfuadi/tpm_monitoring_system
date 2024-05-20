@@ -2,7 +2,7 @@
 
 <CCard class="p-3">
   <CRow>
-    <CCol lg="6">
+    <CCol class="tableFixHead" lg="6">
       <span>ADDED ITEM HISTORY</span>
       <table class="table table-bordered table-striped" responsive="md">
         <thead>
@@ -21,7 +21,7 @@
             <td class="text-center">{{ i+1 }}</td>
             <td class="text-center">{{ item.machine_nm }}</td>
             <td class="text-center">{{ item.itemcheck_nm }}</td>
-            <td class="text-center">{{ item.approval }}</td>
+            <td class="text-center">{{ item.approval_status }}</td>
             <td class="text-center">{{ item.val_periodic }}</td>
             <td class="text-center">{{ item.period_nm }}</td>
             <td class="text-center">{{ item.created_dt.split('T')[0] }}</td>
@@ -32,7 +32,7 @@
         </tbody>
       </table>
     </CCol>
-    <CCol lg="6">
+    <CCol class="tableFixHead" lg="6">
       <span>EDITED ITEM HISTORY</span>
       <table class="table table-bordered table-striped" responsive="md">
         <thead>
@@ -50,9 +50,9 @@
           <tr v-for="(item, i) in editedItems" :key="i">
             <td class="text-center">{{ i+1 }}</td>
             <td class="text-center">{{ item.machine_nm }}</td>
-            <td class="text-center">{{ item.itemcheck_nm_old }}</td>
-            <td class="text-center">{{ item.approval }}</td>
-            <td class="text-center">{{ item.val_periodic }}</td>
+            <td class="text-center">{{ item.itemcheck_nm_new }}</td>
+            <td class="text-center">{{ item.approval_status }}</td>
+            <td class="text-center">{{ item.val_periodic_new }}</td>
             <td class="text-center">{{ item.period_nm }}</td>
             <td class="text-center">{{ item.created_dt.split('T')[0] }}</td>
             <td class="text-center">
@@ -112,3 +112,11 @@ export default {
 
 
 </script>
+
+<style>
+.tableFixHead {
+  overflow-y: auto;
+  height: 350px;
+  z-index: 1;
+}
+</style>

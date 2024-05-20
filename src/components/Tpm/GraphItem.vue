@@ -42,7 +42,7 @@ export default {
               width: [0, 4]
             },
             title: {
-              text: 'Line Progress'
+              text: 'Total Item'
             },
             labels: data.data.labels,
           }

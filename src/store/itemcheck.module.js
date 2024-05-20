@@ -68,6 +68,18 @@ export default {
             console.log(error);
             toast.error('Error to approve new item')
           }
-        }
+        },
+
+        async ACT_DELETE_ITEMCHECK({ commit }, payload){
+          try {
+            console.log(payload);
+            let deleteData = await api.post(`/tpm/itemchecks/deleteItemcheck`, payload)
+            commit('setItemcheck', deleteData)
+            toast.success('Success to delete item')
+          } catch (error) {
+            console.log(error);
+            toast.error('Error to delete item')
+          }
+        },
     },
 }

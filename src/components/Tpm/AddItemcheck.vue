@@ -90,23 +90,38 @@ import { toast } from 'vue-sonner';
 
     methods: {
       async submitForm(){
-        if(
-          this.form.itemcheck_nm != null &&
-          this.form.itemcheck_method != null &&
-          this.form.duration != null &&
-          this.form.standard_measurement != null){
-            this.submittedForm = {
-              ...this.form
-            }
-            console.log(this.submittedForm);
-            this.submittedForm.period_id = +this.submittedForm.period_id
-            this.submittedForm.val_period = +this.submittedForm.val_period
+        try {
+          if(
+            this.form.itemcheck_nm != null &&
+            this.form.itemcheck_method != null &&
+            this.form.duration != null &&
+            this.form.standard_measurement != null){
+              this.submittedForm = {
+                ...this.form
+              }
+              console.log(this.submittedForm);
+              this.submittedForm.period_id = +this.submittedForm.period_id
+              this.submittedForm.val_period = +this.submittedForm.val_period
 
-            this.$store.dispatch('ACT_NEW_ITEMCHECK', this.submittedForm)
-            toast.success('Success to add itemcheck')
-          }else{
-            toast.error('Must not Empty')
-          }
+              this.$store.dispatch('ACT_NEW_ITEMCHECK', this.submittedForm)
+              this.form.itemcheck_nm = null;
+              this.form.itemcheck_method = null;
+              this.form.duration = null;
+              this.form.standard_measurement = null;
+              this.form.val_period = null;
+              this.form.period_id = null;
+              this.form.plan_check_dt = null;
+              this.form.itemcheck_loc = null;
+              this.form.reasons = null;
+              this.form.mp = null;
+              toast.success('Success to add itemcheck, please wait for approval')
+            }else{
+              toast.error('Must not Empty')
+            }
+        } catch (error) {
+          console.log(error);
+          toast.error('Error to add itemcheck')
+        }
       }
     },
 
