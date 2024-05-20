@@ -1,6 +1,6 @@
 <template>
   <!-- Start:Search -->
-  <CCard class="mb-1">
+  <CCard class="mb-1" style="z-index: 1">
     <CCardHeader>
       Search
     </CCardHeader>
@@ -47,15 +47,7 @@
         </CCol>
 
         <CCol lg="3">
-          <v-select append-to-body style="z-index: 1;" :options="machine" placeholder="Machines"
-            :reduce="machine => machine.machine_id" v-model="form.machine_id">
-            <template #option="option">
-              <span>{{ option.machine_nm }}</span>
-            </template>
-            <template #selected-option="option">
-              <span>{{ option.machine_nm }}</span>
-            </template>
-          </v-select>
+          <treeselect v-model="form.machine_id" :multiple="true" :options="machine" />
         </CCol>
 
         <CCol lg="3">
@@ -68,12 +60,6 @@
               <span>{{ option.incharge_nm }}</span>
             </template>
           </v-select>
-          <!-- <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text">Incharge</span>
-            </div>
-            <input type="text" class="form-control" placeholder="Incharge">
-          </div> -->
         </CCol>
 
         <CCol lg="3">
@@ -107,6 +93,11 @@
 import moment from 'moment'
 import api from '@/apis/CommonAPI'
 
+// import the component
+import Treeselect from 'vue3-treeselect'
+// import the styles
+import 'vue3-treeselect/dist/vue3-treeselect.css'
+
 export default {
   name: 'SearchBar',
   data() {
@@ -125,6 +116,7 @@ export default {
       line: [],
     }
   },
+  components: { Treeselect },
   watch: {
     getSubmitStatus: function () {
       if (this.getSubmitStatus) {
@@ -149,6 +141,11 @@ export default {
         this.search()
         this.getLine()
       }
+    },
+    ['form.line_id']: function () {
+      if (this.form.line_id) {
+        this.getMachine({ line_id: this.form.line_id })
+      }
     }
   },
   methods: {
@@ -172,10 +169,17 @@ export default {
         console.log(error);
       }
     },
-    async getMachine() {
+    async getMachine(filter = {}) {
       try {
-        let machine = await api.post(`/tpm/filter/machine`)
-        this.machine = machine.data.data
+        let machine = await api.post(`/tpm/filter/machine`, filter)
+        console.log(filter);
+        let mapMachines = await machine.data.data.map(item => {
+          return {
+            id: item.machine_id,
+            label: item.machine_nm
+          }
+        })
+        this.machine = mapMachines
       } catch (error) {
         console.log(error);
       }

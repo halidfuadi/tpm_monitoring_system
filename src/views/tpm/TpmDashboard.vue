@@ -37,14 +37,14 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text">Month</span>
                   </div>
-                  <input v-model="filterStatus.month" type="month" class="form-control" placeholder="Month">
+                  <input v-model="filterStatus2.month" type="month" class="form-control" placeholder="Month">
                 </div>
               </div>
             </div>
           </div>
 
           <div class="card-body card">
-            <GraphStatusTPM :filter="filterStatus" />
+            <GraphItem :filter="filterStatus2" />
           </div>
         </div>
       </CCol>
@@ -101,6 +101,7 @@ import { GET_MACHINES } from '../../store/machines.module'
 import GraphStandardTime from '../../components/Tpm/GraphStandardTime.vue'
 import StatusTpm from '../../components/Tpm/StatusTpm.vue'
 import GraphStatusTPM from '../../components/Tpm/GraphStatusTPM.vue'
+import GraphItem from '../../components/Tpm/GraphItem.vue'
 
 export default {
   name: "TPMDashboard",
@@ -116,13 +117,17 @@ export default {
       selectedMonthStatus: moment().format('YYYY-MM'),
       filterStatus: {
         month: `${moment().format('YYYY-MM')}`
+      },
+      filterStatus2: {
+        month: `${moment().format('YYYY-MM')}`
       }
     }
   },
   components: {
     GraphStandardTime,
     StatusTpm,
-    GraphStatusTPM
+    GraphStatusTPM,
+    GraphItem,
   },
   computed: {
     ...mapGetters(['getLinesOpts', 'getMachinesOpts']),
