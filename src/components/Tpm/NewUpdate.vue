@@ -1,5 +1,5 @@
 <template>
-  
+
   <CRow>
     <CCol>
       <CCard>
@@ -12,7 +12,14 @@
               <CCol class="mb-3" lg="6" v-for="(item, i) in dataUpdate" :key="i">
                 <CCard>
                   <CCardHeader>
-                    <CCardTitle> {{ item.machine_nm }}</CCardTitle>
+                    <CRow>
+                      <CCol>
+                        <CCardTitle> {{ item.machine_nm }}</CCardTitle>
+                      </CCol>
+                      <CCol class="text-end">
+                        <CCardTitle> Changed By: {{ item.changed_by }}</CCardTitle>
+                      </CCol>
+                    </CRow>
                   </CCardHeader>
                   <CCardBody>
                     <CCardSubtitle class="mb-2 text-body-secondary">
@@ -60,13 +67,20 @@
               <CCol class="mb-3" lg="12" v-for="(update, i) in dataUpdatedItem" :key="i">
                 <CCard>
                   <CCardHeader>
-                    <CCardTitle>{{ update.machine_nm }}</CCardTitle>
+                    <CRow>
+                      <CCol>
+                        <CCardTitle>{{ update.machine_nm }}</CCardTitle>
+                      </CCol>
+                      <CCol class="text-end">
+                        <CCardTitle>Changed By: {{ update.changed_by }}</CCardTitle>
+                      </CCol>
+                    </CRow>
                   </CCardHeader>
 
                   <CCardBody>
-                    <CCardSubtitle class="mb-2 text-body-secondary">
+                    <CCardTitle class="mb-2 text-body-secondary">
                       {{ update.itemcheck_nm_old }}
-                    </CCardSubtitle>
+                    </CCardTitle>
                     <CAccordion>
                       <CAccordionItem>
                         <CAccordionHeader>

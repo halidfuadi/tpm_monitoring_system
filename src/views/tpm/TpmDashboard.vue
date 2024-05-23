@@ -1,7 +1,7 @@
 <template>
     <CRow class="mb-3">
 
-      <CCol lg="6">
+      <CCol lg="8">
         <div class="card">
           <div class="card-header">
             Line Progress
@@ -25,10 +25,10 @@
         </div>
       </CCol>
 
-      <CCol lg="6">
+      <CCol lg="4">
         <div class="card">
           <div class="card-header">
-            Item 
+            Item
           </div>
           <div class="card-body">
             <div class="row">

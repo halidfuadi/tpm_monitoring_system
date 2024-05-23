@@ -1,5 +1,6 @@
 <template>
   <CModal :visible="is_show" backdrop="static" size="xl" close="changesShow()">
+    <ModalSparepart :visible="is_show_sparepart" :ledger_id="ledger_id" :item="item" @close="() => { is_show_sparepart = false }" size="xl"/>
     <CModal :visible="is_deleting" :item="item" @close="() => { is_deleting = false }">
       <CModalHeader>
         <CModalTitle>Are you sure to delete this item?</CModalTitle>
@@ -49,8 +50,8 @@
                 <th class="item-check text-center" >duration</th>
                 <th class="item-check text-center" >Standard</th>
                 <th class="item-check text-center" >Methods</th>
-                <th class="item-check text-center" >Plan Check Date</th>
-                <th class="actions text-center" colspan="2">Actions</th>
+                <!-- <th class="item-check text-center" >Plan Check Date</th> -->
+                <th class="actions text-center" colspan="3">Actions</th>
               </tr>
               <tr></tr>
             </thead>
@@ -74,8 +75,13 @@
                   <td class="item-check text-center">
                     {{ item?.method_check }}
                   </td>
-                  <td class="item-check text-center">
+                  <!-- <td class="item-check text-center">
                     {{ item?.plan_check_dt.split('T')[0] }}
+                  </td> -->
+                  <td class="actions">
+                    <CButton class="btn btn-sm col" color="info" @click="info(item)" style="max-width: 100px; margin-bottom: 5px;">
+                      SPAREPART
+                    </CButton>
                   </td>
                   <td class="actions">
                     <CButton class="btn btn-sm col" color="warning" @click="changeEdit(item)" style="max-width: 100px; margin-bottom: 5px;">
@@ -122,9 +128,9 @@
                   <!-- <td class="item-check text-center">
                     <CFormInput type="date" v-model="item.plan_check_dt" placeholder="Plan Check Date" :value="item?.plan_check_dt"/>
                   </td> -->
-                  <td class="item-check text-center">
+                  <!-- <td class="item-check text-center">
                     {{ item?.plan_check_dt.split('T')[0] }}
-                  </td>
+                  </td> -->
                   <td class="actions">
                     <CButton class="btn btn-sm col" color="success" @click="editData(item)" style="max-width: 100px; margin-bottom: 5px;">
                       UPDATE
@@ -153,6 +159,7 @@ import api from "@/apis/CommonAPI";
 import { mapGetters } from "vuex";
 import AddItemcheck from "@/components/Tpm/AddItemcheck"
 import { toast } from "vue-sonner";
+import ModalSparepart from "@/components/Tpm/ModalSparepart"
 
 export default {
   name: "ModalItemCheck",
@@ -160,6 +167,7 @@ export default {
     return {
       users: [],
       is_show: false,
+      is_show_sparepart: false,
       items: null,
       id_ledger: null,
       is_add: false,
@@ -238,6 +246,16 @@ export default {
       this.$emit("showChanges", this.is_show);
     },
 
+    info(item){
+      if(this.is_show_sparepart){
+        this.is_show_sparepart = false
+      }else{
+        this.is_show_sparepart = true
+        this.item = item
+
+      }
+    },
+
     changeEdit(item){
       item.is_editing = !item.is_editing;
     },
@@ -270,10 +288,10 @@ export default {
     isShow: Boolean,
     machine_nm: String,
     ledger_id: Number,
-    itemcheck_id: Number
   },
   components: {
-    AddItemcheck
+    AddItemcheck,
+    ModalSparepart
   }
 };
 </script>

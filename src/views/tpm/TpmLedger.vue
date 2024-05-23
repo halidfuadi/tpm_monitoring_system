@@ -11,11 +11,11 @@
       </CCol>
     </CRow>
   </CCard>
-  <ModalItemcheck :isShow="isShow" :ledger_id="ledger_id" :machine_nm="machine_nm" :itemcheck_id="itemcheck_id" @showChanges="showChanges(state)" />
+  <ModalItemcheck :isShow="isShow" :ledger_id="ledger_id" :machine_nm="machine_nm" @showChanges="showChanges(state)" />
   <CCard>
     <CCardBody>
       <CRow>
-        <CCol class="overflow-auto" lg="12">
+        <CCol class="overflow-auto tableFixHead" lg="12">
           <table class="table table-bordered table-striped">
             <thead>
               <tr>
@@ -63,7 +63,7 @@
       </CRow>
     </CCardBody>
     <CCardFooter>
-      <CRow class="justify-content-between">
+      <!-- <CRow class="justify-content-between">
         <CCol lg="2">
           <div class="input-group mb-3">
             <div class="input-group-prepend">
@@ -89,7 +89,7 @@
             </li>
           </ul>
         </CCol>
-      </CRow>
+      </CRow> -->
     </CCardFooter>
   </CCard>
 </template>
@@ -102,7 +102,6 @@ import ModalItemcheck from "@/components/Tpm/ModalItemcheck";
 import SearchBarLedger from "@/components/Tpm/SearchBarLedger";
 import StatusTpm from "@/components/Tpm/StatusTpm";
 import NewUpdate from "@/components/Tpm/NewUpdate";
-import AddItemcheck from "../../components/Tpm/AddItemcheck.vue";
 import AddLedger from "../../components/Tpm/AddLedger.vue"
 
 export default {
@@ -160,6 +159,7 @@ export default {
       try {
         // this.isLoading = true
         this.filter = filter
+        console.log(this.filter);
         let ledgers = await api.get(`/tpm/ledgers`, '?' + filter);
         console.log(ledgers);
         this.ledgers = ledgers.data.data;
@@ -243,6 +243,11 @@ td {
   border: 1px solid black;
   border-collapse: collapse;
   background: white;
+}
+
+.tableFixHead{
+  overflow-y: auto;
+  height: 800px;
 }
 
 

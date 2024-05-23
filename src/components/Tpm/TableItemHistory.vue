@@ -13,6 +13,7 @@
             <th class="text-center">Approval</th>
             <th class="text-center" colspan="2">Periods</th>
             <th class="text-center">Date Approved</th>
+            <th class="text-center">Approved By</th>
             <th class="text-center">Actions</th>
           </tr>
         </thead>
@@ -25,6 +26,7 @@
             <td class="text-center">{{ item.val_periodic }}</td>
             <td class="text-center">{{ item.period_nm }}</td>
             <td class="text-center">{{ item.created_dt.split('T')[0] }}</td>
+            <td class="text-center">{{ item.created_by }}</td>
             <td class="text-center">
               <CButton class="btn btn-sm col" color="info" @click="" >DETAILS</CButton>
             </td>
@@ -43,6 +45,7 @@
             <th class="text-center">Approval</th>
             <th class="text-center" colspan="2">Periods</th>
             <th class="text-center">Date Approved</th>
+            <th class="text-center">Approved By</th>
             <th class="text-center">Actions</th>
           </tr>
         </thead>
@@ -55,6 +58,7 @@
             <td class="text-center">{{ item.val_periodic_new }}</td>
             <td class="text-center">{{ item.period_nm }}</td>
             <td class="text-center">{{ item.created_dt.split('T')[0] }}</td>
+            <td class="text-center">{{ item.created_by }}</td>
             <td class="text-center">
               <CButton class="btn btn-sm col" color="info" @click="" >DETAILS</CButton>
             </td>

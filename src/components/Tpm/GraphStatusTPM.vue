@@ -39,7 +39,7 @@ export default {
               type: 'line',
             },
             stroke: {
-              width: [0, 4]
+              width: [4, 4]
             },
             title: {
               text: 'Line Progress'
