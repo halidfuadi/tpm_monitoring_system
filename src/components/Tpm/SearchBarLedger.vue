@@ -1,32 +1,16 @@
 <template>
-  <CCard class="mb-3">
+  <CCard class="mb-3" style="z-index: 1;">
     <CCardHeader>
       Search
     </CCardHeader>
     <CCardBody>
       <CRow>
         <CCol lg="6">
-          <v-select append-to-body style="z-index: 1;" :options="line" placeholder="Lines"
-            :reduce="line => line.line_id" v-model="form.line_id">
-            <template #option="option">
-              <span>{{ option.line_nm }}</span>
-            </template>
-            <template #selected-option="option">
-              <span>{{ option.line_nm }}</span>
-            </template>
-          </v-select>
+          <treeselect v-model="form.line_id" :multiple="true" :options="line" />
         </CCol>
 
         <CCol lg="6">
-          <v-select append-to-body style="z-index: 1;" :options="machine" placeholder="Machines"
-            :reduce="machine => machine.machine_id" v-model="form.machine_id">
-            <template #option="option">
-              <span>{{ option.machine_nm }}</span>
-            </template>
-            <template #selected-option="option">
-              <span>{{ option.machine_nm }}</span>
-            </template>
-          </v-select>
+          <treeselect v-model="form.machine_id" :multiple="true" :options="machine" />
         </CCol>
 
       </CRow>
@@ -45,6 +29,8 @@
 <script>
 import moment from 'moment'
 import api from '@/apis/CommonAPI'
+import Treeselect from 'vue3-treeselect'
+import 'vue3-treeselect/dist/vue3-treeselect.css'
 
 export default {
   name: 'SearchBarLedger',
@@ -58,24 +44,39 @@ export default {
       line: [],
     }
   },
+  components: { Treeselect },
   methods: {
     search() {
       let mapForm = Object.keys(this.form).map((key) => `${key}=${this.form[key]}`).join('&')
       console.log(mapForm);
       this.$emit('getLedgers', mapForm)
     },
-    async getMachine() {
+    async getMachine(filter = {}) {
       try {
-        let machine = await api.post(`/tpm/filter/machine`)
-        this.machine = machine.data.data
+        let machine = await api.post(`/tpm/filter/machine`, filter)
+        console.log(filter);
+        let mapMachines = await machine.data.data.map(item => {
+          return {
+            id: item.machine_id,
+            label: item.machine_nm
+          }
+        })
+        this.machine = mapMachines
       } catch (error) {
         console.log(error);
       }
     },
-    async getLine() {
+    async getLine(filter = {}) {
       try {
-        let line = await api.post(`/tpm/filter/line`)
-        this.line = line.data.data
+        let line = await api.post(`/tpm/filter/line`, filter)
+        console.log(filter);
+        let maplines = await line.data.data.map(item => {
+          return {
+            id: item.line_id,
+            label: item.line_nm
+          }
+        })
+        this.line = maplines
       } catch (error) {
         console.log(error);
       }

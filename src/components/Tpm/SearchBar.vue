@@ -35,15 +35,7 @@
 
       <CRow>
         <CCol lg="3">
-          <v-select append-to-body style="z-index: 1;" :options="line" placeholder="Lines"
-            :reduce="line => line.line_id" v-model="form.line_id">
-            <template #option="option">
-              <span>{{ option.line_nm }}</span>
-            </template>
-            <template #selected-option="option">
-              <span>{{ option.line_nm }}</span>
-            </template>
-          </v-select>
+          <treeselect v-model="form.line_id" :multiple="true" :options="line" />
         </CCol>
 
         <CCol lg="3">
@@ -51,15 +43,7 @@
         </CCol>
 
         <CCol lg="3">
-          <v-select append-to-body style="z-index: 1;" :options="incharge" placeholder="Incharge"
-            :reduce="incharge => incharge.incharge_id" v-model="form.incharge_id">
-            <template #option="option">
-              <span>{{ option.incharge_nm }}</span>
-            </template>
-            <template #selected-option="option">
-              <span>{{ option.incharge_nm }}</span>
-            </template>
-          </v-select>
+          <treeselect v-model="form.incharge_id" :multiple="true" :options="incharge" />
         </CCol>
 
         <CCol lg="3">
@@ -161,10 +145,17 @@ export default {
         console.log(error)
       }
     },
-    async getIncharge() {
+    async getIncharge(filter = {}) {
       try {
-        let incharge = await api.post(`/tpm/filter/incharge`)
-        this.incharge = incharge.data.data
+        let incharge = await api.post(`/tpm/filter/incharge`, filter)
+        console.log(filter);
+        let mapincharges = await incharge.data.data.map(item => {
+          return {
+            id: item.incharge_id,
+            label: item.incharge_nm
+          }
+        })
+        this.incharge = mapincharges
       } catch (error) {
         console.log(error);
       }
@@ -184,10 +175,17 @@ export default {
         console.log(error);
       }
     },
-    async getLine() {
+    async getLine(filter = {}) {
       try {
-        let line = await api.post(`/tpm/filter/line`)
-        this.line = line.data.data
+        let line = await api.post(`/tpm/filter/line`, filter)
+        console.log(filter);
+        let maplines = await line.data.data.map(item => {
+          return {
+            id: item.line_id,
+            label: item.line_nm
+          }
+        })
+        this.line = maplines
       } catch (error) {
         console.log(error);
       }
