@@ -50,6 +50,20 @@
           </td>
         </tbody>
       </table>
+      <table class="table table-bordered table-striped">
+        <thead>
+          <th class="item-check text-center">Upper Limit</th>
+          <th class="item-check text-center">Lower Limit</th>
+        </thead>
+        <tbody>
+          <td class="item-check text-center">
+            <CFormInput v-model="form.upper_limit" class="item-check text-center" style="border: none;" placeholder="add Upper Limit"/>
+          </td>
+          <td class="item-check text-center">
+            <CFormInput v-model="form.lower_limit" class="item-check text-center" style="border: none;" placeholder="add Lower Limit"/>
+          </td>
+        </tbody>
+      </table>
     </CCol>
   </CRow>
   <CRow>

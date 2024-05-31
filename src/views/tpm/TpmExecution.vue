@@ -21,6 +21,7 @@
       </CRow>
     </CCardBody>
   </CCard>
+
   <CCard class="mb-1">
     <CAccordion>
       <CAccordionItem>
@@ -29,6 +30,7 @@
       </CAccordionItem>
     </CAccordion>
   </CCard>
+
   <CCard class="mb-1">
     <CCardBody>
       <CRow>
@@ -39,6 +41,7 @@
           })
             " disabled />
         </CCol>
+
         <CCol lg="6" v-if="GETTER_USERS">
           <label>Actual Pic</label>
           <v-select :options="GETTER_USERS" label="user_nm" multiple v-model="form.actual_user_ids"
@@ -52,6 +55,7 @@
           </v-select>
         </CCol>
       </CRow>
+
       <CRow>
         <CCol v-if="!GETTER_SCHEDULE_DATA?.is_number" lg="12">
           <!-- Itemcheck: type judg -->
@@ -69,6 +73,7 @@
             </CInputGroupText>
           </CInputGroup>
         </CCol>
+
         <CCol v-else lg="6">
           <!-- Itemcheck: type number -->
           <CInputGroup class="mb-3">
@@ -79,24 +84,28 @@
             </CInputGroupText>
           </CInputGroup>
         </CCol>
+
         <CCol lg="3">
           <CInputGroup class="mb-3">
             <CInputGroupText>Plan Date</CInputGroupText>
             <CFormInput type="date" v-model="plan_check_dt" :disabled="is_already_check" />
           </CInputGroup>
         </CCol>
+
         <CCol lg="3">
           <CInputGroup class="mb-3">
             <CInputGroupText>Actual Date</CInputGroupText>
             <CFormInput type="date" v-model="form.actual_check_dt" :disabled="is_already_check" />
           </CInputGroup>
         </CCol>
+
         <CCol lg="3">
           <CInputGroup class="mb-3">
             <CInputGroupText>Start Time</CInputGroupText>
             <CFormInput type="time" v-model="start_time" :disabled="is_already_check" />
           </CInputGroup>
         </CCol>
+
         <CCol lg="3">
           <CInputGroup class="mb-3">
             <CInputGroupText>End Time</CInputGroupText>
@@ -106,6 +115,7 @@
       </CRow>
     </CCardBody>
   </CCard>
+
   <CCard>
     <CCardBody>
       <CRow class="justify-content-end">

@@ -204,10 +204,7 @@ export default {
   methods: {
     async getItems() {
       try {
-        let items = await api.get(
-          `/tpm/ledgers/detail`,
-          `?ledger_id=${this.id_ledger}`
-        );
+        let items = await api.get(`/tpm/ledgers/detail`,`?ledger_id=${this.id_ledger}`);
         items.data.data.forEach(obj => {obj.is_editing = false})
         this.items = items.data.data;
       } catch (error) {
@@ -246,13 +243,13 @@ export default {
       this.$emit("showChanges", this.is_show);
     },
 
-    info(item){
+    async info(item){
       if(this.is_show_sparepart){
         this.is_show_sparepart = false
       }else{
         this.is_show_sparepart = true
-        this.item = item
-
+        let sparepart = await this.getSparepart(item)
+        this.item = sparepart
       }
     },
 
@@ -278,6 +275,16 @@ export default {
       } catch (error) {
         console.log(error);
         toast.error('Error edit itemcheck')
+      }
+    },
+
+    async getSparepart(item) {
+      try {
+        console.log(item);
+        let sparepart = await api.get(`/tpm/spareparts/get-sparepart`, `?ledger_itemcheck_id=${item.ledger_itemcheck_id}`)
+        return sparepart
+      } catch (error){
+        console.log(error);
       }
     }
 

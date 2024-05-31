@@ -45,21 +45,13 @@ export default {
 
   },
   methods: {
-    async getSparepart() {
-      try {
-        console.log(this.ledger_id);
-        let sparepart = await api.get(`/tpm/spareparts/get-sparepart`, `?ledger_id=${this.ledger_id}`)
-      } catch (error){
-        console.log(error);
-      }
-    }
   },
 
   mounted() {
-    this.getSparepart()
+
   },
   props: {
-    ledger_id: Number
+
   },
 };
 </script>

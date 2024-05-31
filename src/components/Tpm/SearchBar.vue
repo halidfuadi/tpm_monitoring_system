@@ -35,15 +35,15 @@
 
       <CRow>
         <CCol lg="3">
-          <treeselect v-model="form.line_id" :multiple="true" :options="line" />
+          <treeselect v-model="form.line_id" :multiple="true" :options="line" placeholder="Select Line"/>
         </CCol>
 
         <CCol lg="3">
-          <treeselect v-model="form.machine_id" :multiple="true" :options="machine" />
+          <treeselect v-model="form.machine_id" :multiple="true" :options="machine" placeholder="Select Machine"/>
         </CCol>
 
         <CCol lg="3">
-          <treeselect v-model="form.incharge_id" :multiple="true" :options="incharge" />
+          <treeselect v-model="form.incharge_id" :multiple="true" :options="incharge" placeholder="Select Incharge"/>
         </CCol>
 
         <CCol lg="3">

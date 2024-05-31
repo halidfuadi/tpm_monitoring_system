@@ -1,10 +1,10 @@
 <template>
-  <CCard class="mb-3" style="z-index: 1;">
+  <CCard class="mb-2" style="z-index: 1;">
     <CCardHeader>
       Search
     </CCardHeader>
     <CCardBody>
-      <CRow>
+      <CRow class="mb-3">
         <CCol lg="6">
           <treeselect v-model="form.line_id" :multiple="true" :options="line" />
         </CCol>
