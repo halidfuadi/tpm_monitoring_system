@@ -6,11 +6,11 @@
     <CCardBody>
       <CRow class="mb-3">
         <CCol lg="6">
-          <treeselect v-model="form.line_id" :multiple="true" :options="line" />
+          <treeselect v-model="form.line_id" :multiple="true" :options="line" placeholder="Select Line"/>
         </CCol>
 
         <CCol lg="6">
-          <treeselect v-model="form.machine_id" :multiple="true" :options="machine" />
+          <treeselect v-model="form.machine_id" :multiple="true" :options="machine" placeholder="Select Machine"/>
         </CCol>
 
       </CRow>

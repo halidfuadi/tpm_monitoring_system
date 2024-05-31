@@ -97,40 +97,45 @@
 
                 <template v-else>
                   <td class="item-check text-center">
-                    <CFormInput v-model="item.itemcheck_nm" :value="item?.itemcheck_nm"/>
+                    <CFormTextarea v-model="item.itemcheck_nm" :value="item?.itemcheck_nm"/>
                   </td>
                   <td class="item-check text-center">
-                    <CFormInput style="max-width: 20px;" v-model="item.val_periodic" :value="item?.val_periodic"/>
+                    <CFormTextarea style="max-width: 20px;" v-model="item.val_periodic" :value="item?.val_periodic"/>
                   </td>
                   <td class="item-check text-center">
                     <CFormSelect v-model="item.period_id">
-                      <option>{{ item?.period_id }}</option>
+                      <option value="{{item?.period_id}}">{{ item?.period_nm }}</option>
                       <option value=0>Day</option>
                       <option value=1>Month</option>
                       <option value=2>Year</option>
                     </CFormSelect>
                   </td>
                   <td class="item-check text-center">
-                    <CFormInput v-model="item.mp" :value="item?.mp"/>
+                    <CFormTextarea v-model="item.mp" :value="item?.mp"/>
                   </td>
                   <td class="item-check text-center">
                     <!-- {{ item?.duration }} -->
-                    <CFormInput v-model="item.duration" :value="item?.duration"/>
+                    <CFormTextarea v-model="item.duration" :value="item?.duration"/>
                   </td>
                   <td class="item-check text-center">
                     <!-- {{ item?.standard_measurement == '' ? "OK" : item?.standard_measurement }} -->
-                    <CFormInput v-model="item.standard_measurement" :value="item?.standard_measurement"/>
+                    <CFormTextarea v-model="item.standard_measurement" :value="item?.standard_measurement"/>
                   </td>
                   <td class="item-check text-center">
                     <!-- {{ item?.method_check }} -->
-                    <CFormInput v-model="item.method_check" :value="item?.method_check"/>
+                    <CFormTextarea v-model="item.method_check" :value="item?.method_check"/>
                   </td>
                   <!-- <td class="item-check text-center">
-                    <CFormInput type="date" v-model="item.plan_check_dt" placeholder="Plan Check Date" :value="item?.plan_check_dt"/>
+                    <CFormTextarea type="date" v-model="item.plan_check_dt" placeholder="Plan Check Date" :value="item?.plan_check_dt"/>
                   </td> -->
                   <!-- <td class="item-check text-center">
                     {{ item?.plan_check_dt.split('T')[0] }}
                   </td> -->
+                  <td class="actions">
+                    <CButton class="btn btn-sm col" color="info" @click="" style="max-width: 100px; margin-bottom: 5px;">
+                      SPAREPART
+                    </CButton>
+                  </td>
                   <td class="actions">
                     <CButton class="btn btn-sm col" color="success" @click="editData(item)" style="max-width: 100px; margin-bottom: 5px;">
                       UPDATE
@@ -160,6 +165,7 @@ import { mapGetters } from "vuex";
 import AddItemcheck from "@/components/Tpm/AddItemcheck"
 import { toast } from "vue-sonner";
 import ModalSparepart from "@/components/Tpm/ModalSparepart"
+import { CFormTextarea } from "@coreui/vue";
 
 export default {
   name: "ModalItemCheck",

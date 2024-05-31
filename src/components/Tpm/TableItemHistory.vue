@@ -10,7 +10,7 @@
             <th class="no text-center">No</th>
             <th class="no text-center">Machine</th>
             <th class="text-center">Item Name</th>
-            <th class="text-center">Conditions</th>
+            <th class="text-center">Condition</th>
             <th class="text-center" colspan="2">Periods</th>
             <th class="text-center">Date Approved</th>
             <th class="text-center">Approved By</th>
@@ -42,7 +42,7 @@
             <th class="no text-center">No</th>
             <th class="no text-center">Machine</th>
             <th class="text-center">Item Name</th>
-            <th class="text-center">Approval</th>
+            <th class="text-center">Condition</th>
             <th class="text-center" colspan="2">Periods</th>
             <th class="text-center">Date Approved</th>
             <th class="text-center">Approved By</th>
@@ -54,7 +54,7 @@
             <td class="text-center">{{ i+1 }}</td>
             <td class="text-center">{{ item.machine_nm }}</td>
             <td class="text-center">{{ item.itemcheck_nm_new }}</td>
-            <td class="text-center">{{ item.approval_status }}</td>
+            <td class="text-center">{{ item.condition }}</td>
             <td class="text-center">{{ item.val_periodic_new }}</td>
             <td class="text-center">{{ item.period_nm }}</td>
             <td class="text-center">{{ item.created_dt.split('T')[0] }}</td>

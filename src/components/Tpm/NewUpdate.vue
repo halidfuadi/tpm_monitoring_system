@@ -38,7 +38,7 @@
                     <CButton class="btn btn-sm col me-3" color="success" @click="approve(item)">
                       APPROVE
                     </CButton>
-                    <CButton class="btn btn-sm col" color="danger" style="max-width: 100px">
+                    <CButton class="btn btn-sm col" color="danger" style="max-width: 100px" @click="denyAdded(item)">
                       DENY
                     </CButton>
                   </CCardFooter>
@@ -137,7 +137,7 @@
                     <CButton class="btn btn-sm col me-3" color="success" @click="approveEdit(update)">
                       APPROVE
                     </CButton>
-                    <CButton class="btn btn-sm col" color="danger" style="max-width: 100px">
+                    <CButton class="btn btn-sm col" color="danger" style="max-width: 100px" @click="denyEdit(update)">
                       DENY
                     </CButton>
                   </CCardFooter>
@@ -159,6 +159,7 @@
 </template>
 
 <script>
+import api from "@/apis/CommonAPI";
 import { CAccordion, CAccordionBody, CAccordionItem, CCard, CCardFooter, CCardHeader, CCol } from '@coreui/vue';
 
 export default {
@@ -174,6 +175,22 @@ export default {
 
     async approveEdit(data){
       this.$store.dispatch('ACT_APPROVE_UPDATED_ITEMCHECK', data)
+    },
+
+    async denyAdded(data){
+      try {
+        await api.post(`/tpm/itemchecks/denyAdded`, data)
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async denyEdit(data){
+      try {
+        await api.post(`/tpm/itemchecks/denyEdit`, data)
+      } catch (error) {
+        console.log(error);
+      }
     }
   },
 
