@@ -69,6 +69,12 @@ const routes = [{
                 component: () =>
                     import ('@/views/tpm/TpmDashboard.vue')
             },
+            {
+                path: '/tpm/sparepart',
+                name: 'TpmSparepart',
+                component: () =>
+                    import ('@/views/tpm/TpmSparepart.vue'),
+            },
 
             /*define other in here*/
         ],

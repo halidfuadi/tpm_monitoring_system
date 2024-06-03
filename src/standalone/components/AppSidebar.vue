@@ -83,13 +83,6 @@ export default {
   data() {
     return {
       nav: [
-        // {
-        //   component: 'CNavItem',
-        //   name: 'Home',
-        //   to: '/app/dashboard',
-        //   icon: 'cilHome',
-        //   parentId: 'ROOT',
-        // },
         {
           component: 'CNavItem',
           to: '/tpm/dashboard',
@@ -123,6 +116,13 @@ export default {
           to: '/tpm/ledger',
           name: 'TPM Ledger',
           icon: 'cilTask',
+          parentId: 'ROOT',
+        },
+        {
+          component: 'CNavItem',
+          to: '/tpm/sparepart',
+          name: 'TPM Sparepart',
+          icon: 'cilFactory',
           parentId: 'ROOT',
         },
         {

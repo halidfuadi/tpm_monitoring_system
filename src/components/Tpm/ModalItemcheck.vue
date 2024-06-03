@@ -50,6 +50,8 @@
                 <th class="item-check text-center" >duration</th>
                 <th class="item-check text-center" >Standard</th>
                 <th class="item-check text-center" >Methods</th>
+                <th class="item-check text-center" >Upper</th>
+                <th class="item-check text-center" >Lower</th>
                 <!-- <th class="item-check text-center" >Plan Check Date</th> -->
                 <th class="actions text-center" colspan="3">Actions</th>
               </tr>
@@ -74,6 +76,12 @@
                   </td>
                   <td class="item-check text-center">
                     {{ item?.method_check }}
+                  </td>
+                  <td class="item-check text-center">
+                    {{ item?.upper_limit }}
+                  </td>
+                  <td class="item-check text-center">
+                    {{ item?.lower_limit  }}
                   </td>
                   <!-- <td class="item-check text-center">
                     {{ item?.plan_check_dt.split('T')[0] }}
@@ -124,6 +132,12 @@
                   <td class="item-check text-center">
                     <!-- {{ item?.method_check }} -->
                     <CFormTextarea v-model="item.method_check" :value="item?.method_check"/>
+                  </td>
+                  <td class="item-check text-center">
+                    <CFormTextarea v-model="item.upper_limit" :value="item?.upper_limit"/>
+                  </td>
+                  <td class="item-check text-center">
+                    <CFormTextarea v-model="item.lower_limit" :value="item?.lower_limit"/>
                   </td>
                   <!-- <td class="item-check text-center">
                     <CFormTextarea type="date" v-model="item.plan_check_dt" placeholder="Plan Check Date" :value="item?.plan_check_dt"/>
@@ -213,6 +227,7 @@ export default {
         let items = await api.get(`/tpm/ledgers/detail`,`?ledger_id=${this.id_ledger}`);
         items.data.data.forEach(obj => {obj.is_editing = false})
         this.items = items.data.data;
+        console.log(items.data.data);
       } catch (error) {
         console.log(error);
       }
