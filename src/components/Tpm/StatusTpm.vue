@@ -12,15 +12,13 @@
               <CCol v-for="stat in status" :key="stat.status_nm">
                 <div class="input-group input-group-sm mb-3">
                   <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      <CBadge class="text-dark" :style="`background-color: ${stat.color_tag}`" shape="pill">
-                        {{ stat.status_nm }}</CBadge>
-                    </span>
+                    <CInputGroup class="input-group-text text-dark" :style="`background-color: ${stat.color_tag}; font-weight: bold;`" shape="pill">
+                      {{ stat.status_nm }}
+                    </CInputGroup>
                   </div>
-                  <input disabled type="text" class="form-control" :value="stat.count">
+                    <input disabled type="text" class="form-control" style="font-weight: bold;":value="stat.count">
                 </div>
                 <CProgress animated color="info" style="font-size: 14px; font-weight: bold;" height="30" :value="stat.percent">
-                  <!-- <CProgressBar class="overflow-visible px-5"> {{ stat.count }}</CProgressBar> -->
                   {{ stat.percent }}%
                 </CProgress>
               </CCol>
@@ -35,6 +33,7 @@
 
 <script>
 import api from '@/apis/CommonAPI'
+import { CInputGroup } from '@coreui/vue'
 export default {
   name: 'StatusTpm',
   data() {

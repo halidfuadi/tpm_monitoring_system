@@ -35,9 +35,7 @@
                     <td>{{ schedule[0].line_nm }}</td>
                     <td>{{ schedule[0].machine_nm }}</td>
                     <td>{{ schedule[0].itemcheck_nm }}</td>
-                    <td>
-                      {{ schedule[0].val_periodic }}
-                    </td>
+                    <td>{{ schedule[0].val_periodic }}</td>
                     <td class="text-center">
                       {{ schedule[0].period_nm }}
                     </td>
@@ -50,40 +48,14 @@
                       </template>
                     </td>
                     <td v-else>
-                      <CButton class="btn btn-sm w-100" color="info" @click="confirmShow(schedule[0])">Assign</CButton>
+                      <CButton class="btn btn-sm w-100" color="info" @click="confirmShow(schedule[0])">ASSIGN</CButton>
                     </td>
                     <template v-for="date in dates" :key="date">
-                      <td v-if="
-                        schedule.find((item) => {
-                          return item.day_idx == date
-                        })
-                      ">
+                      <td v-if="schedule.find((item) => {return item.day_idx == date})">
                         <!-- BTN FOR ASSIGN PIC -->
-                        <button class="btn btn-sm w-100" v-if="
-                          schedule.find((item) => {
-                            return item.day_idx == date
-                          }).checkers.length == 0
-                        " :style="`background-color: ${schedule.find((item) => {
-                          return item.day_idx == date
-                        }).color_tag
-                          }`" @click="
-                            confirmShow(
-                              schedule.find((item) => {
-                                return item.day_idx == date
-                              }),
-                            )
-                            "></button>
+                        <CButton size="lg" v-if="schedule.find((item) => {return item.day_idx == date}).checkers.length == 0" :style="`height: 35px ;background-color: ${schedule.find((item) => {return item.day_idx == date}).color_tag}`" @click="confirmShow(schedule.find((item) => {return item.day_idx == date}),)"></CButton>
                         <!-- BTN FOR EXECUTION -->
-                        <button v-else class="btn btn-sm w-100" :style="`background-color: ${schedule.find((item) => {
-                          return item.day_idx == date
-                        }).color_tag
-                          }`" @click="
-                            executionPage(
-                              schedule.find((item) => {
-                                return item.day_idx == date
-                              }),
-                            )
-                            "></button>
+                        <CButton size="lg" v-else :style="`height: 35px; background-color: ${schedule.find((item) => {return item.day_idx == date}).color_tag}`" @click="executionPage(schedule.find((item) => {return item.day_idx == date}),)"></CButton>
                       </td>
                       <td v-else></td>
                     </template>
@@ -142,6 +114,7 @@ import { Toaster } from 'vue-sonner'
 import ModalPic from '@/components/Tpm/ModalPic'
 import SearchBar from '@/components/Tpm/SearchBar'
 import StatusTpm from '@/components/Tpm/StatusTpm'
+import { CButton } from '@coreui/vue'
 
 export default {
   name: 'TpmMonitoring',
