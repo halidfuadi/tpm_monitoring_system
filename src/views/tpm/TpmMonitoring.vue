@@ -13,14 +13,14 @@
               <thead>
                 <tr>
                   <th rowspan="2">No</th>
-                  <th class="w100-line text-center" rowspan="2">Line</th>
-                  <th class="w200-mc" rowspan="2">Machine</th>
-                  <th class="w300-item-check text-center" rowspan="2">Item Check</th>
-                  <th class="text-center" rowspan="2" colspan="2">Periodic</th>
-                  <th class="text-center" rowspan="2">Incharge</th>
-                  <th class="text-center" rowspan="2">PIC</th>
-                  <th class="text-center" :colspan="31">{{ 'Schedule' }}</th>
-                  <th class="text-center w100-line" rowspan="2">Next Check</th>
+                  <th class="w100-line text-center" rowspan="2" style="font-size: 15px;">Line</th>
+                  <th class="w200-mc" rowspan="2" style="font-size: 15px;">Machine</th>
+                  <th class="w300-item-check text-center" rowspan="2" style="font-size: 15px;">Item Check</th>
+                  <th class="text-center" rowspan="2" colspan="2" style="font-size: 15px;">Periodic</th>
+                  <th class="text-center" rowspan="2" style="font-size: 15px;">Incharge</th>
+                  <th class="text-center" rowspan="2" style="font-size: 15px;">PIC</th>
+                  <th class="text-center" :colspan="31" style="font-size: 15px;">{{ 'Schedule' }}</th>
+                  <th class="text-center w100-line" rowspan="2" style="font-size: 15px;">Next Check</th>
                 </tr>
                 <tr>
                   <td class="w40-date text-center" v-for="i in 31" :key="i">
@@ -238,6 +238,7 @@ export default {
     },
     showChanges(state) {
       this.isShow = state
+      this.getSchedules(this.filter)
     },
 
     async confirmShow(schedule) {
@@ -247,6 +248,7 @@ export default {
       this.incharge_id = schedule.incharge_id
       this.schedule_id = schedule.schedule_id
       this.plan_check_dt = schedule.plan_check_dt
+      this.getSchedules(this.filter)
     },
 
     executionPage(schedule) {

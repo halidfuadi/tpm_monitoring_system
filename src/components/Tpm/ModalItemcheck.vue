@@ -50,6 +50,7 @@
                 <th class="item-check text-center" >duration</th>
                 <th class="item-check text-center" >Standard</th>
                 <th class="item-check text-center" >Methods</th>
+                <th class="item-check text-center" >Incharge</th>
                 <th class="item-check text-center" >Upper</th>
                 <th class="item-check text-center" >Lower</th>
                 <!-- <th class="item-check text-center" >Plan Check Date</th> -->
@@ -76,6 +77,9 @@
                   </td>
                   <td class="item-check text-center">
                     {{ item?.method_check }}
+                  </td>
+                  <td class="item-check text-center">
+                    {{ item?.incharge_nm }}
                   </td>
                   <td class="item-check text-center">
                     {{ item?.upper_limit }}
