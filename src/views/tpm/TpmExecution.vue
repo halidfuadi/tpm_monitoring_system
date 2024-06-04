@@ -87,6 +87,13 @@
 
         <CCol lg="3">
           <CInputGroup class="mb-3">
+            <CInputGroupText>Act Measurement</CInputGroupText>
+            <CFormInput type="input" v-model="form.actual_measurement" :disabled="is_already_check" placeholder="Input when there's measurement"/>
+          </CInputGroup>
+        </CCol>
+
+        <CCol lg="3">
+          <CInputGroup class="mb-3">
             <CInputGroupText>Plan Date</CInputGroupText>
             <CFormInput type="date" v-model="plan_check_dt" :disabled="is_already_check" />
           </CInputGroup>
@@ -238,6 +245,7 @@ export default {
           return
         }
         if(isNotNull) {
+          console.log(this.submittedForm);
           this.$store.dispatch('ACT_EXECUTION_TPM', this.submittedForm)
           this.$router.push('/tpm/monitoring')
         } else {
