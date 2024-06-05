@@ -83,6 +83,15 @@ export default {
     }
 
   },
+  watch: {
+    'form.line_id': function(newVal) {
+      if (newVal && newVal.length > 0) {
+        this.getMachine({ line_id: newVal });
+      } else {
+        this.getMachine();
+      }
+    }
+  },
   mounted() {
     this.getMachine()
     this.getLine()

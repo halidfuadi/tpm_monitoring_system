@@ -8,7 +8,7 @@
             <th class="no text-center">Material Number</th>
             <th class="text-center">Description</th>
             <th class="text-center">UOM</th>
-            <th class="text-center">LT</th>
+            <th class="text-center">LT (day)</th>
             <th class="text-center">Actions</th>
           </tr>
         </thead>
