@@ -1,5 +1,5 @@
 <template>
-  <CModal :visible="is_show" backdrop="static" size="xl" close="changesShow()">
+  <CModal :visible="is_show" backdrop="static" fullscreen close="changesShow()">
     <ModalSparepart :visible="is_show_sparepart" :ledger_id="ledger_id" :item="item" @close="() => { is_show_sparepart = false }" size="xl"/>
     <CModal :visible="is_deleting" :item="item" @close="() => { is_deleting = false }">
       <CModalHeader>
@@ -138,6 +138,14 @@
                     <CFormTextarea v-model="item.method_check" :value="item?.method_check"/>
                   </td>
                   <td class="item-check text-center">
+                    <CFormSelect v-model="item.incharge_id">
+                      <option value="{{item?.incharge_id}}">{{ item?.incharge_nm }}</option>
+                      <option value=0>MAINTENANCE</option>
+                      <option value=1>PRODUCTION</option>
+                      <option value=2>VENDOR</option>
+                    </CFormSelect>
+                  </td>
+                  <td class="item-check text-center">
                     <CFormTextarea v-model="item.upper_limit" :value="item?.upper_limit"/>
                   </td>
                   <td class="item-check text-center">
@@ -150,9 +158,7 @@
                     {{ item?.plan_check_dt.split('T')[0] }}
                   </td> -->
                   <td class="actions">
-                    <CButton class="btn btn-sm col" color="info" @click="" style="max-width: 100px; margin-bottom: 5px;">
-                      SPAREPART
-                    </CButton>
+                    <CFormTextarea v-model="item.reason" placeholder="Insert Reasons"/>
                   </td>
                   <td class="actions">
                     <CButton class="btn btn-sm col" color="success" @click="editData(item)" style="max-width: 100px; margin-bottom: 5px;">

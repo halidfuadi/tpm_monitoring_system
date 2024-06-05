@@ -126,6 +126,20 @@
                                 <CTableDataCell>{{ update.standard_measurement_old }}</CTableDataCell>
                                 <CTableDataCell>{{ update.standard_measurement_new }}</CTableDataCell>
                               </CTableRow>
+                              <CTableRow>
+                                <CTableDataCell>UPPER</CTableDataCell>
+                                <CTableDataCell>{{ update.upper_limit_old }}</CTableDataCell>
+                                <CTableDataCell>{{ update.upper_limit_old }}</CTableDataCell>
+                              </CTableRow>
+                              <CTableRow>
+                                <CTableDataCell>LOWER</CTableDataCell>
+                                <CTableDataCell>{{ update.lower_limit_old }}</CTableDataCell>
+                                <CTableDataCell>{{ update.lower_limit_old }}</CTableDataCell>
+                              </CTableRow>
+                              <CTableRow>
+                                <CTableDataCell>REASON</CTableDataCell>
+                                <CTableDataCell colspan="2">{{ update.reason }}</CTableDataCell>
+                              </CTableRow>
                             </CTableBody>
                           </CTable>
                         </CAccordionBody>

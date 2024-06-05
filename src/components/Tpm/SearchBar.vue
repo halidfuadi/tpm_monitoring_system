@@ -126,9 +126,11 @@ export default {
         this.getLine()
       }
     },
-    ['form.line_id']: function () {
-      if (this.form.line_id) {
-        this.getMachine({ line_id: this.form.line_id })
+    'form.line_id': function(newVal) {
+      if (newVal && newVal.length > 0) {
+        this.getMachine({ line_id: newVal });
+      } else {
+        this.getMachine();
       }
     }
   },
