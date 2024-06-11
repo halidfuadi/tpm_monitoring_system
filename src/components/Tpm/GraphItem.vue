@@ -1,6 +1,6 @@
 <template>
   <div id="chart">
-    <apexchart type="line" height="350" :options="chartOptions" :series="series"></apexchart>
+    <apexchart type="bar" height="350" :options="chartOptions" :series="series"></apexchart>
   </div>
 
 </template>
@@ -27,9 +27,6 @@ export default {
   methods: {
     async ActionStandardTime() {
       try {
-        // this.filter.year = this.filter.selectedMonth.split('-')[0]
-        // this.filter.month = this.filter.selectedMonth.split('-')[1]
-        // delete this.filter.selectedMonth
         let { data } = await api.post(`/tpm/schedules/visualization-item`, this.filter)
         if (data) {
           this.series = data.data.series
@@ -39,7 +36,7 @@ export default {
               type: 'line',
             },
             stroke: {
-              width: [0, 4]
+              width: [3, 0]
             },
             title: {
               text: 'Total Item'

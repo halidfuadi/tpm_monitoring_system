@@ -12,7 +12,7 @@
     </CRow>
   </CCard>
   <ModalItemcheck :isShow="isShow" :ledger_id="ledger_id" :machine_nm="machine_nm" @showChanges="showChanges(state)" />
-  <CCard>
+  <CCard class="mb-5">
     <CCardBody>
       <CRow>
         <CCol class="overflow-auto tableFixHead" lg="12">
@@ -26,9 +26,9 @@
                 <th class="text-center">Actions</th>
               </tr>
             </thead>
-            <tbody v-if="ledgers.length > 0 && !isLoading">
-              <tr v-for="(ledger, i) in ledgers" :key="i">
-                <td class="text-center">{{ i + 1 }}</td>
+            <tbody v-if="paginatedLedgers.length > 0 && !isLoading">
+              <tr v-for="(ledger, i) in paginatedLedgers" :key="i">
+                <td class="text-center">{{ (currentPage - 1) * rowsPerPage + i + 1 }}</td>
                 <td class="text-center">{{ ledger?.line_nm }}</td>
                 <td class="text-center">{{ ledger?.machine_nm }}</td>
                 <td class="text-center">
@@ -66,9 +66,9 @@
                 <th class="text-center">Actions</th>
               </tr>
             </thead>
-            <tbody v-if="items.length > 0 && !isLoading">
-              <tr v-for="(ledger, i) in items" :key="i">
-                <td class="text-center">{{ i + 1 }}</td>
+            <tbody v-if="paginatedItems.length > 0 && !isLoading">
+              <tr v-for="(ledger, i) in paginatedItems" :key="i">
+                <td class="text-center">{{ (currentPage - 1) * rowsPerPage + i + 1 }}</td>
                 <td class="text-center">{{ ledger?.machine_nm }}</td>
                 <td class="text-center">{{ ledger?.itemcheck_nm }}</td>
                 <td class="text-center">{{ ledger?.val_periodic }}</td>
@@ -98,6 +98,15 @@
       </CRow>
     </CCardBody>
     <CCardFooter>
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <CButton class="mx-3" color="warning" @click="changePage(currentPage - 1)" :disabled="currentPage === 1">Previous</CButton>
+          <CButton color="info" @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages">Next</CButton>
+        </div>
+        <div>
+          Page {{ currentPage }} of {{ totalPages }}
+        </div>
+      </div>
     </CCardFooter>
   </CCard>
 </template>
@@ -120,9 +129,9 @@ export default {
         currentPage: 1,
       },
       isLoading: false,
-      rowsPerPage: 5,
-      maxVisible: 5,
-      modelValue: 10,
+      rowsPerPage: 50,
+      maxVisible: 50,
+      modelValue: 100,
 
       isShow: false,
       filter: null,
@@ -136,6 +145,7 @@ export default {
       machine_nm: null,
       num_item_checks: null,
       rowsNumber: 1,
+      currentPage: 1,
       currentView: "machineAndLine", // Track current view condition
 
       limitOpts: [
@@ -158,13 +168,30 @@ export default {
       ],
     };
   },
-  computed: {},
-
+  computed: {
+    totalPages() {
+      if (this.currentView === 'machineAndLine') {
+        return Math.ceil(this.ledgers.length / this.rowsPerPage);
+      } else {
+        return Math.ceil(this.items.length / this.rowsPerPage);
+      }
+    },
+    paginatedLedgers() {
+      const start = (this.currentPage - 1) * this.rowsPerPage;
+      const end = start + this.rowsPerPage;
+      return this.ledgers.slice(start, end);
+    },
+    paginatedItems() {
+      const start = (this.currentPage - 1) * this.rowsPerPage;
+      const end = start + this.rowsPerPage;
+      return this.items.slice(start, end);
+    }
+  },
   methods: {
     async getLedgers(filter) {
       try {
         if(this.currentView == "machineAndLine"){
-          this.filter = filter;
+        this.filter = filter;
           let ledgers = await api.get(`/tpm/ledgers`, "?" + filter);
           this.ledgers = ledgers.data.data;
         }else{
@@ -177,8 +204,6 @@ export default {
         console.log(error);
       }
     },
-
-    // ON GOING PROGRESS
     async getItems(filter) {
       try {
         this.filter = filter;
@@ -205,12 +230,16 @@ export default {
     handleChangeView(view) {
       this.currentView = view;
     },
+    changePage(page) {
+      if (page > 0 && page <= this.totalPages) {
+        this.currentPage = page;
+      }
+    }
   },
   async mounted() {
     await this.getLedgers();
-    await this.getItems()
+    await this.getItems();
   },
-
   components: {
     SearchBarLedger,
     NewUpdate,
@@ -249,5 +278,16 @@ td {
 .tableFixHead {
   overflow-y: auto;
   height: 800px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+}
+
+.pagination button {
+  margin: 0 0.5rem;
 }
 </style>
