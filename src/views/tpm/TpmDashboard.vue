@@ -1,93 +1,114 @@
 <template>
-    <CRow class="mb-3">
-
-      <CCol lg="8">
-        <div class="card">
-          <div class="card-header">
-            Line Progress
-          </div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-4">
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">Month</span>
+  <CCard class="mb-3">
+    <CCardHeader>
+      <CCardTitle>ITEMCHECKS</CCardTitle>
+    </CCardHeader>
+    <CCardBody>
+      <CRow class="mb-3">
+        <CCol lg="8">
+          <div class="card">
+            <div class="card-header">
+              Line Progress
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-4">
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Month</span>
+                    </div>
+                    <input v-model="filterStatus.month" type="month" class="form-control" placeholder="Month">
                   </div>
-                  <input v-model="filterStatus.month" type="month" class="form-control" placeholder="Month">
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="card-body card">
-            <GraphStatusTPM :filter="filterStatus" />
+            <div class="card-body card">
+              <GraphStatusTPM :filter="filterStatus" />
+            </div>
+          </div>
+        </CCol>
+
+        <CCol lg="4">
+          <div class="card">
+            <div class="card-header">
+              Item
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-4">
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Month</span>
+                    </div>
+                    <input v-model="filterStatus2.month" type="month" class="form-control" placeholder="Month">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-body card">
+              <GraphItem :filter="filterStatus2" />
+            </div>
+          </div>
+        </CCol>
+
+      </CRow>
+      <CRow>
+
+      </CRow>
+    </CCardBody>
+  </CCard>
+
+  <CCard class="mb-3">
+    <CCardHeader>
+      <CCardTitle>NOTIFICATIONS</CCardTitle>
+    </CCardHeader>
+    <CCardBody>
+      <CRow class="mb-3">
+        <CCol lg="8">
+          <NewUpdate/>
+        </CCol>
+      </CRow>
+    </CCardBody>
+
+  </CCard>
+
+  <CCard class="mb-3">
+    <CCardHeader>
+      Search
+    </CCardHeader>
+    <CCardBody class="card-body">
+      <div class="row">
+        <div class="col-4">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Month</span>
+            </div>
+            <input v-model="filter.month" type="month" class="form-control" placeholder="Month">
           </div>
         </div>
-      </CCol>
-
-      <CCol lg="4">
-        <div class="card">
-          <div class="card-header">
-            Item
-          </div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-4">
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">Month</span>
-                  </div>
-                  <input v-model="filterStatus2.month" type="month" class="form-control" placeholder="Month">
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card-body card">
-            <GraphItem :filter="filterStatus2" />
-          </div>
+        <div class="col-4">
+          <select class="form-select" v-model="filter.line_id">
+            <option v-for="(line, index) in getLinesOpts" :key="index" :value="line.id">
+              {{ line.text }}
+            </option>
+          </select>
         </div>
-      </CCol>
+        <div class="col-4">
+          <select class="form-select" v-model="filter.machine_id">
+            <option v-for="(machine, index) in getMachinesOpts" :key="index" :value="machine.id">
+              {{ machine.text }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="card-body card">
+        <GraphStandardTime :filter="filter" />
+      </div>
+    </CCardBody>
+  </CCard>
 
-    </CRow>
-
-    <!-- <CRow> -->
-      <CCard>
-        <CCardHeader>
-          Search
-        </CCardHeader>
-        <CCardBody class="card-body">
-          <div class="row">
-            <div class="col-4">
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">Month</span>
-                </div>
-                <input v-model="filter.month" type="month" class="form-control" placeholder="Month">
-              </div>
-            </div>
-            <div class="col-4">
-              <select class="form-select" v-model="filter.line_id">
-                <option v-for="(line, index) in getLinesOpts" :key="index" :value="line.id">
-                  {{ line.text }}
-                </option>
-              </select>
-            </div>
-            <div class="col-4">
-              <select class="form-select" v-model="filter.machine_id">
-                <option v-for="(machine, index) in getMachinesOpts" :key="index" :value="machine.id">
-                  {{ machine.text }}
-                </option>
-              </select>
-            </div>
-          </div>
-          <div class="card-body card">
-            <GraphStandardTime :filter="filter" />
-          </div>
-        </CCardBody>
-
-      </CCard>
-    <!-- </CRow> -->
 
 
 </template>
@@ -102,6 +123,8 @@ import GraphStandardTime from '../../components/Tpm/GraphStandardTime.vue'
 import StatusTpm from '../../components/Tpm/StatusTpm.vue'
 import GraphStatusTPM from '../../components/Tpm/GraphStatusTPM.vue'
 import GraphItem from '../../components/Tpm/GraphItem.vue'
+import NewUpdate from '../../components/Tpm/NewUpdate.vue'
+import { CCardBody, CCardHeader } from '@coreui/vue'
 
 export default {
   name: "TPMDashboard",
@@ -128,6 +151,7 @@ export default {
     StatusTpm,
     GraphStatusTPM,
     GraphItem,
+    NewUpdate,
   },
   computed: {
     ...mapGetters(['getLinesOpts', 'getMachinesOpts']),

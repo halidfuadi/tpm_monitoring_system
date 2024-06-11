@@ -1,11 +1,28 @@
 <template>
   <CModal :visible="is_show" backdrop="static" fullscreen close="changesShow()">
-    <ModalSparepart :visible="is_show_sparepart" :ledger_id="ledger_id" :item="item" @close="() => { is_show_sparepart = false }" size="xl"/>
+    <ModalSparepart :visible="is_show_sparepart" :id_ledger="ledger_id" @close="() => { is_show_sparepart = false }" size="xl"/>
+
     <CModal :visible="is_deleting" :item="item" @close="() => { is_deleting = false }">
       <CModalHeader>
         <CModalTitle>Are you sure to delete this item?</CModalTitle>
       </CModalHeader>
-      <CModalBody>{{ item.itemcheck_nm }} {{ item.itemcheck_id }} {{ item.ledger_itemcheck_id }}</CModalBody>
+      <CModalBody>
+        <table class="table table-bordered table-striped" responsive="md">
+          <thead>
+            <tr>
+              <th class="item-check text-center" >Item Check</th>
+              <th class="item-check text-center" >Periodic</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="item-check text-center">{{ item.itemcheck_nm }}</td>
+              <td class="item-check text-center">{{ item.val_periodic }} {{ item.period_nm }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <CFormTextarea v-model="item.reason" placeholder="Insert Reason"/>
+      </CModalBody>
       <CModalFooter>
         <CButton color="secondary" @click="() => { is_deleting = false }">
           Close
@@ -27,8 +44,11 @@
           </div>
         </CCol>
         <CCol class="text-end" lg="6">
-          <CButton class="btn btn-sm col" color="info" @click="changeAdd()" style="max-width: 150px; margin-bottom: 5px;">
+          <CButton class="btn btn-sm col mx-3" color="info" @click="changeAdd()" style="max-width: 150px; margin-bottom: 5px;">
             ADD NEW ITEMCHECK
+          </CButton>
+          <CButton class="btn btn-sm col" color="warning" @click="info(this.ledger_id)" style="max-width: 100px; margin-bottom: 5px;">
+            SPAREPART
           </CButton>
         </CCol>
       </CRow>
@@ -90,11 +110,6 @@
                   <!-- <td class="item-check text-center">
                     {{ item?.plan_check_dt.split('T')[0] }}
                   </td> -->
-                  <td class="actions">
-                    <CButton class="btn btn-sm col" color="info" @click="info(item)" style="max-width: 100px; margin-bottom: 5px;">
-                      SPAREPART
-                    </CButton>
-                  </td>
                   <td class="actions">
                     <CButton class="btn btn-sm col" color="warning" @click="changeEdit(item)" style="max-width: 100px; margin-bottom: 5px;">
                       EDIT
@@ -244,10 +259,9 @@ export default {
     },
 
     submitDeleting(item){
-      console.log(item);
       this.$store.dispatch('ACT_DELETE_ITEMCHECK', item)
-      this.getItems()
       this.is_deleting = false
+      this.getItems()
     },
 
     deleting(item){
@@ -279,8 +293,6 @@ export default {
         this.is_show_sparepart = false
       }else{
         this.is_show_sparepart = true
-        let sparepart = await this.getSparepart(item)
-        this.item = sparepart
       }
     },
 
@@ -308,16 +320,6 @@ export default {
         toast.error('Error edit itemcheck')
       }
     },
-
-    async getSparepart(item) {
-      try {
-        console.log(item);
-        let sparepart = await api.get(`/tpm/spareparts/get-sparepart`, `?ledger_itemcheck_id=${item.ledger_itemcheck_id}`)
-        return sparepart
-      } catch (error){
-        console.log(error);
-      }
-    }
 
   },
   mounted() { },

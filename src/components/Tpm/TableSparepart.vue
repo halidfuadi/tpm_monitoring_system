@@ -9,6 +9,7 @@
             <th class="text-center">Description</th>
             <th class="text-center">UOM</th>
             <th class="text-center">LT (day)</th>
+            <th class="text-center">Stock</th>
             <th class="text-center">Actions</th>
           </tr>
         </thead>
@@ -19,6 +20,7 @@
             <td class="text-center">{{ item.sparepart_nm }}</td>
             <td class="text-center">{{ item.uom }}</td>
             <td class="text-center">{{ item.lead_time }}</td>
+            <td class="text-center">{{ item.stock }}</td>
             <td class="text-center">
               <CButton class="btn btn-sm col" color="info" @click="">DETAILS</CButton>
             </td>
@@ -62,7 +64,7 @@ export default {
     async getSparepart() {
       try {
         console.log("cie berhasil");
-        let newItems = await api.get(`/tpm/spareparts/get-sparepart`, `?`);
+        let newItems = await api.get(`/tpm/spareparts/get-sparepart/search`, `?`);
         this.newItems = newItems.data.data;
         console.log(this.newItems);
       } catch (error) {

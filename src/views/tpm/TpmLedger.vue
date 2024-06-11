@@ -3,11 +3,11 @@
   <CCard class="mb-3 p-2">
     <CRow>
       <CCol lg="4">
-          <SearchBarLedger @getLedgers="getLedgers" />
-          <AddLedger />
+        <SearchBarLedger @getLedgers="getLedgers" @changeView="handleChangeView" />
+        <AddLedger />
       </CCol>
       <CCol lg="8">
-        <NewUpdate :dataUpdate="dataUpdate" :dataUpdatedItem="dataUpdatedItem"/>
+        <NewUpdate />
       </CCol>
     </CRow>
   </CCard>
@@ -16,7 +16,7 @@
     <CCardBody>
       <CRow>
         <CCol class="overflow-auto tableFixHead" lg="12">
-          <table class="table table-bordered table-striped">
+          <table v-if="currentView === 'machineAndLine'" class="table table-bordered table-striped">
             <thead>
               <tr>
                 <th class="text-center">No</th>
@@ -26,7 +26,6 @@
                 <th class="text-center">Actions</th>
               </tr>
             </thead>
-
             <tbody v-if="ledgers.length > 0 && !isLoading">
               <tr v-for="(ledger, i) in ledgers" :key="i">
                 <td class="text-center">{{ i + 1 }}</td>
@@ -35,12 +34,48 @@
                 <td class="text-center">
                   <CBadge class="text-light bg-dark" shape="pill">{{ ledger?.num_item_checks }}</CBadge>
                 </td>
-
                 <td class="align-center">
                   <div class="d-flex justify-content-center">
-                    <!-- Add a div with Bootstrap flex utilities -->
-                    <CButton class="btn btn-sm col me-3" color="success" @click="showDetail(ledger)"
-                      style="max-width: 100px">
+                    <CButton class="btn btn-sm col me-3" color="success" @click="showDetail(ledger)" style="max-width: 100px">
+                      ITEMCHECKS
+                    </CButton>
+                    <CButton class="btn btn-sm col" color="danger" style="max-width: 100px">
+                      DELETE
+                    </CButton>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody v-else-if="isLoading">
+              <tr>
+                <th class="text-center" colspan="5">
+                  <CSpinner component="span" size="sm" variant="grow" aria-hidden="true" />
+                  Loading...
+                </th>
+              </tr>
+            </tbody>
+          </table>
+
+          <table v-else class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th class="text-center">No</th>
+                <th class="text-center">Total Machine</th>
+                <th class="text-center">Itemcheck Name</th>
+                <th class="text-center" colspan="2">Periods</th>
+                <th class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody v-if="items.length > 0 && !isLoading">
+              <tr v-for="(ledger, i) in items" :key="i">
+                <td class="text-center">{{ i + 1 }}</td>
+                <td class="text-center">{{ ledger?.machine_nm }}</td>
+                <td class="text-center">{{ ledger?.itemcheck_nm }}</td>
+                <td class="text-center">{{ ledger?.val_periodic }}</td>
+                <td class="text-center">{{ ledger?.period_nm }}</td>
+                <td class="align-center">
+                  <div class="d-flex justify-content-center">
+                    <CButton class="btn btn-sm col me-3" color="success" @click="showDetail(ledger)" style="max-width: 100px">
                       ITEMCHECKS
                     </CButton>
                     <CButton class="btn btn-sm col" color="danger" style="max-width: 100px">
@@ -63,33 +98,6 @@
       </CRow>
     </CCardBody>
     <CCardFooter>
-      <!-- <CRow class="justify-content-between">
-        <CCol lg="2">
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text">Limit</span>
-            </div>
-            <select class="form-control" v-model="filtered.rowsPerPage">
-              <option v-for="limit in limitOpts" :key="limit.label" :value="limit.value">
-                {{ limit.label }}
-              </option>
-            </select>
-          </div>
-        </CCol>
-        <CCol lg="3">
-          <ul class="pagination m-0">
-            <li class="page-item disabled">
-              <button class="page-link">Previous</button>
-            </li>
-            <li v-for="page in pages" class="page-item">
-              <button class="page-link">1</button>
-            </li>
-            <li class="page-item">
-              <button class="page-link">Next</button>
-            </li>
-          </ul>
-        </CCol>
-      </CRow> -->
     </CCardFooter>
   </CCard>
 </template>
@@ -102,7 +110,7 @@ import ModalItemcheck from "@/components/Tpm/ModalItemcheck";
 import SearchBarLedger from "@/components/Tpm/SearchBarLedger";
 import StatusTpm from "@/components/Tpm/StatusTpm";
 import NewUpdate from "@/components/Tpm/NewUpdate";
-import AddLedger from "../../components/Tpm/AddLedger.vue"
+import AddLedger from "../../components/Tpm/AddLedger.vue";
 
 export default {
   name: "TpmLedger",
@@ -116,20 +124,19 @@ export default {
       maxVisible: 5,
       modelValue: 10,
 
-      dataUpdate: [],
-      dataUpdatedItem: [],
-
       isShow: false,
       filter: null,
       schedule_id: null,
       approval: null,
 
       ledgers: [],
+      items: [],
       ledger_id: null,
       line_nm: null,
       machine_nm: null,
       num_item_checks: null,
       rowsNumber: 1,
+      currentView: "machineAndLine", // Track current view condition
 
       limitOpts: [
         {
@@ -151,19 +158,33 @@ export default {
       ],
     };
   },
-  computed: {
-  },
+  computed: {},
 
   methods: {
     async getLedgers(filter) {
       try {
-        // this.isLoading = true
-        this.filter = filter
-        console.log(this.filter);
-        let ledgers = await api.get(`/tpm/ledgers`, '?' + filter);
-        console.log(ledgers);
-        this.ledgers = ledgers.data.data;
-        // this.isLoading = false
+        if(this.currentView == "machineAndLine"){
+          this.filter = filter;
+          let ledgers = await api.get(`/tpm/ledgers`, "?" + filter);
+          this.ledgers = ledgers.data.data;
+        }else{
+          this.filter = filter;
+          let items = await api.get(`/tpm/itemchecks`, "?" + filter);
+          console.log(items);
+          this.items = items.data.data;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    // ON GOING PROGRESS
+    async getItems(filter) {
+      try {
+        this.filter = filter;
+        let items = await api.get(`/tpm/itemchecks`, "?" + filter);
+        console.log(items);
+        this.items = items.data.data;
       } catch (error) {
         console.log(error);
       }
@@ -172,42 +193,22 @@ export default {
       this.isShow = state;
     },
     async showDetail(ledger) {
-      this.isLoading = true
+      this.isLoading = true;
       this.machine_nm = ledger.machine_nm;
       this.ledger_id = ledger.ledger_id;
       setTimeout(() => {
         this.showChanges(true);
-        this.isLoading = false
+        this.isLoading = false;
       }, 500);
-      this.getLedgers(this.filter)
-      this.getUpdate()
-      this.getUpdatedItem()
+      this.getLedgers(this.filter);
     },
-
-    async getUpdate(){
-      try {
-        let dataUpdate = await api.get(`/tpm/ledgers/new_data`, '?')
-        this.dataUpdate = dataUpdate.data.data
-        console.log(this.dataUpdate);
-      } catch (error) {
-        console.log(error);
-      }
+    handleChangeView(view) {
+      this.currentView = view;
     },
-
-    async getUpdatedItem(){
-      try {
-        let dataUpdatedItem = await api.get(`/tpm/itemchecks/updatedItem`, '?')
-        this.dataUpdatedItem = dataUpdatedItem.data.data
-        console.log(this.dataUpdatedItem);
-      } catch (error) {
-        console.log(error);
-      }
-    }
   },
-  async mounted(){
-    await this.getLedgers()
-    await this.getUpdate()
-    await this.getUpdatedItem()
+  async mounted() {
+    await this.getLedgers();
+    await this.getItems()
   },
 
   components: {
@@ -216,7 +217,7 @@ export default {
     StatusTpm,
     ModalItemcheck,
     Toaster,
-    AddLedger
+    AddLedger,
   },
 };
 </script>
@@ -245,10 +246,8 @@ td {
   background: white;
 }
 
-.tableFixHead{
+.tableFixHead {
   overflow-y: auto;
   height: 800px;
 }
-
-
 </style>

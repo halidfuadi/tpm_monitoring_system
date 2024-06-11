@@ -129,12 +129,12 @@
                               <CTableRow>
                                 <CTableDataCell>UPPER</CTableDataCell>
                                 <CTableDataCell>{{ update.upper_limit_old }}</CTableDataCell>
-                                <CTableDataCell>{{ update.upper_limit_old }}</CTableDataCell>
+                                <CTableDataCell>{{ update.upper_limit_new }}</CTableDataCell>
                               </CTableRow>
                               <CTableRow>
                                 <CTableDataCell>LOWER</CTableDataCell>
                                 <CTableDataCell>{{ update.lower_limit_old }}</CTableDataCell>
-                                <CTableDataCell>{{ update.lower_limit_old }}</CTableDataCell>
+                                <CTableDataCell>{{ update.lower_limit_new }}</CTableDataCell>
                               </CTableRow>
                               <CTableRow>
                                 <CTableDataCell>REASON</CTableDataCell>
@@ -180,20 +180,28 @@ export default {
   name: 'newUpdate',
   data() {
     return {
+      dataUpdate: [],
+      dataUpdatedItem:[]
     }
   },
   methods:{
     async approve(data){
       this.$store.dispatch('ACT_APPROVE_ITEMCHECK', data)
+      this.getUpdate()
+      this.getUpdatedItem()
     },
 
     async approveEdit(data){
       this.$store.dispatch('ACT_APPROVE_UPDATED_ITEMCHECK', data)
+      this.getUpdate()
+      this.getUpdatedItem()
     },
 
     async denyAdded(data){
       try {
         await api.post(`/tpm/itemchecks/denyAdded`, data)
+        this.getUpdate()
+        this.getUpdatedItem()
       } catch (error) {
         console.log(error);
       }
@@ -202,6 +210,28 @@ export default {
     async denyEdit(data){
       try {
         await api.post(`/tpm/itemchecks/denyEdit`, data)
+        this.getUpdate()
+        this.getUpdatedItem()
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async getUpdate(){
+      try {
+        let dataUpdate = await api.get(`/tpm/ledgers/new_data`, '?')
+        this.dataUpdate = dataUpdate.data.data
+        console.log(this.dataUpdate);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async getUpdatedItem(){
+      try {
+        let dataUpdatedItem = await api.get(`/tpm/itemchecks/updatedItem`, '?')
+        this.dataUpdatedItem = dataUpdatedItem.data.data
+        console.log(this.dataUpdatedItem);
       } catch (error) {
         console.log(error);
       }
@@ -209,8 +239,13 @@ export default {
   },
 
   props: {
-    dataUpdate: [],
-    dataUpdatedItem: []
+    // dataUpdate: [],
+    // dataUpdatedItem: []
+  },
+
+  async mounted() {
+    await this.getUpdate()
+    await this.getUpdatedItem()
   }
 }
 </script>
