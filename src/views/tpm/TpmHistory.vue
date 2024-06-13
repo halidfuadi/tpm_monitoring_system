@@ -20,7 +20,7 @@
             <td>{{ item.actual_check_dt.split('T')[0] }}</td>
             <td>{{ item.itemcheck_nm }}</td>
             <td>{{ item.checked_val }}</td>
-            <td>{{ item.standard_measurement == '' ? 'OK' : item.standard_measurement }}</td>
+            <td>{{ item.act_measurement == '' ? 'OK' : item.act_measurement }}</td>
             <td>
               <router-link class="btn btn-sm bg-primary text-light" :to="`/tpm/monitoring/${item.schedule_id}`">
                 Details

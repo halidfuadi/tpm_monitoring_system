@@ -7,7 +7,7 @@
         <AddLedger />
       </CCol>
       <CCol lg="8">
-        <NewUpdate />
+        <NewUpdate ref="NewUpdated"/>
       </CCol>
     </CRow>
   </CCard>
@@ -120,6 +120,7 @@ import SearchBarLedger from "@/components/Tpm/SearchBarLedger";
 import StatusTpm from "@/components/Tpm/StatusTpm";
 import NewUpdate from "@/components/Tpm/NewUpdate";
 import AddLedger from "../../components/Tpm/AddLedger.vue";
+import {getUpdate, getUpdatedItem} from "../../components/Tpm/NewUpdate.vue"
 
 export default {
   name: "TpmLedger",
@@ -216,6 +217,8 @@ export default {
     },
     showChanges(state) {
       this.isShow = state;
+      this.$refs.NewUpdated.getUpdate()
+      this.$refs.NewUpdated.getUpdatedItem()
     },
     async showDetail(ledger) {
       this.isLoading = true;

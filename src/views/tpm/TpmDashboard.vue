@@ -36,7 +36,7 @@
             </div>
             <div class="card-body">
               <div class="row">
-                <div class="col-4">
+                <div class="col-6">
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
                       <span class="input-group-text">Month</span>
@@ -62,6 +62,19 @@
 
   <CCard class="mb-3">
     <CCardHeader>
+      <CCardTitle>ITEM TREND</CCardTitle>
+    </CCardHeader>
+    <CCardBody>
+      <CRow class="mb-3">
+        <CCol>
+          <GraphTrendTPM />
+        </CCol>
+      </CRow>
+    </CCardBody>
+  </CCard>
+
+  <!-- <CCard class="mb-3">
+    <CCardHeader>
       <CCardTitle>NOTIFICATIONS</CCardTitle>
     </CCardHeader>
     <CCardBody>
@@ -72,7 +85,7 @@
       </CRow>
     </CCardBody>
 
-  </CCard>
+  </CCard> -->
 
   <CCard class="mb-3">
     <CCardHeader>
@@ -123,7 +136,8 @@ import GraphStandardTime from '../../components/Tpm/GraphStandardTime.vue'
 import StatusTpm from '../../components/Tpm/StatusTpm.vue'
 import GraphStatusTPM from '../../components/Tpm/GraphStatusTPM.vue'
 import GraphItem from '../../components/Tpm/GraphItem.vue'
-import NewUpdate from '../../components/Tpm/NewUpdate.vue'
+// import NewUpdate from '../../components/Tpm/NewUpdate.vue'
+import GraphTrendTPM from '../../components/Tpm/GraphTrendTPM.vue'
 import { CCardBody, CCardHeader } from '@coreui/vue'
 
 export default {
@@ -151,7 +165,8 @@ export default {
     StatusTpm,
     GraphStatusTPM,
     GraphItem,
-    NewUpdate,
+    // NewUpdate,
+    GraphTrendTPM,
   },
   computed: {
     ...mapGetters(['getLinesOpts', 'getMachinesOpts']),
