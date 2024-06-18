@@ -10,6 +10,7 @@
           <div class="input-group mb-3">
             <div class="input-group-prepend">
               <span class="input-group-text">Month</span>
+              
             </div>
             <input v-model="form.month" type="month" class="form-control" placeholder="Month">
           </div>
