@@ -113,7 +113,7 @@ import api from '@/apis/CommonAPI'
 import { Toaster } from 'vue-sonner'
 import ModalPic from '@/components/Tpm/ModalPic'
 import SearchBar from '@/components/Tpm/SearchBar'
-import StatusTpm from '@/components/Tpm/StatusTpm'
+import StatusTpm from '../../views/charts/StatusTpm.vue'
 import { CButton } from '@coreui/vue'
 
 export default {

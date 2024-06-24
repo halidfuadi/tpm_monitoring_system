@@ -9,7 +9,7 @@ import { toast } from 'vue-sonner';
 import api from '../../apis/CommonAPI';
 
 export default {
-  name: "GraphStatusTPM",
+  name: "GraphItem",
   data() {
     return {
       series: [],

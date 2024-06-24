@@ -117,7 +117,7 @@ import { Toaster } from "vue-sonner";
 
 import ModalItemcheck from "@/components/Tpm/ModalItemcheck";
 import SearchBarLedger from "@/components/Tpm/SearchBarLedger";
-import StatusTpm from "@/components/Tpm/StatusTpm";
+import StatusTpm from "../../views/charts/StatusTpm.vue";
 import NewUpdate from "@/components/Tpm/NewUpdate";
 import AddLedger from "../../components/Tpm/AddLedger.vue";
 import {getUpdate, getUpdatedItem} from "../../components/Tpm/NewUpdate.vue"
