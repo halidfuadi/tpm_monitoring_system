@@ -16,11 +16,23 @@
                       {{ stat.status_nm }}
                     </CInputGroup>
                   </div>
-                    <input disabled type="text" class="form-control" style="font-weight: bold;":value="stat.count">
+                  <input disabled type="text" class="form-control" style="font-weight: bold;" :value="stat.count">
                 </div>
                 <CProgress animated color="info" style="font-size: 14px; font-weight: bold;" height="30" :value="stat.percent">
                   {{ stat.percent }}%
                 </CProgress>
+              </CCol>
+            </CRow>
+            <CRow class="mt-3">
+              <CCol>
+                <div class="input-group input-group-sm mb-3">
+                  <div class="input-group-prepend">
+                    <CInputGroup class="input-group-text text-dark bg-secondary" style="font-weight: bold;" shape="pill">
+                      Total
+                    </CInputGroup>
+                  </div>
+                  <input disabled type="text" class="form-control" style="font-weight: bold;" :value="total">
+                </div>
               </CCol>
             </CRow>
           </CCardBody>
@@ -39,6 +51,7 @@ export default {
   data() {
     return {
       status: null,
+      total: 0,
     }
   },
   watch: {
@@ -53,12 +66,13 @@ export default {
         this.status = status.data.data
         let sum = 0
         for(let i=0;i<this.status.length;i++){
-          sum = sum + this.status[i].count
+          sum += this.status[i].count
+          console.log(sum);
         }
+        this.total = sum
         for(let i=0;i<this.status.length;i++){
           this.status[i].percent = Math.ceil((this.status[i].count / sum) * 100)
         }
-
       } catch (error) {
         console.log(error)
       }

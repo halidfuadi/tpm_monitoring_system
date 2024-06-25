@@ -1,5 +1,5 @@
 <template>
-  <CRow>
+  <!-- <CRow> -->
     <CCol class="mb-3" lg="4" v-for="(chart, i) in charts" :key="i">
       <CCard>
         <CCardBody>
@@ -8,7 +8,7 @@
         </CCardBody>
       </CCard>
     </CCol>
-  </CRow>
+  <!-- </CRow> -->
 </template>
 <script>
 import { toast } from 'vue-sonner';
@@ -37,6 +37,7 @@ export default {
   methods: {
     async ActionStandardTime() {
       try {
+        console.log(this.filter);
         let { data } = await api.post(`/tpm/schedules/visualization-item-yearly`, this.filter)
         console.log(data);
 

@@ -1,9 +1,9 @@
 <template>
-  <CCard class="mb-3">
+  <!-- <CCard class="mb-3">
     <CCardHeader>
       <CCardTitle>ITEMCHECKS</CCardTitle>
     </CCardHeader>
-    <CCardBody>
+    <CCardBody> -->
       <CCard class="mb-3">
         <CCardHeader>
           <CCardTitle>Monthly</CCardTitle>
@@ -61,7 +61,7 @@
 
           </CCardBody>
       </CCard>
-      <CCard>
+      <CCard class="mb-3">
           <CCardHeader>
             <CCardTitle>Yearly</CCardTitle>
           </CCardHeader>
@@ -72,22 +72,22 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text">Year</span>
                   </div>
-                  <input v-model="filterStatus3.year" type="year" class="form-control" placeholder="Year">
+                  <input v-model="filterStatus3.yearonly" type="year" class="form-control" placeholder="Year">
                   <!-- <CDatePicker v-model="filterStatus3.year" date="filterStatus3.year" label="Year Pick" selectionType="year" /> -->
                 </div>
               </div>
             </div>
           </CCardBody>
 
-          <CRow>
+          <CRow class="p-3">
             <!-- <CCol lg="12"> -->
               <GraphItemYearly :filter="filterStatus3" />
             <!-- </CCol> -->
           </CRow>
         </CCard>
 
-    </CCardBody>
-  </CCard>
+    <!-- </CCardBody>
+  </CCard> -->
 
   <CCard class="mb-3">
     <CCardHeader>

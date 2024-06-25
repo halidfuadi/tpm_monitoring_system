@@ -154,20 +154,7 @@ export default {
           value: -1,
         },
       ],
-      months: [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
-      ],
+      months: ['January','February','March','April','May','June','July','August','September','October','November','December',],
     }
   },
   computed: {
