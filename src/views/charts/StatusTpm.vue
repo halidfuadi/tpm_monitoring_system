@@ -22,8 +22,6 @@
                   {{ stat.percent }}%
                 </CProgress>
               </CCol>
-            </CRow>
-            <CRow class="mt-3">
               <CCol>
                 <div class="input-group input-group-sm mb-3">
                   <div class="input-group-prepend">
