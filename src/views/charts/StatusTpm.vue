@@ -7,7 +7,7 @@
           <CCardHeader>
             Status
           </CCardHeader>
-          <CCardBody>
+          <CCardBody v-if="!isLoading">
             <CRow>
               <CCol v-for="stat in status" :key="stat.status_nm">
                 <div class="input-group input-group-sm mb-3">
@@ -34,6 +34,9 @@
               </CCol>
             </CRow>
           </CCardBody>
+          <CCardBody v-else>
+              <CSpinner as="span" size="lg" aria-hidden="true"/>
+          </CCardBody>
         </CCard>
       </CCol>
     </CRow>
@@ -42,6 +45,7 @@
 </template>
 
 <script>
+import { CSpinner } from '@coreui/vue'
 import api from '@/apis/CommonAPI'
 import { CInputGroup } from '@coreui/vue'
 export default {
@@ -50,6 +54,7 @@ export default {
     return {
       status: null,
       total: 0,
+      isLoading: true
     }
   },
   watch: {
@@ -71,6 +76,7 @@ export default {
         for(let i=0;i<this.status.length;i++){
           this.status[i].percent = Math.ceil((this.status[i].count / sum) * 100)
         }
+        this.isLoading = false
       } catch (error) {
         console.log(error)
       }

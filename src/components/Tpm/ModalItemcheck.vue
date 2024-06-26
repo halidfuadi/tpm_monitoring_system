@@ -110,12 +110,12 @@
                   <!-- <td class="item-check text-center">
                     {{ item?.plan_check_dt.split('T')[0] }}
                   </td> -->
-                  <td class="actions">
+                  <td class="actions justify-content-center">
                     <CButton class="btn btn-sm col" color="warning" @click="changeEdit(item)" style="max-width: 100px; margin-bottom: 5px;">
                       EDIT
                     </CButton>
                   </td>
-                  <td class="actions">
+                  <td class="actions justify-content-center" colspan="2">
                     <CButton class="btn btn-sm col" color="danger" @click="deleting(item)" style="max-width: 100px">
                       DELETE
                     </CButton>
