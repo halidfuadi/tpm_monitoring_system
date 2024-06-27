@@ -74,21 +74,14 @@
           </CInputGroup>
         </CCol>
 
-        <CCol v-else lg="6">
+        <CCol v-else lg="12">
           <!-- Itemcheck: type number -->
           <CInputGroup class="mb-3">
             <CInputGroupText>TPM Check</CInputGroupText>
-            <CFormInput type="number" />
+            <CFormInput type="number" v-model="form.checked_val" />
             <CInputGroupText>
-              <b>Std: 10 ~ 20</b>
+              <b>Std: {{ GETTER_SCHEDULE_DATA.ng_val }} ~ {{ GETTER_SCHEDULE_DATA.ok_val }}</b>
             </CInputGroupText>
-          </CInputGroup>
-        </CCol>
-
-        <CCol lg="3">
-          <CInputGroup class="mb-3">
-            <CInputGroupText>Act Measurement</CInputGroupText>
-            <CFormInput type="input" v-model="form.actual_measurement" :disabled="is_already_check" placeholder="Input when there's measurement"/>
           </CInputGroup>
         </CCol>
 
@@ -229,12 +222,14 @@ export default {
             return !value && value != 0
           }).length === 0
         let isJudgType =
-          !this.submittedForm.is_number &&
+          !this.is_number &&
           this.submittedForm.ng_val === this.submittedForm.checked_val
         let isRangedType =
-          this.submittedForm.is_number &&
-          (this.submittedForm.ng_val < this.submittedForm.checked_val ||
-            this.submittedForm.ok_val > this.submittedForm.checked_val)
+          this.is_number &&
+          (+this.submittedForm.checked_val < +this.submittedForm.ng_val ||
+            +this.submittedForm.checked_val > +this.submittedForm.ok_val)
+        console.log(+this.submittedForm.ng_val < +this.submittedForm.checked_val ||
+          +this.submittedForm.ok_val > +this.submittedForm.checked_val);
         console.log(isNotNull, isJudgType, isRangedType)
         console.log(this.submittedForm)
         if (isNotNull && isJudgType) {
@@ -244,9 +239,9 @@ export default {
           this.is_finding = true
           return
         }
-        if(isNotNull) {
+        if (isNotNull) {
           console.log(this.submittedForm);
-          this.$store.dispatch('ACT_EXECUTION_TPM', this.submittedForm)
+          await this.$store.dispatch('ACT_EXECUTION_TPM', this.submittedForm)
           this.$router.push('/tpm/monitoring')
         } else {
           toast.error('Lengkapi input dulu!')
@@ -322,7 +317,10 @@ export default {
           `?itemcheck_std_id=${this.GETTER_SCHEDULE_DATA.itemcheck_std_id}`,
         )
         let stdData = data.data[0]
+        console.log('stdData');
+        console.log(stdData);
         this.is_number = stdData.is_number
+        this.form.is_number = stdData.is_number
         this.stdData = stdData
       } catch (error) {
         console.log(error)
