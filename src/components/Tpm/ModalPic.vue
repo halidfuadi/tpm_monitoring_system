@@ -63,7 +63,7 @@
 import api from '@/apis/CommonAPI'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
-import {getSchedule} from '../../views/tpm/TpmMonitoring.vue'
+import { getSchedule } from '../../views/tpm/TpmMonitoring.vue'
 
 export default {
   name: 'ModalPic',
