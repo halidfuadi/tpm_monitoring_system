@@ -4,6 +4,7 @@
     <ModalPic :isShow="isShow" :incharge_id="incharge_id" :machine_nm="machine_nm" :plan_check_dt="plan_check_dt"
       :schedule_id="schedule_id" @showChanges="showChanges(state)" />
     <SearchBar @getSchedules="getSchedules" />
+    <DropBarDelay/>
     <StatusTpm :filter="filter" />
     <CCard>
       <CCardBody>
@@ -114,6 +115,7 @@ import { Toaster } from 'vue-sonner'
 import ModalPic from '@/components/Tpm/ModalPic'
 import SearchBar from '@/components/Tpm/SearchBar'
 import StatusTpm from '../../views/charts/StatusTpm.vue'
+import DropBarDelay from '../../components/Tpm/DropBarDelay.vue'
 import { CButton } from '@coreui/vue'
 
 export default {
@@ -248,6 +250,7 @@ export default {
     StatusTpm,
     ModalPic,
     Toaster,
+    DropBarDelay,
   },
   watch:{
     getSchedules(){
